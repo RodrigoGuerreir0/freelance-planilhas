@@ -17,9 +17,9 @@ import {
 import { Link } from 'react-router';
 
 const menuItems = [
-  { label: 'Informações', route: '/', icon: <SnippetsOutlined  className="p-1" /> },
+  { label: 'Informações', route: '/informacoes/empresa', icon: <SnippetsOutlined className="p-1" /> },
   { label: 'Modelagem', route: '/modelagem', icon: <FundProjectionScreenOutlined className="p-1" /> },
-  { label: 'Estratégia', route: '/estrategia', icon: <FundOutlined  className="p-1" /> },
+  { label: 'Estratégia', route: '/estrategia', icon: <FundOutlined className="p-1" /> },
   { label: 'Marketing', route: '/marketing', icon: <AppstoreOutlined className="p-1" /> },
   { label: 'Preço', route: '/preco', icon: <DollarOutlined className="p-1" /> },
   { label: 'Finanças', route: '/financas', icon: <BarChartOutlined className="p-1" /> },
