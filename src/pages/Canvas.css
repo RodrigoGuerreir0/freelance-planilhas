@@ -1,0 +1,93 @@
+.canvas-container {
+    max-width: 1200px;
+}
+
+.canvas-title {
+    font-weight: 700;
+    color: #2c3e50;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+}
+
+.canvas-badge {
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: white;
+}
+
+.canvas-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: none;
+    height: 100%;
+}
+
+.canvas-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-icon {
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+
+.canvas-list {
+    padding-left: 1.5rem;
+    margin-bottom: 0;
+}
+
+.canvas-list li {
+    margin-bottom: 0.5rem;
+    position: relative;
+    color: #495057;
+    padding-right: 25px;
+}
+
+.canvas-list li::before {
+    content: "•";
+    color: #3498db;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* Botão de remover */
+.canvas-list li button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+/* Formulário de edição */
+.canvas-card .form-control {
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    height: calc(1.5em + 0.5rem + 2px);
+}
+
+.canvas-card .btn-sm {
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .canvas-title {
+        font-size: 1.8rem;
+    }
+    
+    .canvas-card {
+        margin-bottom: 1.5rem;
+    }
+}
