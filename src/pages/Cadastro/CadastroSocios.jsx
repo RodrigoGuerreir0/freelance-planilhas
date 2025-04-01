@@ -14,6 +14,57 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+const formatDocument = (value) => {
+  if (!value) return '';
+  
+  // Remove tudo que não é dígito
+  const cleaned = value.replace(/\D/g, '');
+  
+  // CPF: 11 dígitos
+  if (cleaned.length <= 11) {
+    // Aplica máscara de CPF: 000.000.000-00
+    return cleaned
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  } 
+  // CNPJ: mais de 11 dígitos
+  else {
+    // Aplica máscara de CNPJ: 00.000.000/0000-00
+    return cleaned
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  }
+};
+
+const formatPhone = (value) => {
+  if (!value) return '';
+  
+  // Remove tudo que não é dígito
+  const cleaned = value.replace(/\D/g, '');
+  
+  // Verifica se é celular (começa com dígito 9 após o DDD)
+  const isCelular = cleaned.length > 2 && cleaned[2] === '9';
+  
+  // Aplica máscara de telefone
+  if (cleaned.length <= 2) {
+    return `(${cleaned}`;
+  } else if (cleaned.length <= 6) {
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2)}`;
+  } else if (isCelular && cleaned.length <= 11) {
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7)}`;
+  } else if (!isCelular && cleaned.length <= 10) {
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
+  } else {
+    // Caso tenha mais dígitos que o esperado, mantém o formato completo
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 3)} ${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+  }
+};
+
 const CadastroSocios = () => {
   const [socios, setSocios] = useState([
     {
@@ -33,6 +84,24 @@ const CadastroSocios = () => {
   const [editingId, setEditingId] = useState(null);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+
+  const handleDocumentChange = (id, e) => {
+    const { value } = e.target;
+    const formattedValue = formatDocument(value);
+    
+    setSocios(socios.map(socio => 
+      socio.id === id ? { ...socio, documento: formattedValue } : socio
+    ));
+  };
+
+  const handlePhoneChange = (id, e) => {
+    const { value } = e.target;
+    const formattedValue = formatPhone(value);
+    
+    setSocios(socios.map(socio => 
+      socio.id === id ? { ...socio, telefone: formattedValue } : socio
+    ));
+  };
 
   const handleChange = (id, e) => {
     const { name, value } = e.target;
@@ -188,7 +257,7 @@ const CadastroSocios = () => {
                             fullWidth
                             name="documento"
                             value={socio.documento}
-                            onChange={(e) => handleChange(socio.id, e)}
+                            onChange={(e) => handleDocumentChange(socio.id, e)}
                             size="small"
                             margin="dense"
                             error={!!errors.documento}
@@ -308,7 +377,7 @@ const CadastroSocios = () => {
                           label="Telefone"
                           name="telefone"
                           value={socios.find(s => s.id === editingId).telefone}
-                          onChange={(e) => handleChange(editingId, e)}
+                          onChange={(e) => handlePhoneChange(editingId, e)}
                           size="small"
                           margin="dense"
                           InputProps={{

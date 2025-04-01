@@ -35,9 +35,69 @@ const CadastroEmpresa = () => {
   const [success, setSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState('dados-basicos');
 
+  // Função para formatar CNPJ
+  const formatCNPJ = (value) => {
+    if (!value) return '';
+    
+    // Remove tudo que não é dígito
+    const cleaned = value.replace(/\D/g, '');
+    
+    // Limita a 14 caracteres (tamanho do CNPJ)
+    const limited = cleaned.slice(0, 14);
+    
+    // Aplica máscara de CNPJ: 00.000.000/0000-00
+    return limited
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  };
+
+  // Função para formatar Telefone
+  const formatPhone = (value) => {
+    if (!value) return '';
+    
+    // Remove tudo que não é dígito
+    const cleaned = value.replace(/\D/g, '');
+    
+    // Limita a 11 caracteres (tamanho máximo com DDD e 9º dígito)
+    const limited = cleaned.slice(0, 11);
+    
+    // Verifica se é celular (com 9º dígito)
+    const isCelular = limited.length > 10;
+    
+    // Aplica máscara de telefone: (00) 0000-0000 ou (00) 90000-0000
+    if (isCelular) {
+      return limited
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2')
+        .replace(/(-\d{4})\d+?$/, '$1');
+    } else {
+      return limited
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d)/, '$1-$2')
+        .replace(/(-\d{4})\d+?$/, '$1');
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEmpresa({ ...empresa, [name]: value });
+  };
+
+  // Função específica para lidar com mudanças no CNPJ
+  const handleCNPJChange = (e) => {
+    const { value } = e.target;
+    const formattedValue = formatCNPJ(value);
+    setEmpresa({ ...empresa, cnpj: formattedValue });
+  };
+
+  // Função específica para lidar com mudanças no Telefone
+  const handlePhoneChange = (e) => {
+    const { value } = e.target;
+    const formattedValue = formatPhone(value);
+    setEmpresa({ ...empresa, telefone: formattedValue });
   };
 
   const validate = () => {
@@ -236,7 +296,7 @@ const CadastroEmpresa = () => {
                         label="CNPJ *"
                         name="cnpj"
                         value={empresa.cnpj}
-                        onChange={handleChange}
+                        onChange={handleCNPJChange}
                         size="small"
                         margin="dense"
                         error={!!errors.cnpj}
@@ -368,7 +428,7 @@ const CadastroEmpresa = () => {
                         label="Telefone"
                         name="telefone"
                         value={empresa.telefone}
-                        onChange={handleChange}
+                        onChange={handlePhoneChange}
                         size="small"
                         margin="dense"
                         InputProps={{
