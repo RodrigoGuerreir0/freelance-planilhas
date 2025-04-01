@@ -168,3 +168,5 @@ export function Canvas() {
     </Container>
   );
 }
+
+export default Canvas;

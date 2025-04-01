@@ -1,10 +1,10 @@
 import { Container, Form } from "react-bootstrap";
-import Login from "./Login";
+import Canvas from "./Canvas";
 
 export function Modelagem(){
     return(
     <>
-     <Login />
+     <Canvas />
     </>
     );
 }

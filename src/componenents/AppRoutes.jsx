@@ -32,7 +32,7 @@ export const AppRoutes = () => {
 
         <Route path="/modelagem" element={<Modelagem />} />
         <Route path="/modelagem/canvas"  element={<Canvas />} />
-        <Route path="/modelagem/curvadevalores"  element={<CurvaDeValores />} />
+        <Route path="/modelagem/curva-de-valor"  element={<CurvaDeValores />} />
 
       </Routes>
     </>
