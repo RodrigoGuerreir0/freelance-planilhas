@@ -16,6 +16,13 @@ export const AppNavbar = () => {
         modelagem: [
             { path: "/modelagem/canvas", label: "Canvas" },
             { path: "/modelagem/curva-de-valor", label: "Curva de Valor" }
+        ],
+        estrategia: [
+            { path: "/estrategia/diretrizes", label: "Dretrizes" },
+            { path: "/estrategia/forcas", label: "Forças" },
+            { path: "/estrategia/swot", label: "SWOT" },
+            { path: "/estrategia/metas", label: "Metas" },
+            { path: "/estrategia/acose", label: "Acose" }
         ]
     };
 
@@ -31,8 +38,18 @@ export const AppNavbar = () => {
     else if (
         currentPath.startsWith("/modelagem") || 
         currentPath === "/modelagem"
-    ) {
+    )
+   
+     {
         activeNavItems = navItems.modelagem;
+    }
+    else if (
+        currentPath.startsWith("/estrategia") || 
+        currentPath === "/estrategia"
+    )
+   
+     {
+        activeNavItems = navItems.estrategia;
     }
 
     return (
