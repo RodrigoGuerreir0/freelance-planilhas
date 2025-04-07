@@ -15,6 +15,7 @@ import { Canvas } from "../pages/Canvas";
 import { Estrategia } from "../pages/Estrategia";
 import CadastroDiretrizesEmpresa from "../pages/Diretrizes";
 import Forcas from "../pages/Forcas";
+import { Informacoes } from "../pages/informacoes";
 
 
 export const AppRoutes = () => {
@@ -28,6 +29,7 @@ export const AppRoutes = () => {
         <Route path="/clientes" element={<Clientes />} />
         <Route path="/login" element={<Login />} />
 
+        <Route path="/informacoes" element={<Informacoes />} />
         <Route path="/informacoes/empresa" element={<CadastroEmpresa />} />
         <Route path="/informacoes/socios" element={<CadastroSocios />} />
         <Route path="/informacoes/departamentos" element={<CadastroDepartamentos />} />

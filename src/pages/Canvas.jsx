@@ -24,17 +24,17 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
   };
 
   return (
-    <Card className={`h-100 canvas-card border-top border-${color} border-4`}>
+    <Card className={`h-100 canvas-card border-0 shadow-sm`} style={{ backgroundColor: '#f8f9fa' }}>
       <Card.Body>
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <Card.Title className="mb-0">{title}</Card.Title>
-          <span className="canvas-icon">{icon}</span>
+          <Card.Title className="mb-0 text-dark">{title}</Card.Title>
+          <span className="canvas-icon" style={{ color: `var(--bs-${color})` }}>{icon}</span>
         </div>
         
         <ul className="canvas-list">
           {currentItems.map((item, index) => (
             <li key={index} className="d-flex justify-content-between align-items-center">
-              {item}
+              <span className="text-dark">{item}</span>
               <Button 
                 variant="link" 
                 className="p-0 text-danger"
@@ -62,7 +62,7 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
         )}
 
         <Button 
-          variant="outline-secondary" 
+          variant="outline-primary" 
           size="sm" 
           className="mt-2"
           onClick={() => setIsEditing(!isEditing)}
@@ -83,7 +83,10 @@ export function Canvas() {
     relationships: ['-'],
     customers: ['Pequenas Empresas', 'Médias Empresas', 'Sistemas e Inventariadores'],
     costs: ['Salários', 'Custos com projetos'],
-    revenue: ['Projetos de consultoria financeira', 'Cursos online e produtos digitais']
+    revenue: ['Projetos de consultoria financeira', 'Cursos online e produtos digitais'],
+    channels: ['Site', 'Redes Sociais', 'Parcerias'],
+    segments: ['Startups', 'Empresas familiares', 'Profissionais liberais'],
+    resources: ['Equipe especializada', 'Software de gestão', 'Conteúdo educativo']
   });
 
   const updateItems = (section, items) => {
@@ -91,12 +94,12 @@ export function Canvas() {
   };
 
   return (
-    <Container className="canvas-container py-5">
+    <Container className="canvas-container py-5" style={{ backgroundColor: 'white' }}>
       {/* Cabeçalho */}
       <Row className="mb-4 text-center">
         <Col>
-          <h1 className="canvas-title">Business Model Canvas</h1>
-       
+          <h1 className="canvas-title text-dark">Business Model Canvas</h1>
+          <p className="text-muted">Visualize e edite seu modelo de negócios</p>
         </Col>
       </Row>
 
@@ -144,6 +147,39 @@ export function Canvas() {
       </Row>
 
       {/* Segunda Linha */}
+      <Row className="g-4 mb-4">
+        <Col md={6} lg={4}>
+          <CanvasItem 
+            title="Segmento de Clientes"
+            icon="👥"
+            items={canvasData.customers}
+            color="primary"
+            onUpdateItems={(items) => updateItems('customers', items)}
+          />
+        </Col>
+
+        <Col md={6} lg={4}>
+          <CanvasItem 
+            title="Canais de Distribuição"
+            icon="📦"
+            items={canvasData.channels}
+            color="secondary"
+            onUpdateItems={(items) => updateItems('channels', items)}
+          />
+        </Col>
+
+        <Col md={6} lg={4}>
+          <CanvasItem 
+            title="Recursos Chave"
+            icon="🔑"
+            items={canvasData.resources}
+            color="warning"
+            onUpdateItems={(items) => updateItems('resources', items)}
+          />
+        </Col>
+      </Row>
+
+      {/* Terceira Linha */}
       <Row className="g-4">
         <Col lg={6}>
           <CanvasItem 

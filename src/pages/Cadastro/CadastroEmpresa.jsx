@@ -12,7 +12,7 @@ import MoneyIcon from '@mui/icons-material/Money';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 const CadastroEmpresa = () => {
-  const [empresa, setEmpresa] = useState({
+  const initialFormState = {
     nome: '',
     razao_social: '',
     endereco: '',
@@ -29,24 +29,19 @@ const CadastroEmpresa = () => {
     ano_inicial_negocios: '',
     mes_inicial_negocios: '',
     usuario_id: 1
-  });
+  };
 
+  const [empresa, setEmpresa] = useState(initialFormState);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('dados-basicos');
+  const [cadastroRealizado, setCadastroRealizado] = useState(false);
 
-  // Função para formatar CNPJ
   const formatCNPJ = (value) => {
     if (!value) return '';
-    
-    // Remove tudo que não é dígito
-    const cleaned = value.replace(/\D/g, '');
-    
-    // Limita a 14 caracteres (tamanho do CNPJ)
-    const limited = cleaned.slice(0, 14);
-    
-    // Aplica máscara de CNPJ: 00.000.000/0000-00
-    return limited
+    const cleaned = value.replace(/\D/g, '').slice(0, 14);
+    return cleaned
       .replace(/^(\d{2})(\d)/, '$1.$2')
       .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
       .replace(/\.(\d{3})(\d)/, '.$1/$2')
@@ -54,180 +49,190 @@ const CadastroEmpresa = () => {
       .replace(/(-\d{2})\d+?$/, '$1');
   };
 
-  // Função para formatar Telefone
   const formatPhone = (value) => {
     if (!value) return '';
-    
-    // Remove tudo que não é dígito
-    const cleaned = value.replace(/\D/g, '');
-    
-    // Limita a 11 caracteres (tamanho máximo com DDD e 9º dígito)
-    const limited = cleaned.slice(0, 11);
-    
-    // Verifica se é celular (com 9º dígito)
-    const isCelular = limited.length > 10;
-    
-    // Aplica máscara de telefone: (00) 0000-0000 ou (00) 90000-0000
-    if (isCelular) {
-      return limited
+    const cleaned = value.replace(/\D/g, '').slice(0, 11);
+    const isCelular = cleaned.length > 10;
+    return isCelular
+      ? cleaned
         .replace(/^(\d{2})(\d)/, '($1) $2')
         .replace(/(\d{5})(\d)/, '$1-$2')
-        .replace(/(-\d{4})\d+?$/, '$1');
-    } else {
-      return limited
+        .replace(/(-\d{4})\d+?$/, '$1')
+      : cleaned
         .replace(/^(\d{2})(\d)/, '($1) $2')
         .replace(/(\d{4})(\d)/, '$1-$2')
         .replace(/(-\d{4})\d+?$/, '$1');
-    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEmpresa({ ...empresa, [name]: value });
+    setEmpresa(prev => ({ ...prev, [name]: value }));
   };
 
-  // Função específica para lidar com mudanças no CNPJ
   const handleCNPJChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = formatCNPJ(value);
-    setEmpresa({ ...empresa, cnpj: formattedValue });
+    const formattedValue = formatCNPJ(e.target.value);
+    setEmpresa(prev => ({ ...prev, cnpj: formattedValue }));
   };
 
-  // Função específica para lidar com mudanças no Telefone
   const handlePhoneChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = formatPhone(value);
-    setEmpresa({ ...empresa, telefone: formattedValue });
+    const formattedValue = formatPhone(e.target.value);
+    setEmpresa(prev => ({ ...prev, telefone: formattedValue }));
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!empresa.nome) newErrors.nome = 'Campo obrigatório';
-    if (!empresa.cnpj) newErrors.cnpj = 'Campo obrigatório';
+    if (!empresa.nome.trim()) newErrors.nome = 'Campo obrigatório';
+    if (!empresa.cnpj.trim()) newErrors.cnpj = 'Campo obrigatório';
+    else if (empresa.cnpj.replace(/\D/g, '').length !== 14) newErrors.cnpj = 'CNPJ inválido';
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log('Dados:', empresa);
+    if (!validate()) return;
+
+    setLoading(true);
+
+    try {
+      const dadosParaEnviar = {
+        ...empresa,
+        cnpj: empresa.cnpj.replace(/\D/g, ''),
+        telefone: empresa.telefone.replace(/\D/g, '')
+      };
+
+      const response = await fetch("http://localhost/teste/CadastroEmpresa.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dadosParaEnviar),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro no servidor");
+      }
+
+      const resultado = await response.json();
       setSuccess(true);
+      setCadastroRealizado(true);
+      
       setTimeout(() => setSuccess(false), 3000);
+    } catch (error) {
+      console.error("Erro:", error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Nova empresa
+  const handleNovaEmpresa = () => {
+    setEmpresa(initialFormState);
+    setCadastroRealizado(false);
+    setErrors({});
+  };
+
+  // Dados auxiliares
   const meses = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
-  // Paleta de cores elegante
+  // Estilos
   const colors = {
-    primary: '#2c3e50',       // Azul petróleo escuro
-    secondary: '#34495e',     // Azul petróleo mais claro
-    accent: '#3498db',        // Azul vibrante
-    light: '#ecf0f1',         // Cinza muito claro
-    background: '#f8f9fa',    // Fundo suave
-    text: '#2c3e50',          // Texto escuro
-    success: '#27ae60',       // Verde elegante
-    error: '#e74c3c'          // Vermelho suave
+    primary: '#4a6fa5',
+    secondary: '#6c8fc7',
+    accent: '#88a0d3',
+    light: '#ffffff',
+    background: '#f8fafc',
+    text: '#334155',
+    textLight: '#64748b',
+    success: '#10b981',
+    error: '#ef4444',
+    border: '#e2e8f0',
+    hover: '#f1f5f9'
   };
 
   return (
-    <Container className="mt-3" style={{ maxWidth: '960px' }}>
+    <Container className="mt-4" style={{ maxWidth: '960px' }}>
       <Row className="justify-content-center">
         <Col lg={12}>
           <Card className="border-0" style={{ 
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             borderRadius: '12px',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            backgroundColor: colors.light
           }}>
             <Card.Header style={{ 
-              backgroundColor: colors.primary,
-              borderBottom: `1px solid ${colors.secondary}`,
-              padding: '0.75rem 1.25rem'
+              backgroundColor: colors.light,
+              borderBottom: `1px solid ${colors.border}`,
+              padding: '1.25rem 1.5rem'
             }}>
               <div className="d-flex align-items-center">
-                <BusinessIcon style={{ color: '#fff', marginRight: '10px' }} fontSize="small" />
-                <h5 style={{ 
-                  color: '#fff',
-                  margin: 0,
-                  fontWeight: 500,
-                  letterSpacing: '0.5px'
-                }}>
-                  Cadastro de Empresa
+                <BusinessIcon style={{ color: colors.primary, marginRight: '12px' }} fontSize="medium" />
+                <h5 style={{ color: colors.text, margin: 0, fontWeight: 600, fontSize: '1.25rem' }}>
+                  {cadastroRealizado ? 'Empresa Cadastrada' : 'Cadastro de Empresa'}
                 </h5>
               </div>
             </Card.Header>
             
-            <Card.Body style={{ 
-              backgroundColor: colors.background,
-              padding: '1.25rem'
-            }}>
+            <Card.Body style={{ backgroundColor: colors.light, padding: '1.5rem' }}>
               {success && (
                 <Alert variant="success" style={{
                   backgroundColor: colors.success,
-                  color: '#fff',
+                  color: colors.light,
                   border: 'none',
-                  padding: '0.5rem 1rem',
-                  marginBottom: '1rem',
-                  borderRadius: '6px'
-                }} dismissible onClose={() => setSuccess(false)}>
+                  padding: '0.75rem 1.25rem',
+                  marginBottom: '1.5rem',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                  <svg style={{ marginRight: '8px' }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white"/>
+                  </svg>
                   Empresa cadastrada com sucesso!
                 </Alert>
               )}
 
-              <div className="mb-3" style={{ display: 'flex', gap: '8px' }}>
-                <Button 
-                  variant="link"
-                  style={{
-                    color: activeTab === 'dados-basicos' ? colors.primary : '#95a5a6',
-                    backgroundColor: activeTab === 'dados-basicos' ? '#fff' : 'transparent',
-                    border: activeTab === 'dados-basicos' ? `1px solid ${colors.primary}` : '1px solid #dfe6e9',
-                    borderRadius: '6px',
-                    padding: '0.375rem 0.75rem',
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    boxShadow: activeTab === 'dados-basicos' ? `0 2px 4px rgba(44, 62, 80, 0.1)` : 'none'
-                  }}
-                  onClick={() => setActiveTab('dados-basicos')}
-                >
-                  Dados Básicos
-                </Button>
-                <Button 
-                  variant="link"
-                  style={{
-                    color: activeTab === 'contato' ? colors.primary : '#95a5a6',
-                    backgroundColor: activeTab === 'contato' ? '#fff' : 'transparent',
-                    border: activeTab === 'contato' ? `1px solid ${colors.primary}` : '1px solid #dfe6e9',
-                    borderRadius: '6px',
-                    padding: '0.375rem 0.75rem',
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    boxShadow: activeTab === 'contato' ? `0 2px 4px rgba(44, 62, 80, 0.1)` : 'none'
-                  }}
-                  onClick={() => setActiveTab('contato')}
-                >
-                  Contato
-                </Button>
-                <Button 
-                  variant="link"
-                  style={{
-                    color: activeTab === 'detalhes' ? colors.primary : '#95a5a6',
-                    backgroundColor: activeTab === 'detalhes' ? '#fff' : 'transparent',
-                    border: activeTab === 'detalhes' ? `1px solid ${colors.primary}` : '1px solid #dfe6e9',
-                    borderRadius: '6px',
-                    padding: '0.375rem 0.75rem',
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    boxShadow: activeTab === 'detalhes' ? `0 2px 4px rgba(44, 62, 80, 0.1)` : 'none'
-                  }}
-                  onClick={() => setActiveTab('detalhes')}
-                >
-                  Detalhes
-                </Button>
-              </div>
+              {!cadastroRealizado && (
+                <div className="mb-4" style={{ display: 'flex', gap: '8px', borderBottom: `1px solid ${colors.border}`, paddingBottom: '1rem' }}>
+                  {['dados-basicos', 'contato', 'detalhes'].map((tab) => (
+                    <Button 
+                      key={tab}
+                      variant="link"
+                      style={{
+                        color: activeTab === tab ? colors.primary : colors.textLight,
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        borderRadius: '6px',
+                        padding: '0.5rem 1rem',
+                        fontWeight: 500,
+                        textDecoration: 'none',
+                        position: 'relative',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onClick={() => setActiveTab(tab)}
+                    >
+                      {tab === 'dados-basicos' && 'Dados Básicos'}
+                      {tab === 'contato' && 'Contato'}
+                      {tab === 'detalhes' && 'Detalhes'}
+                      {activeTab === tab && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-1.1rem',
+                          left: 0,
+                          right: 0,
+                          height: '2px',
+                          backgroundColor: colors.primary,
+                          borderRadius: '2px'
+                        }} />
+                      )}
+                    </Button>
+                  ))}
+                </div>
+              )}
 
               <Form onSubmit={handleSubmit}>
                 {activeTab === 'dados-basicos' && (
@@ -239,27 +244,23 @@ const CadastroEmpresa = () => {
                         name="nome"
                         value={empresa.nome}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         error={!!errors.nome}
                         helperText={errors.nome}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <BusinessIcon fontSize="small" style={{ color: colors.primary }} />
+                              <BusinessIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
                     <Col md={6}>
@@ -269,78 +270,58 @@ const CadastroEmpresa = () => {
                         name="razao_social"
                         value={empresa.razao_social}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <AssignmentIcon fontSize="small" style={{ color: colors.primary }} />
+                              <AssignmentIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mt-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="CNPJ *"
                         name="cnpj"
                         value={empresa.cnpj}
                         onChange={handleCNPJChange}
-                        size="small"
-                        margin="dense"
                         error={!!errors.cnpj}
                         helperText={errors.cnpj}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <AssignmentIcon fontSize="small" style={{ color: colors.primary }} />
+                              <AssignmentIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mt-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Formato Jurídico"
                         name="foramato_juridico"
                         value={empresa.foramato_juridico}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
-                        InputProps={{
-                          style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
                   </Row>
@@ -348,109 +329,77 @@ const CadastroEmpresa = () => {
 
                 {activeTab === 'contato' && (
                   <Row>
-                    <Col md={8} className="mb-2">
+                    <Col md={8}>
                       <TextField
                         fullWidth
                         label="Endereço"
                         name="endereco"
                         value={empresa.endereco}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <HomeIcon fontSize="small" style={{ color: colors.primary }} />
+                              <HomeIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={4} className="mb-2">
+                    <Col md={4}>
                       <TextField
                         fullWidth
                         label="Complemento"
                         name="complemento"
                         value={empresa.complemento}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
-                        InputProps={{
-                          style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Cidade/Estado"
                         name="cidade_estado"
                         value={empresa.cidade_estado}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
-                        InputProps={{
-                          style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Telefone"
                         name="telefone"
                         value={empresa.telefone}
                         onChange={handlePhoneChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <PhoneIcon fontSize="small" style={{ color: colors.primary }} />
+                              <PhoneIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={12} className="mb-2">
+                    <Col md={12}>
                       <TextField
                         fullWidth
                         label="Email"
@@ -458,25 +407,21 @@ const CadastroEmpresa = () => {
                         type="email"
                         value={empresa.email}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <EmailIcon fontSize="small" style={{ color: colors.primary }} />
+                              <EmailIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
                   </Row>
@@ -484,58 +429,42 @@ const CadastroEmpresa = () => {
 
                 {activeTab === 'detalhes' && (
                   <Row>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="CNAE"
                         name="cnae"
                         value={empresa.cnae}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
-                        InputProps={{
-                          style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Alíquota de Imposto"
                         name="aliquota_de_imposto"
                         value={empresa.aliquota_de_imposto}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <MoneyIcon fontSize="small" style={{ color: colors.primary }} />
+                              <MoneyIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Ano Inicial de Negócios"
@@ -543,34 +472,26 @@ const CadastroEmpresa = () => {
                         type="number"
                         value={empresa.ano_inicial_negocios}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <CalendarTodayIcon fontSize="small" style={{ color: colors.primary }} />
+                              <CalendarTodayIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <Form.Group controlId="mesInicialNegocios">
-                        <Form.Label style={{ 
-                          color: colors.text,
-                          fontSize: '0.875rem',
-                          marginBottom: '0.25rem'
-                        }}>
+                        <Form.Label style={{ color: colors.textLight, fontSize: '0.875rem' }}>
                           Mês Inicial
                         </Form.Label>
                         <Form.Select
@@ -578,13 +499,12 @@ const CadastroEmpresa = () => {
                           value={empresa.mes_inicial_negocios}
                           onChange={handleChange}
                           style={{
-                            backgroundColor: '#fff',
-                            border: '1px solid #dfe6e9',
-                            borderRadius: '6px',
-                            color: colors.text,
-                            fontSize: '0.875rem',
-                            padding: '0.375rem 0.75rem'
+                            backgroundColor: colors.light,
+                            border: `1px solid ${colors.border}`,
+                            borderRadius: '8px',
+                            height: '40px'
                           }}
+                          disabled={cadastroRealizado}
                         >
                           <option value="">Selecione</option>
                           {meses.map((mes, index) => (
@@ -593,7 +513,7 @@ const CadastroEmpresa = () => {
                         </Form.Select>
                       </Form.Group>
                     </Col>
-                    <Col md={6} className="mb-2">
+                    <Col md={6}>
                       <TextField
                         fullWidth
                         label="Data de Fundação"
@@ -601,74 +521,83 @@ const CadastroEmpresa = () => {
                         type="date"
                         value={empresa.data_fundacao}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         InputLabelProps={{ shrink: true }}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <EventIcon fontSize="small" style={{ color: colors.primary }} />
+                              <EventIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        style={{ color: colors.text }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
-                    <Col md={12} className="mb-2">
+                    <Col md={12}>
                       <TextField
                         fullWidth
                         label="Observações"
                         name="observacoes"
                         value={empresa.observacoes}
                         onChange={handleChange}
-                        size="small"
-                        margin="dense"
                         multiline
-                        rows={2}
+                        rows={3}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <NotesIcon fontSize="small" style={{ color: colors.primary }} />
+                              <NotesIcon fontSize="small" style={{ color: colors.textLight }} />
                             </InputAdornment>
                           ),
                           style: {
-                            backgroundColor: '#fff',
-                            borderRadius: '6px',
-                            border: '1px solid #dfe6e9'
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
                           }
                         }}
-                        InputLabelProps={{
-                          style: {
-                            color: colors.text
-                          }
-                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
                       />
                     </Col>
                   </Row>
                 )}
 
-                <div className="d-grid mt-3">
-                  <Button 
-                    type="submit" 
-                    style={{
-                      backgroundColor: colors.primary,
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '0.5rem',
-                      fontWeight: 500,
-                      letterSpacing: '0.5px',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseOver={(e) => e.target.style.backgroundColor = colors.secondary}
-                    onMouseOut={(e) => e.target.style.backgroundColor = colors.primary}
-                  >
-                    Salvar Cadastro
-                  </Button>
+                <div className="d-flex justify-content-end mt-4">
+                  {!cadastroRealizado ? (
+                    <Button 
+                      type="submit" 
+                      disabled={loading}
+                      style={{
+                        backgroundColor: colors.primary,
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '0.625rem 1.5rem',
+                        fontWeight: 500,
+                        opacity: loading ? 0.7 : 1
+                      }}
+                    >
+                      {loading ? 'Salvando...' : 'Salvar Cadastro'}
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={handleNovaEmpresa}
+                      style={{
+                        backgroundColor: colors.secondary,
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '0.625rem 1.5rem',
+                        fontWeight: 500
+                      }}
+                    >
+                      Cadastrar Nova Empresa
+                    </Button>
+                  )}
                 </div>
               </Form>
             </Card.Body>
