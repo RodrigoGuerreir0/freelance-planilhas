@@ -2,7 +2,6 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useState } from 'react';
 import './Canvas.css';
 
-// Componente de Item editável
 const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newItem, setNewItem] = useState('');
@@ -74,7 +73,6 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
   );
 };
 
-// Componente principal Canvas
 export function Canvas() {
   const [canvasData, setCanvasData] = useState({
     partnerships: ['Academias de Consultor'],
@@ -103,7 +101,6 @@ export function Canvas() {
         </Col>
       </Row>
 
-      {/* Primeira Linha */}
       <Row className="g-4 mb-4">
         <Col md={6} lg={3}>
           <CanvasItem 
@@ -146,7 +143,6 @@ export function Canvas() {
         </Col>
       </Row>
 
-      {/* Segunda Linha */}
       <Row className="g-4 mb-4">
         <Col md={6} lg={4}>
           <CanvasItem 
@@ -179,7 +175,6 @@ export function Canvas() {
         </Col>
       </Row>
 
-      {/* Terceira Linha */}
       <Row className="g-4">
         <Col lg={6}>
           <CanvasItem 

@@ -37,18 +37,17 @@ const CadastroEquipes = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Paleta de cores moderna e clara
   const colors = {
-    primary: '#4a6fa5',       // Azul suave
-    secondary: '#6c8fc7',     // Azul mais claro
-    light: '#ffffff',         // Branco puro
-    background: '#f8fafc',    // Fundo muito claro
-    text: '#334155',          // Texto escuro suave
-    textLight: '#64748b',     // Texto cinza
-    success: '#10b981',       // Verde suave
-    error: '#ef4444',         // Vermelho suave
-    border: '#e2e8f0',        // Borda clara
-    hover: '#f1f5f9'          // Cor de hover
+    primary: '#4a6fa5',       
+    secondary: '#6c8fc7',     
+    light: '#ffffff',         
+    background: '#f8fafc',    
+    text: '#334155',          
+    textLight: '#64748b',     
+    success: '#10b981',       
+    error: '#ef4444',         
+    border: '#e2e8f0',        
+    hover: '#f1f5f9'          
   };
 
   const handleChange = (e) => {

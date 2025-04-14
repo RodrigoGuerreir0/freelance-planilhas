@@ -6,27 +6,24 @@ import {
 } from '@mui/icons-material';
 
 const AnaliseSWOT = () => {
-  // Paleta de cores super claras
   const colors = {
-    primary: '#64B5F6',       // Azul claro
-    secondary: '#FAFAFA',     // Branco quase puro
-    accent: '#90CAF9',        // Azul mais claro
-    light: '#FFFFFF',         // Branco puro
-    background: '#F5F5F5',    // Cinza muito claro
-    text: '#424242',          // Texto escuro
-    success: '#A5D6A7',       // Verde muito claro
-    warning: '#FFCC80',       // Laranja muito claro
-    error: '#EF9A9A',         // Vermelho muito claro
-    white: '#FFFFFF',         // Branco
-    black: '#212121',         // Preto
-    // Cores específicas para SWOT
-    forca: '#C8E6C9',         // Verde muito claro
-    fraqueza: '#FFCDD2',      // Vermelho muito claro
-    oportunidade: '#BBDEFB',  // Azul muito claro
-    ameaca: '#FFE0B2',        // Laranja muito claro
+    primary: '#64B5F6',       
+    secondary: '#FAFAFA',     
+    accent: '#90CAF9',        
+    light: '#FFFFFF',         
+    background: '#F5F5F5',    
+    text: '#424242',          
+    success: '#A5D6A7',       
+    warning: '#FFCC80',       
+    error: '#EF9A9A',         
+    white: '#FFFFFF',         
+    black: '#212121',         
+    forca: '#C8E6C9',         
+    fraqueza: '#FFCDD2',      
+    oportunidade: '#BBDEFB',  
+    ameaca: '#FFE0B2',        
   };
 
-  // Opções de classificação
   const opcoesClassificacao = ['Força', 'Fraqueza'];
   const opcoesImportancia = [
     'Totalmente sem importância',
@@ -36,20 +33,17 @@ const AnaliseSWOT = () => {
     'Totalmente importante'
   ];
 
-  // Estado inicial para Forças e Fraquezas
   const [forcasFraquezas, setForcasFraquezas] = useState([
     { id: 1, descricao: 'A empresa tem diferencial inovador', classificacao: 'Força', importancia: 'Totalmente sem importância', pontuacao: 0 },
     { id: 2, descricao: 'A tecnologia própria é essencial para o negócio', classificacao: 'Fraqueza', importancia: 'Totalmente importante', pontuacao: 10 },
     { id: 3, descricao: 'O produto é de qualidade', classificacao: 'Fraqueza', importancia: 'Pouco importante', pontuacao: 2.5 }
   ]);
 
-  // Estado inicial para Oportunidades e Ameaças
   const [oportunidadesAmeacas, setOportunidadesAmeacas] = useState([
     { id: 1, descricao: 'Há mercados inexplorados', classificacao: 'Oportunidade', importancia: 'Muito importante', pontuacao: 7.5 },
     { id: 2, descricao: 'Possibilidade de parcerias estratégicas', classificacao: 'Oportunidade', importancia: 'Pouco importante', pontuacao: 2.5 }
   ]);
 
-  // Calcular pontuação baseada na importância
   const calcularPontuacao = (importancia) => {
     switch(importancia) {
       case 'Totalmente sem importância':
@@ -67,31 +61,30 @@ const AnaliseSWOT = () => {
     }
   };
 
-  // Obter cor baseada na classificação (tons muito claros)
   const getClassificacaoStyle = (classificacao) => {
     switch(classificacao) {
       case 'Força':
         return { 
           backgroundColor: colors.forca, 
-          color: '#2E7D32', // Texto verde escuro para contraste
+          color: '#2E7D32', 
           border: `1px solid ${colors.forca}`
         };
       case 'Fraqueza':
         return { 
           backgroundColor: colors.fraqueza, 
-          color: '#C62828', // Texto vermelho escuro para contraste
+          color: '#C62828', 
           border: `1px solid ${colors.fraqueza}`
         };
       case 'Oportunidade':
         return { 
           backgroundColor: colors.oportunidade, 
-          color: '#1565C0', // Texto azul escuro para contraste
+          color: '#1565C0', 
           border: `1px solid ${colors.oportunidade}`
         };
       case 'Ameaça':
         return { 
           backgroundColor: colors.ameaca, 
-          color: '#E65100', // Texto laranja escuro para contraste
+          color: '#E65100',
           border: `1px solid ${colors.ameaca}`
         };
       default:
@@ -99,18 +92,17 @@ const AnaliseSWOT = () => {
     }
   };
 
-  // Obter cor baseada na importância (tons muito claros)
   const getImportanciaStyle = (importancia) => {
     switch(importancia) {
       case 'Totalmente sem importância':
         return { 
-          backgroundColor: '#FFEBEE', // Vermelho super claro
+          backgroundColor: '#FFEBEE', 
           color: colors.text,
           border: '1px solid #EF9A9A'
         };
       case 'Pouco importante':
         return { 
-          backgroundColor: '#FFF8E1', // Amarelo super claro
+          backgroundColor: '#FFF8E1', 
           color: colors.text,
           border: '1px solid #FFE082'
         };
@@ -122,13 +114,13 @@ const AnaliseSWOT = () => {
         };
       case 'Muito importante':
         return { 
-          backgroundColor: '#E3F2FD', // Azul super claro
+          backgroundColor: '#E3F2FD', 
           color: colors.text,
           border: '1px solid #90CAF9'
         };
       case 'Totalmente importante':
         return { 
-          backgroundColor: '#E1F5FE', // Azul mais claro ainda
+          backgroundColor: '#E1F5FE', 
           color: colors.text,
           border: '1px solid #4FC3F7'
         };
@@ -137,17 +129,15 @@ const AnaliseSWOT = () => {
     }
   };
 
-  // Estilo para pontuação (cores suaves)
   const getPontuacaoStyle = (pontuacao) => {
     const num = parseFloat(pontuacao);
     if (isNaN(num)) return { color: colors.text };
     
-    if (num >= 8) return { color: '#388E3C', fontWeight: 'bold' }; // Verde mais suave
-    if (num >= 5) return { color: '#F57C00', fontWeight: 'bold' }; // Laranja mais suave
-    return { color: '#D32F2F', fontWeight: 'bold' };               // Vermelho mais suave
+    if (num >= 8) return { color: '#388E3C', fontWeight: 'bold' }; 
+    if (num >= 5) return { color: '#F57C00', fontWeight: 'bold' }; 
+    return { color: '#D32F2F', fontWeight: 'bold' };               
   };
 
-  // Adicionar novo item
   const adicionarItem = (lista, setLista, tipo) => {
     const novoId = lista.length > 0 ? Math.max(...lista.map(item => item.id)) + 1 : 1;
     const novoItem = {
@@ -160,12 +150,10 @@ const AnaliseSWOT = () => {
     setLista([...lista, novoItem]);
   };
 
-  // Remover item
   const removerItem = (lista, setLista, id) => {
     setLista(lista.filter(item => item.id !== id));
   };
 
-  // Atualizar item
   const atualizarItem = (lista, setLista, id, campo, valor) => {
     setLista(lista.map(item => {
       if (item.id === id) {
@@ -196,7 +184,6 @@ const AnaliseSWOT = () => {
         Análise SWOT
       </h2>
 
-      {/* Forças e Fraquezas */}
       <Card className="mb-4" style={{ 
         border: 'none',
         borderRadius: '12px',

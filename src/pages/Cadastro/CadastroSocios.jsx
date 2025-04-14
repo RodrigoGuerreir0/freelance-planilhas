@@ -17,21 +17,16 @@ import EditIcon from '@mui/icons-material/Edit';
 const formatDocument = (value) => {
   if (!value) return '';
   
-  // Remove tudo que não é dígito
   const cleaned = value.replace(/\D/g, '');
   
-  // CPF: 11 dígitos
   if (cleaned.length <= 11) {
-    // Aplica máscara de CPF: 000.000.000-00
     return cleaned
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})/, '$1-$2')
       .replace(/(-\d{2})\d+?$/, '$1');
   } 
-  // CNPJ: mais de 11 dígitos
   else {
-    // Aplica máscara de CNPJ: 00.000.000/0000-00
     return cleaned
       .replace(/^(\d{2})(\d)/, '$1.$2')
       .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
@@ -44,13 +39,10 @@ const formatDocument = (value) => {
 const formatPhone = (value) => {
   if (!value) return '';
   
-  // Remove tudo que não é dígito
   const cleaned = value.replace(/\D/g, '');
   
-  // Verifica se é celular (começa com dígito 9 após o DDD)
   const isCelular = cleaned.length > 2 && cleaned[2] === '9';
   
-  // Aplica máscara de telefone
   if (cleaned.length <= 2) {
     return `(${cleaned}`;
   } else if (cleaned.length <= 6) {
@@ -85,18 +77,17 @@ const CadastroSocios = () => {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
 
-  // Paleta de cores moderna e clara
   const colors = {
-    primary: '#4a6fa5',       // Azul suave
-    secondary: '#6c8fc7',     // Azul mais claro
-    light: '#ffffff',         // Branco puro
-    background: '#f8fafc',    // Fundo muito claro
-    text: '#334155',          // Texto escuro suave
-    textLight: '#64748b',     // Texto cinza
-    success: '#10b981',       // Verde suave
-    error: '#ef4444',         // Vermelho suave
-    border: '#e2e8f0',        // Borda clara
-    hover: '#f1f5f9'          // Cor de hover
+    primary: '#4a6fa5',       
+    secondary: '#6c8fc7',      
+    light: '#ffffff',         
+    background: '#f8fafc',     
+    text: '#334155',           
+    textLight: '#64748b',     
+    success: '#10b981',       
+    error: '#ef4444',         
+    border: '#e2e8f0',        
+    hover: '#f1f5f9'           
   };
 
   const handleDocumentChange = (id, e) => {

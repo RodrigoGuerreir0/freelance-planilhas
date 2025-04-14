@@ -14,23 +14,21 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const CadastroDiretrizesEmpresa = () => {
-  // Nova paleta de cores claras
+  
   const colors = {
-    primary: '#1976d2', // Azul mais suave
-    secondary: '#f5f5f5', // Cinza muito claro
-    accent: '#64b5f6', // Azul claro
-    light: '#ffffff', // Branco puro
-    background: '#fafafa', // Branco levemente acinzentado
-    text: '#424242', // Cinza escuro para texto
-    success: '#4caf50', // Verde suave
-    error: '#f44336'  // Vermelho suave
+    primary: '#1976d2', 
+    secondary: '#f5f5f5', 
+    accent: '#64b5f6', 
+    light: '#ffffff', 
+    background: '#fafafa', 
+    text: '#424242',
+    success: '#4caf50', 
+    error: '#f44336'  
   };
 
-  // Estado para controle de edição
   const [editMode, setEditMode] = useState(true);
   const [success, setSuccess] = useState(false);
 
-  // Estado para os dados da empresa
   const [empresa, setEmpresa] = useState({
     nome: 'LUZ Planilhas',
     anoInicial: '2022',
@@ -41,7 +39,6 @@ const CadastroDiretrizesEmpresa = () => {
     valores: ['']
   });
 
-  // Meses para o select
   const meses = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -52,7 +49,6 @@ const CadastroDiretrizesEmpresa = () => {
     setEmpresa({ ...empresa, [name]: value });
   };
 
-  // Funções para manipular arrays dinâmicos
   const handleArrayChange = (arrayName, index, value) => {
     const newArray = [...empresa[arrayName]];
     newArray[index] = value;
@@ -82,8 +78,6 @@ const CadastroDiretrizesEmpresa = () => {
     setSuccess(true);
     setTimeout(() => setSuccess(false), 3000);
   };
-
-  // Renderiza itens em modo de visualização
   const renderViewItems = (items, icon) => (
     <ListGroup variant="flush">
       {items.map((item, index) => (
@@ -114,7 +108,6 @@ const CadastroDiretrizesEmpresa = () => {
     </ListGroup>
   );
 
-  // Renderiza campos em modo de edição
   const renderEditItems = (arrayName, label, icon) => (
     <div>
       {empresa[arrayName].map((item, index) => (
@@ -244,7 +237,6 @@ const CadastroDiretrizesEmpresa = () => {
           )}
 
           <Form onSubmit={handleSubmit}>
-            {/* Seção de Informações Básicas */}
             <div style={{ 
               backgroundColor: colors.light,
               borderRadius: '8px',
@@ -378,7 +370,6 @@ const CadastroDiretrizesEmpresa = () => {
               </Row>
             </div>
             
-            {/* Seção de Missões */}
             <div style={{ 
               backgroundColor: colors.light,
               borderRadius: '8px',
@@ -405,7 +396,6 @@ const CadastroDiretrizesEmpresa = () => {
               )}
             </div>
             
-            {/* Seção de Visões */}
             <div style={{ 
               backgroundColor: colors.light,
               borderRadius: '8px',
@@ -431,8 +421,6 @@ const CadastroDiretrizesEmpresa = () => {
                 renderViewItems(empresa.visoes, <VisibilityIcon fontSize="small" />)
               )}
             </div>
-            
-            {/* Seção de Valores */}
             <div style={{ 
               backgroundColor: colors.light,
               borderRadius: '8px',

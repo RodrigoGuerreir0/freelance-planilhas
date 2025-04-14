@@ -25,7 +25,6 @@ import {
   Filler
 } from 'chart.js';
 
-// Registra os componentes do Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -40,7 +39,6 @@ ChartJS.register(
   Filler
 );
 
-// Cores modernas para o tema
 const COLORS = {
   primary: '#4361ee',
   secondary: '#3f37c9',
@@ -72,7 +70,6 @@ const CORES_PREDEFINIDAS = [
 ];
 
 export function CurvaDeValores() {
-  // Estados para os gráficos
   const [tipoGrafico, setTipoGrafico] = useState('line');
   const [labels, setLabels] = useState(['Jan', 'Fev', 'Mar', 'Abr', 'Mai']);
   const [datasets, setDatasets] = useState([
@@ -93,7 +90,6 @@ export function CurvaDeValores() {
   ]);
   const [activeDataset, setActiveDataset] = useState(0);
 
-  // Estados para os alertas
   const [alertas, setAlertas] = useState([
     { id: 1, tipo: 'info', texto: 'Você optou por um modelo de negócio em que o seu maior atributo é Expertise Financeira' },
     { id: 2, tipo: 'info', texto: 'Dos 15 atributos possíveis, você só usou 5. Faça uma análise e tente identificar se os atributos utilizados são suficientes para a análise' },
@@ -106,7 +102,6 @@ export function CurvaDeValores() {
   const [editandoAlerta, setEditandoAlerta] = useState(null);
   const [textoEditado, setTextoEditado] = useState('');
 
-  // Funções para os gráficos (mantidas iguais)
   const adicionarItem = () => {
     setLabels([...labels, `Mês ${labels.length + 1}`]);
     setDatasets(datasets.map(dataset => ({
@@ -177,7 +172,6 @@ export function CurvaDeValores() {
     setDatasets(newDatasets);
   };
 
-  // Funções para os alertas (mantidas iguais)
   const adicionarAlerta = () => {
     if (!novoAlerta.trim()) return;
     
@@ -213,7 +207,6 @@ export function CurvaDeValores() {
     setEditandoAlerta(null);
   };
 
-  // Configuração do gráfico (com ajustes visuais)
   const getChartData = () => {
     const baseData = {
       labels,
@@ -386,7 +379,6 @@ export function CurvaDeValores() {
           </Col>
         </Row>
 
-        {/* Seção de Gráfico */}
         <Card className="mb-4 border-0 shadow-sm">
           <Card.Body className="p-4">
             <Row className="align-items-center mb-4">
@@ -422,7 +414,6 @@ export function CurvaDeValores() {
           </Card.Body>
         </Card>
 
-        {/* Controles dos Datasets */}
         <Card className="mb-4 border-0 shadow-sm">
           <Card.Body className="p-4">
             <Tabs
@@ -607,7 +598,6 @@ export function CurvaDeValores() {
           </Card.Body>
         </Card>
 
-        {/* Seção de Alertas */}
         <Card className="border-0 shadow-sm">
           <Card.Body className="p-4">
             <div className="d-flex justify-content-between align-items-center mb-4">

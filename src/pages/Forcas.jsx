@@ -23,22 +23,20 @@ import {
 } from '@mui/icons-material';
 
 const AnaliseConcorrencia = () => {
-  // Paleta de cores atualizada (tons mais claros)
   const colors = {
-    primary: '#1976d2',       // Azul principal
-    secondary: '#f5f5f5',     // Cinza claro
-    accent: '#64b5f6',        // Azul claro
-    light: '#ffffff',         // Branco
-    background: '#fafafa',    // Fundo branco acinzentado
-    text: '#424242',          // Texto escuro
-    success: '#81C784',       // Verde claro (sucesso)
-    warning: '#FFB74D',       // Laranja claro (alerta)
-    error: '#E57373',         // Vermelho claro (erro)
-    white: '#ffffff',         // Branco
-    black: '#212121'          // Preto
+    primary: '#1976d2',       
+    secondary: '#f5f5f5',     
+    accent: '#64b5f6',        
+    light: '#ffffff',
+    background: '#fafafa',    
+    text: '#424242',          
+    success: '#81C784',       
+    warning: '#FFB74D',       
+    error: '#E57373',         
+    white: '#ffffff',
+    black: '#212121'
   };
 
-  // Opções de ícones
   const iconesDisponiveis = [
     { nome: 'Business', componente: <Business /> },
     { nome: 'People', componente: <People /> },
@@ -57,7 +55,6 @@ const AnaliseConcorrencia = () => {
     { nome: 'Star', componente: <Star /> }
   ];
 
-  // Opções fixas
   const opcoesResposta = [
     'Concordo Totalmente',
     'Concordo Parcialmente',
@@ -72,12 +69,10 @@ const AnaliseConcorrencia = () => {
     'Sem importância'
   ];
 
-  // Estado para o modal de nova análise
   const [showModal, setShowModal] = useState(false);
   const [novoTitulo, setNovoTitulo] = useState('');
   const [iconeSelecionado, setIconeSelecionado] = useState(iconesDisponiveis[0]);
 
-  // Estado inicial com os dados das tabelas
   const [tabelas, setTabelas] = useState([
     {
       id: 1,
@@ -151,9 +146,7 @@ const AnaliseConcorrencia = () => {
     }
   ]);
 
-  // Calcular pontuação automática baseada na resposta e importância
   const calcularPontuacao = (resposta, importancia) => {
-    // Definir intervalos baseados na importância
     let min, max;
     
     if (importancia === 'Muito importante') {
@@ -162,12 +155,11 @@ const AnaliseConcorrencia = () => {
     } else if (importancia === 'Importante') {
       min = 6;
       max = 7;
-    } else { // Sem importância
+    } else { 
       min = 0;
       max = 5;
     }
 
-    // Mapear resposta para valor dentro do intervalo
     switch(resposta) {
       case 'Concordo Totalmente':
         return max;
@@ -184,7 +176,6 @@ const AnaliseConcorrencia = () => {
     }
   };
 
-  // Alternar estado de abertura/fechamento de uma tabela
   const toggleAbrirTabela = (tabelaId) => {
     setTabelas(tabelas.map(tabela => {
       if (tabela.id === tabelaId) {
@@ -194,7 +185,6 @@ const AnaliseConcorrencia = () => {
     }));
   };
 
-  // Adicionar nova pergunta a uma tabela específica
   const adicionarPergunta = (tabelaId) => {
     setTabelas(tabelas.map(tabela => {
       if (tabela.id === tabelaId) {
@@ -227,7 +217,6 @@ const AnaliseConcorrencia = () => {
     setShowModal(true);
   };
 
-  // Adicionar nova tabela de análise
   const adicionarNovaAnalise = () => {
     if (!novoTitulo.trim()) return;
     
@@ -251,7 +240,6 @@ const AnaliseConcorrencia = () => {
     setShowModal(false);
   };
 
-  // Remover pergunta de uma tabela específica
   const removerPergunta = (tabelaId, perguntaId) => {
     setTabelas(tabelas.map(tabela => {
       if (tabela.id === tabelaId) {
@@ -264,7 +252,6 @@ const AnaliseConcorrencia = () => {
     }));
   };
 
-  // Atualizar uma pergunta específica
   const atualizarPergunta = (tabelaId, perguntaId, campo, valor) => {
     setTabelas(tabelas.map(tabela => {
       if (tabela.id === tabelaId) {
@@ -274,7 +261,6 @@ const AnaliseConcorrencia = () => {
             if (pergunta.id === perguntaId) {
               const novaPergunta = { ...pergunta, [campo]: valor };
               
-              // Se mudou resposta ou importância, recalcular pontuação
               if (campo === 'resposta' || campo === 'importancia') {
                 novaPergunta.pontuacao = calcularPontuacao(
                   campo === 'resposta' ? valor : pergunta.resposta,
@@ -292,7 +278,6 @@ const AnaliseConcorrencia = () => {
     }));
   };
 
-  // Estilo para respostas (cores mais claras)
   const getRespostaStyle = (resposta) => {
     switch(resposta) {
       case 'Concordo Totalmente':
@@ -310,7 +295,6 @@ const AnaliseConcorrencia = () => {
     }
   };
 
-  // Estilo para importância (cores mais claras)
   const getImportanciaStyle = (importancia) => {
     switch(importancia) {
       case 'Muito importante':
@@ -324,7 +308,6 @@ const AnaliseConcorrencia = () => {
     }
   };
 
-  // Estilo para pontuação
   const getPontuacaoStyle = (pontuacao) => {
     const num = parseFloat(pontuacao);
     if (isNaN(num)) return { color: colors.text };
@@ -352,7 +335,6 @@ const AnaliseConcorrencia = () => {
         Análise de Concorrência e Mercado
       </h3>
 
-      {/* Renderizar cada tabela */}
       {tabelas.map(tabela => (
         <Card key={tabela.id} className="mb-4" style={{ 
           border: 'none',

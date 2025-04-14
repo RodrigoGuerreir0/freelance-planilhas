@@ -5,7 +5,6 @@ export const AppNavbar = () => {
     const location = useLocation();
     const currentPath = location.pathname;
 
-    // Mapeamento completo de todas as subrotas
     const allSubItems = {
         informacoes: [
             { path: "/informacoes/empresa", label: "Empresa" },
@@ -39,12 +38,10 @@ export const AppNavbar = () => {
         ]
     };
 
-    // Encontra qual grupo de subitens corresponde à rota atual
     const currentSubItems = Object.entries(allSubItems).find(([key]) => 
         currentPath.startsWith(`/${key}`)
     )?.[1] || [];
 
-    // Se não houver subitens ou estiver na raiz, não mostra nada
     if (currentSubItems.length === 0 || currentPath === '/') {
         return null;
     }

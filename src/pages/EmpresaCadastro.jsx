@@ -62,35 +62,34 @@ const EmpresaCadastro = () => {
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
-  // Paleta de cores elegante
   const colors = {
-    primary: '#2c3e50',       // Azul petróleo escuro
-    secondary: '#34495e',     // Azul petróleo mais claro
-    accent: '#3498db',        // Azul vibrante
-    light: '#ecf0f1',         // Cinza muito claro
-    background: '#f8f9fa',    // Fundo suave
-    text: '#2c3e50',          // Texto escuro
-    success: '#27ae60',       // Verde elegante
-    error: '#e74c3c'          // Vermelho suave
+    primary: '#2c3e50',
+    secondary: '#34495e',
+    accent: '#3498db',
+    light: '#ecf0f1',
+    background: '#f8f9fa',
+    text: '#2c3e50',
+    success: '#27ae60',
+    error: '#e74c3c'
   };
 
   return (
     <Container className="mt-3" style={{ maxWidth: '960px' }}>
       <Row className="justify-content-center">
         <Col lg={12}>
-          <Card className="border-0" style={{ 
+          <Card className="border-0" style={{
             boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
             borderRadius: '12px',
             overflow: 'hidden'
           }}>
-            <Card.Header style={{ 
+            <Card.Header style={{
               backgroundColor: colors.primary,
               borderBottom: `1px solid ${colors.secondary}`,
               padding: '0.75rem 1.25rem'
             }}>
               <div className="d-flex align-items-center">
                 <BusinessIcon style={{ color: '#fff', marginRight: '10px' }} fontSize="small" />
-                <h5 style={{ 
+                <h5 style={{
                   color: '#fff',
                   margin: 0,
                   fontWeight: 500,
@@ -100,8 +99,8 @@ const EmpresaCadastro = () => {
                 </h5>
               </div>
             </Card.Header>
-            
-            <Card.Body style={{ 
+
+            <Card.Body style={{
               backgroundColor: colors.background,
               padding: '1.25rem'
             }}>
@@ -119,7 +118,7 @@ const EmpresaCadastro = () => {
               )}
 
               <div className="mb-3" style={{ display: 'flex', gap: '8px' }}>
-                <Button 
+                <Button
                   variant="link"
                   style={{
                     color: activeTab === 'dados-basicos' ? colors.primary : '#95a5a6',
@@ -135,7 +134,7 @@ const EmpresaCadastro = () => {
                 >
                   Dados Básicos
                 </Button>
-                <Button 
+                <Button
                   variant="link"
                   style={{
                     color: activeTab === 'contato' ? colors.primary : '#95a5a6',
@@ -151,7 +150,7 @@ const EmpresaCadastro = () => {
                 >
                   Contato
                 </Button>
-                <Button 
+                <Button
                   variant="link"
                   style={{
                     color: activeTab === 'detalhes' ? colors.primary : '#95a5a6',
@@ -506,7 +505,7 @@ const EmpresaCadastro = () => {
                     </Col>
                     <Col md={6} className="mb-2">
                       <Form.Group controlId="mesInicialNegocios">
-                        <Form.Label style={{ 
+                        <Form.Label style={{
                           color: colors.text,
                           fontSize: '0.875rem',
                           marginBottom: '0.25rem'
@@ -593,8 +592,8 @@ const EmpresaCadastro = () => {
                 )}
 
                 <div className="d-grid mt-3">
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     style={{
                       backgroundColor: colors.primary,
                       border: 'none',

@@ -11,22 +11,20 @@ import {
 } from '@mui/icons-material';
 
 const MetasPlanosAcao = () => {
-  // Paleta de cores super claras
   const colors = {
-    primary: '#64B5F6',       // Azul claro
-    secondary: '#FAFAFA',     // Branco quase puro
-    accent: '#90CAF9',        // Azul mais claro
-    light: '#FFFFFF',         // Branco puro
-    background: '#F5F5F5',    // Cinza muito claro
-    text: '#424242',          // Texto escuro
-    success: '#A5D6A7',       // Verde muito claro
-    warning: '#FFCC80',       // Laranja muito claro
-    error: '#EF9A9A',         // Vermelho muito claro
-    white: '#FFFFFF',         // Branco
-    black: '#212121'          // Preto
+    primary: '#64B5F6',       
+    secondary: '#FAFAFA',      
+    accent: '#90CAF9',         
+    light: '#FFFFFF',         
+    background: '#F5F5F5',     
+    text: '#424242',          
+    success: '#A5D6A7',        
+    warning: '#FFCC80',        
+    error: '#EF9A9A',          
+    white: '#FFFFFF',
+    black: '#212121'
   };
 
-  // Opções de status atualizadas
   const opcoesStatus = [
     'Não Iniciado',
     'Em Andamento',
@@ -35,7 +33,6 @@ const MetasPlanosAcao = () => {
     'Não Concluído'
   ];
 
-  // Estado inicial das metas
   const [metas, setMetas] = useState([
     { 
       id: 1,
@@ -66,7 +63,6 @@ const MetasPlanosAcao = () => {
     }
   ]);
 
-  // Obter estilo baseado no status
   const getStatusStyle = (status) => {
     switch(status) {
       case 'Concluído no Prazo':
@@ -103,8 +99,6 @@ const MetasPlanosAcao = () => {
         return { backgroundColor: colors.light };
     }
   };
-
-  // Obter ícone baseado no status
   const getStatusIcon = (status) => {
     switch(status) {
       case 'Concluído no Prazo':
@@ -122,7 +116,6 @@ const MetasPlanosAcao = () => {
     }
   };
 
-  // Adicionar nova meta
   const adicionarMeta = () => {
     const novoId = metas.length > 0 ? Math.max(...metas.map(item => item.id)) + 1 : 1;
     const novaMeta = {
@@ -154,7 +147,7 @@ const MetasPlanosAcao = () => {
 
   return (
     <Container className="mt-4" style={{ 
-      maxWidth: '1400px', // Aumentei o maxWidth
+      maxWidth: '1400px', 
       backgroundColor: colors.background,
       padding: '20px',
       borderRadius: '8px'
@@ -174,7 +167,7 @@ const MetasPlanosAcao = () => {
           backgroundColor: colors.light,
           borderColor: colors.secondary,
           marginBottom: '20px',
-          minWidth: '1200px' // Defini uma largura mínima maior
+          minWidth: '1200px' 
         }}>
           <thead>
             <tr>
