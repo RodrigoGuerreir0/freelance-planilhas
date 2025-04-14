@@ -23,7 +23,7 @@ export const AppNavbar = () => {
             { path: "/estrategia/forcas", label: "Forças" },
             { path: "/estrategia/swot", label: "SWOT" },
             { path: "/estrategia/metas", label: "Metas" },
-            { path: "/estrategia/acose", label: "Acose" }
+            { path: "/estrategia/acoes", label: "Ações" }
         ],
         marketing: [
             { path: "/marketing/campanhas", label: "Campanhas" },

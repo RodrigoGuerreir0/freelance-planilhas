@@ -16,6 +16,9 @@ import { Estrategia } from "../pages/Estrategia";
 import CadastroDiretrizesEmpresa from "../pages/Diretrizes";
 import Forcas from "../pages/Forcas";
 import { Informacoes } from "../pages/informacoes";
+import { Metas } from "../pages/Metas";
+import AnaliseSWOT from "../pages/Swot";
+import MetasPlanosAcao from "../pages/Acoes";
 
 
 export const AppRoutes = () => {
@@ -42,9 +45,9 @@ export const AppRoutes = () => {
         <Route path="/estrategia" element={<Estrategia />} />
         <Route path="/estrategia/diretrizes" element={<CadastroDiretrizesEmpresa />} />
         <Route path="/estrategia/forcas" element={<Forcas />} />
-        <Route path="/estrategia/swot" element={<Estrategia />} />
-        <Route path="/estrategia/metas" element={<Estrategia />} />
-        <Route path="/estrategia/acose" element={<Estrategia />} />
+        <Route path="/estrategia/swot" element={<AnaliseSWOT />} />
+        <Route path="/estrategia/metas" element={<Metas />} />
+        <Route path="/estrategia/acoes" element={<MetasPlanosAcao />} />
 
       </Routes>
     </>
