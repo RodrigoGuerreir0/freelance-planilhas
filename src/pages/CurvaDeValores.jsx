@@ -73,16 +73,16 @@ export function CurvaDeValores() {
   const [tipoGrafico, setTipoGrafico] = useState('line');
   const [labels, setLabels] = useState(['Jan', 'Fev', 'Mar', 'Abr', 'Mai']);
   const [datasets, setDatasets] = useState([
-    { 
-      label: 'Serviço A', 
-      data: [12, 19, 3, 5, 2],
+    {
+      label: 'Serviço A',
+      data: [3, 2, 4, 1, 5],
       backgroundColor: CORES_PREDEFINIDAS[0],
       borderColor: CORES_PREDEFINIDAS[0],
       borderWidth: 2
     },
-    { 
-      label: 'Serviço B', 
-      data: [8, 15, 7, 10, 4],
+    {
+      label: 'Serviço B',
+      data: [2, 3, 1, 4, 2],
       backgroundColor: CORES_PREDEFINIDAS[1],
       borderColor: CORES_PREDEFINIDAS[1],
       borderWidth: 2
@@ -114,7 +114,7 @@ export function CurvaDeValores() {
     const newLabels = [...labels];
     newLabels.splice(index, 1);
     setLabels(newLabels);
-    
+
     setDatasets(datasets.map(dataset => ({
       ...dataset,
       data: dataset.data.filter((_, i) => i !== index)
@@ -129,7 +129,9 @@ export function CurvaDeValores() {
 
   const atualizarValor = (datasetIndex, labelIndex, novoValor) => {
     const newDatasets = [...datasets];
-    newDatasets[datasetIndex].data[labelIndex] = Number(novoValor) || 0;
+    // Garante que o valor fique entre 0 e 5
+    const valorLimitado = Math.min(5, Math.max(0, Number(novoValor) || 0));
+    newDatasets[datasetIndex].data[labelIndex] = valorLimitado;
     setDatasets(newDatasets);
   };
 
@@ -174,7 +176,7 @@ export function CurvaDeValores() {
 
   const adicionarAlerta = () => {
     if (!novoAlerta.trim()) return;
-    
+
     const novoId = Math.max(0, ...alertas.map(a => a.id)) + 1;
     setAlertas([
       ...alertas,
@@ -197,7 +199,7 @@ export function CurvaDeValores() {
   };
 
   const salvarEdicao = (id) => {
-    setAlertas(alertas.map(alerta => 
+    setAlertas(alertas.map(alerta =>
       alerta.id === id ? { ...alerta, texto: textoEditado } : alerta
     ));
     setEditandoAlerta(null);
@@ -308,9 +310,10 @@ export function CurvaDeValores() {
     scales: ['bar', 'line', 'radar'].includes(tipoGrafico) ? {
       y: {
         beginAtZero: true,
+        max: 5, // Define o valor máximo do eixo Y como 5
         title: {
           display: true,
-          text: 'Valores',
+          text: 'Valores (0-5)',
           color: COLORS.dark,
           font: {
             size: 14,
@@ -321,7 +324,8 @@ export function CurvaDeValores() {
           color: 'rgba(0, 0, 0, 0.05)'
         },
         ticks: {
-          color: COLORS.text
+          color: COLORS.text,
+          stepSize: 1
         }
       },
       x: {
@@ -347,8 +351,8 @@ export function CurvaDeValores() {
 
   const renderGrafico = () => {
     const data = getChartData();
-    
-    switch(tipoGrafico) {
+
+    switch (tipoGrafico) {
       case 'bar': return <Bar data={data} options={options} />;
       case 'line': return <Line data={data} options={options} />;
       case 'pie': return <Pie data={data} options={options} />;
@@ -389,10 +393,10 @@ export function CurvaDeValores() {
                 </h4>
               </Col>
               <Col xs="auto">
-                <Form.Select 
+                <Form.Select
                   value={tipoGrafico}
                   onChange={(e) => setTipoGrafico(e.target.value)}
-                  style={{ 
+                  style={{
                     backgroundColor: COLORS.card,
                     borderColor: '#dfe2e6',
                     color: COLORS.dark,
@@ -423,12 +427,12 @@ export function CurvaDeValores() {
               variant="pills"
             >
               {datasets.map((dataset, index) => (
-                <Tab 
-                  key={index} 
-                  eventKey={index} 
+                <Tab
+                  key={index}
+                  eventKey={index}
                   title={
                     <span className="d-flex align-items-center">
-                      <span 
+                      <span
                         style={{
                           width: '12px',
                           height: '12px',
@@ -464,8 +468,8 @@ export function CurvaDeValores() {
                                 type="color"
                                 value={dataset.backgroundColor}
                                 onChange={(e) => atualizarCorDataset(index, 'fundo', e.target.value)}
-                                style={{ 
-                                  width: '40px', 
+                                style={{
+                                  width: '40px',
                                   height: '40px',
                                   padding: '5px',
                                   border: 'none',
@@ -490,8 +494,8 @@ export function CurvaDeValores() {
                                 type="color"
                                 value={dataset.borderColor}
                                 onChange={(e) => atualizarCorDataset(index, 'borda', e.target.value)}
-                                style={{ 
-                                  width: '40px', 
+                                style={{
+                                  width: '40px',
                                   height: '40px',
                                   padding: '5px',
                                   border: 'none',
@@ -510,13 +514,13 @@ export function CurvaDeValores() {
                         </Col>
                       </Row>
 
-                      <h5 className="mb-3 fw-medium">Valores</h5>
+                      <h5 className="mb-3 fw-medium">Valores (0-5)</h5>
                       <div className="table-responsive">
                         <table className="table table-hover align-middle">
                           <thead>
                             <tr>
-                              <th style={{ width: '40%' }}>Período</th>
-                              <th style={{ width: '40%' }}>Valor</th>
+                              <th style={{ width: '30%' }}>Período</th>
+                              <th style={{ width: '50%' }}>Valor</th>
                               <th style={{ width: '20%' }}>Ações</th>
                             </tr>
                           </thead>
@@ -533,35 +537,40 @@ export function CurvaDeValores() {
                                   />
                                 </td>
                                 <td>
-                                  <Form.Control
-                                    type="number"
-                                    value={dataset.data[labelIndex]}
-                                    onChange={(e) => atualizarValor(index, labelIndex, e.target.value)}
-                                    placeholder="Valor"
-                                    style={{ backgroundColor: COLORS.card }}
-                                  />
+                                  <div className="d-flex align-items-center">
+                                    <Form.Range
+                                      min="0"
+                                      max="5"
+                                      step="1"
+                                      value={dataset.data[labelIndex]}
+                                      onChange={(e) => atualizarValor(index, labelIndex, e.target.value)}
+                                      style={{ flex: 1, marginRight: '10px' }}
+                                    />
+                                    <Badge bg="primary" style={{ minWidth: '30px' }}>
+                                      {dataset.data[labelIndex]}
+                                    </Badge>
+                                  </div>
                                 </td>
                                 <td>
-                                  {labelIndex === labels.length - 1 && (
-                                    <Button
-                                      variant="outline-danger"
-                                      size="sm"
-                                      onClick={() => removerItem(labelIndex)}
-                                      disabled={labels.length <= 2}
-                                      className="w-100"
-                                    >
-                                      Remover
-                                    </Button>
-                                  )}
+                                  <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    onClick={() => removerItem(labelIndex)}
+                                    disabled={labels.length <= 2}
+                                    className="w-100"
+                                  >
+                                    Remover
+                                  </Button>
                                 </td>
                               </tr>
                             ))}
                           </tbody>
+
                         </table>
                       </div>
 
                       <div className="d-flex justify-content-between mt-3">
-                        <Button 
+                        <Button
                           variant="outline-primary"
                           onClick={adicionarItem}
                           className="d-flex align-items-center"
@@ -586,8 +595,8 @@ export function CurvaDeValores() {
             </Tabs>
 
             <div className="d-flex justify-content-end">
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 onClick={adicionarDataset}
                 className="d-flex align-items-center"
               >
@@ -612,17 +621,18 @@ export function CurvaDeValores() {
 
             <div className="mb-4">
               {alertas.map(alerta => (
-                <Alert 
-                  key={alerta.id} 
+                <Alert
+                  key={alerta.id}
                   variant={
-                    alerta.tipo === 'warning' ? 'warning' : 
-                    alerta.tipo === 'success' ? 'success' : 'info'
+                    alerta.tipo === 'warning' ? 'warning' :
+                      alerta.tipo === 'success' ? 'success' : 'info'
                   }
                   className="d-flex align-items-center"
-                  style={{ borderLeft: `4px solid ${
-                    alerta.tipo === 'warning' ? COLORS.warning : 
-                    alerta.tipo === 'success' ? COLORS.success : COLORS.info
-                  }` }}
+                  style={{
+                    borderLeft: `4px solid ${alerta.tipo === 'warning' ? COLORS.warning :
+                        alerta.tipo === 'success' ? COLORS.success : COLORS.info
+                      }`
+                  }}
                 >
                   <div className="flex-grow-1">
                     {editandoAlerta === alerta.id ? (
@@ -640,17 +650,17 @@ export function CurvaDeValores() {
                   <div className="ms-3 d-flex">
                     {editandoAlerta === alerta.id ? (
                       <>
-                        <Button 
-                          variant="success" 
-                          size="sm" 
-                          onClick={() => salvarEdicao(alerta.id)} 
+                        <Button
+                          variant="success"
+                          size="sm"
+                          onClick={() => salvarEdicao(alerta.id)}
                           className="me-2"
                         >
                           <i className="bi bi-check-lg"></i>
                         </Button>
-                        <Button 
-                          variant="secondary" 
-                          size="sm" 
+                        <Button
+                          variant="secondary"
+                          size="sm"
                           onClick={cancelarEdicao}
                         >
                           <i className="bi bi-x-lg"></i>
@@ -658,17 +668,17 @@ export function CurvaDeValores() {
                       </>
                     ) : (
                       <>
-                        <Button 
-                          variant="outline-info" 
-                          size="sm" 
-                          onClick={() => iniciarEdicao(alerta)} 
+                        <Button
+                          variant="outline-info"
+                          size="sm"
+                          onClick={() => iniciarEdicao(alerta)}
                           className="me-2"
                         >
                           <i className="bi bi-pencil"></i>
                         </Button>
-                        <Button 
-                          variant="outline-danger" 
-                          size="sm" 
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
                           onClick={() => removerAlerta(alerta.id)}
                         >
                           <i className="bi bi-trash"></i>
@@ -711,9 +721,9 @@ export function CurvaDeValores() {
                     </Form.Group>
                   </Col>
                   <Col md={2} className="d-flex align-items-end">
-                    <Button 
-                      variant="primary" 
-                      onClick={adicionarAlerta} 
+                    <Button
+                      variant="primary"
+                      onClick={adicionarAlerta}
                       className="w-100 d-flex align-items-center justify-content-center"
                     >
                       <i className="bi bi-plus-lg me-2"></i>

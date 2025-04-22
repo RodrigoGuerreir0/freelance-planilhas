@@ -4,7 +4,8 @@ import { Modelagem } from "../pages/Modelagem";
 import { Pedidos } from "../pages/Pedidos";
 import { Produtos } from "../pages/Produtos";
 import { Clientes } from "../pages/Clientes";
-import { Login } from "@mui/icons-material";
+import Login from "../pages/Login";
+import Cadastro from "../pages/Cadastro";
 
 import CadastroDepartamentos from "../pages/Cadastro/CadastroDepartamentos";
 import CadastroEquipes from "../pages/Cadastro/CadastroEquipes";
@@ -20,7 +21,6 @@ import AnaliseSWOT from "../pages/Swot";
 import MetasPlanosAcao from "../pages/Acoes";
 import MetasEmpresa from "../pages/Metas";
 
-
 export const AppRoutes = () => {
   return (
     <>
@@ -31,6 +31,8 @@ export const AppRoutes = () => {
         <Route path="/produtos" element={<Produtos />} />
         <Route path="/clientes" element={<Clientes />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/Cadastro" element={<Cadastro />} />
+        
 
         <Route path="/informacoes" element={<Informacoes />} />
         <Route path="/informacoes/empresa" element={<CadastroEmpresa />} />
