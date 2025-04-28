@@ -25,8 +25,11 @@ export const AppNavbar = () => {
             { path: "/estrategia/acoes", label: "Ações" }
         ],
         marketing: [
-            { path: "/marketing/campanhas", label: "Campanhas" },
-            { path: "/marketing/redes-sociais", label: "Redes Sociais" }
+            { path: "/marketing/produto", label: "Produto" },
+            { path: "/marketing/preco", label: "Preço" },
+            { path: "/marketing/praca", label: "Praça" },
+            { path: "/marketing/promocao", label: "Promoção" },
+            { path: "/marketing/mercado", label: "Mercado" }
         ],
         preco: [
             { path: "/preco/tabela", label: "Tabela de Preços" },

@@ -20,6 +20,11 @@ import { Informacoes } from "../pages/informacoes";
 import AnaliseSWOT from "../pages/Swot";
 import MetasPlanosAcao from "../pages/Acoes";
 import MetasEmpresa from "../pages/Metas";
+import ProductDefinitionForm from "../pages/Produto";
+import PricingStrategyPage from "../pages/Preco";
+import DistributionStrategyPage from "../pages/Praca";
+import PromotionStrategyPage from "../pages/Promocao";
+import ProblemOpportunityPage from "../pages/Mercado";
 
 export const AppRoutes = () => {
   return (
@@ -50,6 +55,13 @@ export const AppRoutes = () => {
         <Route path="/estrategia/swot" element={<AnaliseSWOT />} />
         <Route path="/estrategia/metas" element={<MetasEmpresa />} />
         <Route path="/estrategia/acoes" element={<MetasPlanosAcao />} />
+
+        <Route path="/marketing" element={<ProductDefinitionForm />} />
+        <Route path="/marketing/produto" element={<ProductDefinitionForm />} />
+        <Route path="/marketing/preco" element={<PricingStrategyPage />} />
+        <Route path="/marketing/praca" element={<DistributionStrategyPage />} />
+        <Route path="/marketing/promocao" element={<PromotionStrategyPage />} />
+        <Route path="/marketing/mercado" element={<ProblemOpportunityPage />} />
 
       </Routes>
     </>
