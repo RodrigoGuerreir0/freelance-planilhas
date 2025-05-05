@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, Chip } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Divider, Chip, Select, MenuItem, FormControl } from '@mui/material';
 
 const COLORS = {
   primary: '#4361ee',
@@ -15,14 +15,28 @@ const COLORS = {
   text: '#495057'
 };
 
+const answerOptions = [
+  "Concordo Totalmente",
+  "Concordo Parcialmente",
+  "Não concordo e nem discordo",
+  "Discordo Parcialmente",
+  "Discordo Totalmente"
+];
+
 const PricingStrategyPage = () => {
-  const questions = [
+  const [answers, setAnswers] = useState([
     { question: "Sua estratégia de vendas visa grande demanda", answer: "Concordo Totalmente" },
     { question: "O cliente é fortemente influenciado pelo preço", answer: "Não concordo e nem discordo" },
     { question: "O cliente valoriza a qualidade do produto em detrimento do preço", answer: "Concordo Parcialmente" },
     { question: "Sua estratégia visa acelerar a penetração no mercado", answer: "Concordo Parcialmente" },
     { question: "Sua linha de produtos/serviços é considerada Premium", answer: "Concordo Totalmente" },
-  ];
+  ]);
+
+  const handleAnswerChange = (index, newAnswer) => {
+    const newAnswers = [...answers];
+    newAnswers[index].answer = newAnswer;
+    setAnswers(newAnswers);
+  };
 
   const strategyDefinitions = [
     {
@@ -62,6 +76,30 @@ const PricingStrategyPage = () => {
       description: "Preços baixos e baixa qualidade. Procura-se vender com esta estratégia grande quantidade."
     }
   ];
+
+  // Função para determinar a estratégia recomendada
+  const getRecommendedStrategy = () => {
+    // Lógica simplificada para determinar a estratégia
+    // Numa aplicação real, isso seria mais complexo baseado nas respostas
+    const qualityAnswers = answers[2].answer; // "O cliente valoriza a qualidade..."
+    const premiumAnswers = answers[4].answer; // "Sua linha de produtos/serviços é considerada Premium"
+    
+    if (premiumAnswers === "Concordo Totalmente" || premiumAnswers === "Concordo Parcialmente") {
+      if (qualityAnswers === "Concordo Totalmente") {
+        return "Estratégia Premium";
+      } else if (qualityAnswers === "Concordo Parcialmente") {
+        return "Estratégia de Alto Valor";
+      } else {
+        return "Estratégia de Valor Supremo";
+      }
+    } else if (premiumAnswers === "Não concordo e nem discordo") {
+      return "Estratégia de Médio Preço";
+    } else {
+      return "Estratégia de Economia";
+    }
+  };
+
+  const recommendedStrategy = getRecommendedStrategy();
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -104,22 +142,31 @@ const PricingStrategyPage = () => {
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>
             <TableBody>
-              {questions.map((item, index) => (
+              {answers.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell component="th" scope="row" sx={{ fontWeight: 'bold', borderBottom: 'none' }}>
                     {item.question}
                   </TableCell>
                   <TableCell align="right" sx={{ borderBottom: 'none' }}>
-                    <Chip 
-                      label={item.answer} 
-                      sx={{ 
-                        backgroundColor: 
-                          item.answer === "Concordo Totalmente" ? COLORS.success : 
-                          item.answer === "Concordo Parcialmente" ? COLORS.info : 
-                          COLORS.light,
-                        color: COLORS.dark
-                      }} 
-                    />
+                    <FormControl size="small" sx={{ minWidth: 200 }}>
+                      <Select
+                        value={item.answer}
+                        onChange={(e) => handleAnswerChange(index, e.target.value)}
+                        sx={{
+                          backgroundColor: 
+                            item.answer === "Concordo Totalmente" ? COLORS.success : 
+                            item.answer === "Concordo Parcialmente" ? COLORS.info : 
+                            item.answer === "Não concordo e nem discordo" ? COLORS.light :
+                            item.answer === "Discordo Parcialmente" ? COLORS.warning :
+                            COLORS.danger,
+                          color: COLORS.dark
+                        }}
+                      >
+                        {answerOptions.map((option, i) => (
+                          <MenuItem key={i} value={option}>{option}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </TableCell>
                 </TableRow>
               ))}
@@ -130,6 +177,15 @@ const PricingStrategyPage = () => {
         <Typography variant="h6" component="h2" sx={{ mb: 3, color: COLORS.secondary }}>
           A estratégia de preço definida foi a:
         </Typography>
+
+        <Box sx={{ mb: 4, p: 3, backgroundColor: COLORS.primary, color: COLORS.card, borderRadius: 1 }}>
+          <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+            {recommendedStrategy}
+          </Typography>
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            {strategyDefinitions.find(s => s.name === recommendedStrategy)?.description}
+          </Typography>
+        </Box>
 
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>
@@ -144,21 +200,21 @@ const PricingStrategyPage = () => {
             <TableBody>
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>Qualidade Alta</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.success, color: COLORS.card }}>Estratégia Premium</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.info, color: COLORS.card }}>Estratégia de Alto Valor</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.warning, color: COLORS.card }}>Estratégia de Valor Supremo</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia Premium" ? COLORS.success : COLORS.light, color: recommendedStrategy === "Estratégia Premium" ? COLORS.card : COLORS.dark }}>Estratégia Premium</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Alto Valor" ? COLORS.info : COLORS.light, color: recommendedStrategy === "Estratégia de Alto Valor" ? COLORS.card : COLORS.dark }}>Estratégia de Alto Valor</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Valor Supremo" ? COLORS.warning : COLORS.light, color: recommendedStrategy === "Estratégia de Valor Supremo" ? COLORS.card : COLORS.dark }}>Estratégia de Valor Supremo</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>Qualidade Média</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.info, color: COLORS.card }}>Estratégia de Alto Preço</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.light }}>Estratégia de Médio Preço</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.light }}>Estratégia de Valor Médio</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Alto Preço" ? COLORS.info : COLORS.light, color: recommendedStrategy === "Estratégia de Alto Preço" ? COLORS.card : COLORS.dark }}>Estratégia de Alto Preço</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Médio Preço" ? COLORS.light : COLORS.light }}>Estratégia de Médio Preço</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Valor Médio" ? COLORS.light : COLORS.light }}>Estratégia de Valor Médio</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ fontWeight: 'bold' }}>Qualidade Baixa</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.warning, color: COLORS.card }}>Estratégia de Desconto</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.danger, color: COLORS.card }}>Estratégia de Falsa Economia</TableCell>
-                <TableCell align="center" sx={{ backgroundColor: COLORS.light }}>Estratégia de Economia</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Desconto" ? COLORS.warning : COLORS.light, color: recommendedStrategy === "Estratégia de Desconto" ? COLORS.card : COLORS.dark }}>Estratégia de Desconto</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Falsa Economia" ? COLORS.danger : COLORS.light, color: recommendedStrategy === "Estratégia de Falsa Economia" ? COLORS.card : COLORS.dark }}>Estratégia de Falsa Economia</TableCell>
+                <TableCell align="center" sx={{ backgroundColor: recommendedStrategy === "Estratégia de Economia" ? COLORS.light : COLORS.light }}>Estratégia de Economia</TableCell>
               </TableRow>
             </TableBody>
           </Table>

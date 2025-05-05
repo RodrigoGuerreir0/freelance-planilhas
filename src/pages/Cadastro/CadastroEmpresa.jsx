@@ -126,20 +126,44 @@ const CadastroEmpresa = () => {
     }
   };
 
-  // Nova empresa
   const handleNovaEmpresa = () => {
     setEmpresa(initialFormState);
     setCadastroRealizado(false);
     setErrors({});
+    setActiveTab('dados-basicos');
   };
 
-  // Dados auxiliares
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (activeTab === 'dados-basicos') {
+      const newErrors = {};
+      if (!empresa.nome.trim()) newErrors.nome = 'Campo obrigatório';
+      if (!empresa.cnpj.trim()) newErrors.cnpj = 'Campo obrigatório';
+      else if (empresa.cnpj.replace(/\D/g, '').length !== 14) newErrors.cnpj = 'CNPJ inválido';
+      
+      setErrors(newErrors);
+      
+      if (Object.keys(newErrors).length === 0) {
+        setActiveTab('contato');
+      }
+    } else if (activeTab === 'contato') {
+      setActiveTab('detalhes');
+    }
+  };
+
+  const handleBack = () => {
+    if (activeTab === 'contato') {
+      setActiveTab('dados-basicos');
+    } else if (activeTab === 'detalhes') {
+      setActiveTab('contato');
+    }
+  };
+
   const meses = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
-  // Estilos
   const colors = {
     primary: '#4a6fa5',
     secondary: '#6c8fc7',
@@ -234,7 +258,7 @@ const CadastroEmpresa = () => {
                 </div>
               )}
 
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={activeTab === 'detalhes' ? handleSubmit : handleNext}>
                 {activeTab === 'dados-basicos' && (
                   <Row>
                     <Col md={6}>
@@ -568,25 +592,10 @@ const CadastroEmpresa = () => {
                   </Row>
                 )}
 
-                <div className="d-flex justify-content-end mt-4">
-                  {!cadastroRealizado ? (
+                <div className="d-flex justify-content-between mt-4">
+                  {!cadastroRealizado && activeTab !== 'dados-basicos' && (
                     <Button 
-                      type="submit" 
-                      disabled={loading}
-                      style={{
-                        backgroundColor: colors.primary,
-                        border: 'none',
-                        borderRadius: '8px',
-                        padding: '0.625rem 1.5rem',
-                        fontWeight: 500,
-                        opacity: loading ? 0.7 : 1
-                      }}
-                    >
-                      {loading ? 'Salvando...' : 'Salvar Cadastro'}
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={handleNovaEmpresa}
+                      onClick={handleBack}
                       style={{
                         backgroundColor: colors.secondary,
                         border: 'none',
@@ -595,9 +604,43 @@ const CadastroEmpresa = () => {
                         fontWeight: 500
                       }}
                     >
-                      Cadastrar Nova Empresa
+                      Voltar
                     </Button>
                   )}
+                  
+                  <div className="ms-auto">
+                    {!cadastroRealizado ? (
+                      <Button 
+                        type="submit" 
+                        disabled={loading}
+                        style={{
+                          backgroundColor: colors.primary,
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '0.625rem 1.5rem',
+                          fontWeight: 500,
+                          opacity: loading ? 0.7 : 1
+                        }}
+                      >
+                        {activeTab === 'detalhes' 
+                          ? (loading ? 'Salvando...' : 'Salvar Cadastro') 
+                          : 'Avançar'}
+                      </Button>
+                    ) : (
+                      <Button 
+                        onClick={handleNovaEmpresa}
+                        style={{
+                          backgroundColor: colors.secondary,
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '0.625rem 1.5rem',
+                          fontWeight: 500
+                        }}
+                      >
+                        Cadastrar Nova Empresa
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </Form>
             </Card.Body>
