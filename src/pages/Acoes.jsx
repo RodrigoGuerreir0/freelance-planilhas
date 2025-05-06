@@ -130,12 +130,10 @@ const MetasPlanosAcao = () => {
     setMetas([...metas, novaMeta]);
   };
 
-  // Remover meta
   const removerMeta = (id) => {
     setMetas(metas.filter(item => item.id !== id));
   };
 
-  // Atualizar meta
   const atualizarMeta = (id, campo, valor) => {
     setMetas(metas.map(item => {
       if (item.id === id) {
@@ -150,7 +148,9 @@ const MetasPlanosAcao = () => {
       maxWidth: '1400px', 
       backgroundColor: colors.background,
       padding: '20px',
-      borderRadius: '8px'
+      borderRadius: '8px',
+      marginLeft: '370px',
+
     }}>
       <h2 style={{ 
         color: colors.primary,

@@ -32,8 +32,10 @@ export const AppNavbar = () => {
             { path: "/marketing/mercado", label: "Mercado" }
         ],
         preco: [
-            { path: "/preco/tabela", label: "Tabela de Preços" },
-            { path: "/preco/estrategia", label: "Estratégia" }
+            { path: "/preco/precificacao", label: "Precificação" },
+            { path: "/preco/custos", label: "Custos" },
+            { path: "/preco/homem-hora", label: "Homem Hora" }
+
         ],
         financas: [
             { path: "/financas/balanco", label: "Balanço" },

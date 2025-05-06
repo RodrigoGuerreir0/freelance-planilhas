@@ -25,6 +25,9 @@ import PricingStrategyPage from "../pages/Preco";
 import DistributionStrategyPage from "../pages/Praca";
 import PromotionStrategyPage from "../pages/Promocao";
 import ProblemOpportunityPage from "../pages/Mercado";
+import Precificacao from "../pages/Precificacao";
+import Custos from "../pages/Custos";
+import HomemHora from "../pages/HomemHora";
 
 export const AppRoutes = () => {
   return (
@@ -63,6 +66,10 @@ export const AppRoutes = () => {
         <Route path="/marketing/promocao" element={<PromotionStrategyPage />} />
         <Route path="/marketing/mercado" element={<ProblemOpportunityPage />} />
 
+        <Route path="/preco" element={<Precificacao  />} />
+        <Route path="/preco/precificacao" element={<Precificacao  />} />
+        <Route path="/preco/custos" element={<Custos />} />
+        <Route path="/preco/homem-hora" element={<HomemHora />} />
       </Routes>
     </>
   );
