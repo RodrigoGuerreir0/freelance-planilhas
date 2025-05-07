@@ -36,7 +36,7 @@ const PageContainer = styled(Box)({
   width: '100%',
   padding: '20px',
   boxSizing: 'border-box',
-  marginLeft: '300px',
+  paddingLeft: '300px',
   transition: 'margin-left 0.3s ease',
   '@media (max-width: 900px)': {
     marginLeft: '60px'
@@ -275,7 +275,7 @@ const Custos = () => {
     <PageContainer>
       <ContentContainer>
         <StyledTableContainer component={Paper}>
-          <Typography variant="h4" gutterBottom style={{ color: colors.primary, textAlign: 'left' }}>
+          <Typography variant="h4" gutterBottom style={{ color: colors.primary, textAlign: 'left', padding: '10px 0 0 50px' }}>
             Tabela de Custos
           </Typography>
           
