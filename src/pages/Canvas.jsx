@@ -23,17 +23,17 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
   };
 
   return (
-    <Card className={`h-100 canvas-card border-0 shadow-sm`} style={{ backgroundColor: '#f8f9fa' }}>
-      <Card.Body>
+    <Card className="h-100 canvas-card border-0 shadow-sm" style={{ backgroundColor: '#f8f9fa' }}>
+      <Card.Body className="d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <Card.Title className="mb-0 text-dark">{title}</Card.Title>
-          <span className="canvas-icon" style={{ color: `var(--bs-${color})` }}>{icon}</span>
+          <Card.Title className="mb-0 text-dark fs-6 fs-md-5">{title}</Card.Title>
+          <span className="canvas-icon fs-5" style={{ color: `var(--bs-${color})` }}>{icon}</span>
         </div>
         
-        <ul className="canvas-list">
+        <ul className="canvas-list flex-grow-1">
           {currentItems.map((item, index) => (
             <li key={index} className="d-flex justify-content-between align-items-center">
-              <span className="text-dark">{item}</span>
+              <span className="text-dark fs-7 fs-md-6">{item}</span>
               <Button 
                 variant="link" 
                 className="p-0 text-danger"
@@ -63,7 +63,7 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
         <Button 
           variant="outline-primary" 
           size="sm" 
-          className="mt-2"
+          className="mt-2 align-self-start"
           onClick={() => setIsEditing(!isEditing)}
         >
           {isEditing ? 'Fechar' : 'Editar'}
@@ -92,111 +92,121 @@ export function Canvas() {
   };
 
   return (
-    <Container className="canvas-container py-5" style={{ backgroundColor: 'white' }}>
-      {/* Cabeçalho */}
-      <Row className="mb-4 text-center">
-        <Col>
-          <h1 className="canvas-title text-dark">Business Model Canvas</h1>
-          <p className="text-muted">Visualize e edite seu modelo de negócios</p>
-        </Col>
-      </Row>
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <Container className="canvas-container py-3 py-md-5 px-2 px-md-3" style={{ 
+        backgroundColor: 'white', 
+        maxWidth: '1200px',
+        margin: '0 auto',
+        width: '95%'
+      }}>
+        {/* Cabeçalho */}
+        <Row className="mb-3 mb-md-4 text-center">
+          <Col>
+            <h1 className="canvas-title text-dark fs-3 fs-md-2">Business Model Canvas</h1>
+            <p className="text-muted fs-6 fs-md-5">Visualize e edite seu modelo de negócios</p>
+          </Col>
+        </Row>
 
-      <Row className="g-4 mb-4">
-        <Col md={6} lg={3}>
-          <CanvasItem 
-            title="Parcerias"
-            icon="🤝"
-            items={canvasData.partnerships}
-            color="primary"
-            onUpdateItems={(items) => updateItems('partnerships', items)}
-          />
-        </Col>
+        {/* Primeira linha - 4 colunas */}
+        <Row className="g-3 g-md-4 mb-3 mb-md-4">
+          <Col xs={12} sm={6} lg={3}>
+            <CanvasItem 
+              title="Parcerias"
+              icon="🤝"
+              items={canvasData.partnerships}
+              color="primary"
+              onUpdateItems={(items) => updateItems('partnerships', items)}
+            />
+          </Col>
 
-        <Col md={6} lg={3}>
-          <CanvasItem 
-            title="Atividades Chave"
-            icon="⚙️"
-            items={canvasData.activities}
-            color="success"
-            onUpdateItems={(items) => updateItems('activities', items)}
-          />
-        </Col>
+          <Col xs={12} sm={6} lg={3}>
+            <CanvasItem 
+              title="Atividades Chave"
+              icon="⚙️"
+              items={canvasData.activities}
+              color="success"
+              onUpdateItems={(items) => updateItems('activities', items)}
+            />
+          </Col>
 
-        <Col md={6} lg={3}>
-          <CanvasItem 
-            title="Oferta de Valor"
-            icon="💎"
-            items={canvasData.value}
-            color="warning"
-            onUpdateItems={(items) => updateItems('value', items)}
-          />
-        </Col>
+          <Col xs={12} sm={6} lg={3}>
+            <CanvasItem 
+              title="Oferta de Valor"
+              icon="💎"
+              items={canvasData.value}
+              color="warning"
+              onUpdateItems={(items) => updateItems('value', items)}
+            />
+          </Col>
 
-        <Col md={6} lg={3}>
-          <CanvasItem 
-            title="Relacionamento"
-            icon="💬"
-            items={canvasData.relationships}
-            color="info"
-            onUpdateItems={(items) => updateItems('relationships', items)}
-          />
-        </Col>
-      </Row>
+          <Col xs={12} sm={6} lg={3}>
+            <CanvasItem 
+              title="Relacionamento"
+              icon="💬"
+              items={canvasData.relationships}
+              color="info"
+              onUpdateItems={(items) => updateItems('relationships', items)}
+            />
+          </Col>
+        </Row>
 
-      <Row className="g-4 mb-4">
-        <Col md={6} lg={4}>
-          <CanvasItem 
-            title="Segmento de Clientes"
-            icon="👥"
-            items={canvasData.customers}
-            color="primary"
-            onUpdateItems={(items) => updateItems('customers', items)}
-          />
-        </Col>
+        {/* Segunda linha - 3 colunas */}
+        <Row className="g-3 g-md-4 mb-3 mb-md-4">
+          <Col xs={12} md={6} lg={4}>
+            <CanvasItem 
+              title="Segmento de Clientes"
+              icon="👥"
+              items={canvasData.customers}
+              color="primary"
+              onUpdateItems={(items) => updateItems('customers', items)}
+            />
+          </Col>
 
-        <Col md={6} lg={4}>
-          <CanvasItem 
-            title="Canais de Distribuição"
-            icon="📦"
-            items={canvasData.channels}
-            color="secondary"
-            onUpdateItems={(items) => updateItems('channels', items)}
-          />
-        </Col>
+          <Col xs={12} md={6} lg={4}>
+            <CanvasItem 
+              title="Canais de Distribuição"
+              icon="📦"
+              items={canvasData.channels}
+              color="secondary"
+              onUpdateItems={(items) => updateItems('channels', items)}
+            />
+          </Col>
 
-        <Col md={6} lg={4}>
-          <CanvasItem 
-            title="Recursos Chave"
-            icon="🔑"
-            items={canvasData.resources}
-            color="warning"
-            onUpdateItems={(items) => updateItems('resources', items)}
-          />
-        </Col>
-      </Row>
+          <Col xs={12} md={6} lg={4}>
+            <CanvasItem 
+              title="Recursos Chave"
+              icon="🔑"
+              items={canvasData.resources}
+              color="warning"
+              onUpdateItems={(items) => updateItems('resources', items)}
+            />
+          </Col>
+        </Row>
 
-      <Row className="g-4">
-        <Col lg={6}>
-          <CanvasItem 
-            title="Estrutura de Custos"
-            icon="📉"
-            items={canvasData.costs}
-            color="danger"
-            onUpdateItems={(items) => updateItems('costs', items)}
-          />
-        </Col>
+        {/* Terceira linha - 2 colunas */}
+        <Row className="g-3 g-md-4">
+          <Col xs={12} lg={6}>
+            <CanvasItem 
+              title="Estrutura de Custos"
+              icon="📉"
+              items={canvasData.costs}
+              color="danger"
+              onUpdateItems={(items) => updateItems('costs', items)}
+            />
+          </Col>
 
-        <Col lg={6}>
-          <CanvasItem 
-            title="Fontes de Receitas"
-            icon="💰"
-            items={canvasData.revenue}
-            color="success"
-            onUpdateItems={(items) => updateItems('revenue', items)}
-          />
-        </Col>
-      </Row>
-    </Container>
+          <Col xs={12} lg={6}>
+            <CanvasItem 
+              title="Fontes de Receitas"
+              icon="💰"
+              items={canvasData.revenue}
+              color="success"
+              onUpdateItems={(items) => updateItems('revenue', items)}
+            />
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 

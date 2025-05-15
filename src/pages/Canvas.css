@@ -1,65 +1,57 @@
 .canvas-container {
-    max-width: 1200px;
-    background-color: white;
-    border-radius: 10px;
-}
-
-.canvas-title {
-    font-weight: 700;
-    color: #2c3e50;
+  overflow-x: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 .canvas-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-radius: 8px;
-    overflow: hidden;
+  min-height: 200px;
+  transition: transform 0.2s;
 }
 
 .canvas-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.canvas-icon {
-    font-size: 1.5rem;
+  transform: translateY(-5px);
 }
 
 .canvas-list {
-    list-style-type: none;
-    padding-left: 0;
-    margin-bottom: 0;
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
 }
 
 .canvas-list li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    color: #555;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #eee;
 }
 
-.canvas-list li:last-child {
-    border-bottom: none;
+.canvas-icon {
+  font-size: 1.5rem;
 }
 
-.bg-primary-light {
-    background-color: #e3f2fd;
+/* Centralização e responsividade */
+@media (max-width: 767.98px) {
+  .canvas-card {
+    margin-bottom: 1rem;
+  }
+  
+  .canvas-title {
+    font-size: 1.5rem;
+  }
 }
 
-.bg-success-light {
-    background-color: #e8f5e9;
+@media (max-width: 575.98px) {
+  .canvas-container {
+    padding: 1rem;
+    width: 100% !important;
+    margin: 20px auto !important;
+    border-radius: 0;
+  }
+  
+  .canvas-list li {
+    font-size: 0.9rem;
+  }
 }
 
-.bg-warning-light {
-    background-color: #fff8e1;
-}
-
-.bg-info-light {
-    background-color: #e0f7fa;
-}
-
-.bg-danger-light {
-    background-color: #ffebee;
-}
-
-.bg-secondary-light {
-    background-color: #f3e5f5;
+body {
+  background-color: #f5f7fa;
 }
