@@ -42,7 +42,6 @@ function Sidebar() {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      // Se a tela ficar maior que mobile, abre a sidebar automaticamente
       if (!mobile) {
         setSidebarOpen(true);
       } else {
@@ -94,71 +93,98 @@ function Sidebar() {
           position: isMobile ? 'fixed' : 'fixed',
           zIndex: 1000,
           transition: 'transform 0.3s ease',
-          transform: isMobile ? (sidebarOpen ? 'translateX(0)' : 'translateX(-100%)') : 'none'
+          transform: isMobile ? (sidebarOpen ? 'translateX(0)' : 'translateX(-100%)') : 'none',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto p-3">
-          <span className="fs-4 fw-bold">Planilhas</span>
-          {isMobile && (
-            <button 
-              onClick={toggleSidebar}
-              className={`close-btn ${darkMode ? 'text-white' : 'text-dark'}`}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                fontSize: '1.2rem'
-              }}
-            >
-              <CloseOutlined />
-            </button>
-          )}
-        </div>
-        <hr />
-        <ul className="nav nav-pills flex-column mb-auto">
-          {menuItems.map((item) => (
-            <li className="nav-item" key={item.route}>
-              <Link
-                to={item.route}
-                className={`nav-link ${darkMode ? 'text-white' : 'text-dark'} ${activeRoute === item.label ? 'active-route' : ''}`}
-                onClick={() => {
-                  setActiveRoute(item.label);
-                  if (isMobile) setSidebarOpen(false);
+        <div className="sidebar-content" style={{ flex: 1, overflowY: 'auto' }}>
+          <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto p-3">
+            <span className="fs-4 fw-bold">Planilhas</span>
+            {isMobile && (
+              <button 
+                onClick={toggleSidebar}
+                className={`close-btn ${darkMode ? 'text-white' : 'text-dark'}`}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.2rem'
                 }}
               >
-                {item.icon} {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <hr />
-        <div className="dropdown p-3">
-          <a href="#" className="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
-            <UserOutlined className="me-2" />
-            <strong>Usuário</strong>
-          </a>
-          <ul className={`dropdown-menu ${darkMode ? 'dropdown-menu-dark' : ''}`}>
-            <li>
-              <Link className="dropdown-item" to="/profile">
-                Perfil
-              </Link>
-            </li>
-            <li>
-              <button className="dropdown-item" onClick={toggleDarkMode}>
-                <BulbOutlined className="me-2" />
-                {darkMode ? 'Light mode' : 'Dark mode'}
+                <CloseOutlined />
               </button>
-            </li>
-            <li><hr className="dropdown-divider" /></li>
-            <li>
-              <Link className="dropdown-item text-danger" to="/logout">
-                <LogoutOutlined className="me-2" />
-                Logout
-              </Link>
-            </li>
+            )}
+          </div>
+          <hr />
+          <ul className="nav nav-pills flex-column mb-auto">
+            {menuItems.map((item) => (
+              <li className="nav-item" key={item.route}>
+                <Link
+                  to={item.route}
+                  className={`nav-link ${darkMode ? 'text-white' : 'text-dark'} ${activeRoute === item.label ? 'active-route' : ''}`}
+                  onClick={() => {
+                    setActiveRoute(item.label);
+                    if (isMobile) setSidebarOpen(false);
+                  }}
+                >
+                  {item.icon} {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
+
+        {/* Rodapé fixo */}
+        <div className="sidebar-footer" style={{ padding: '1rem', borderTop: '1px solid rgba(0,0,0,.1)' }}>
+          <div className="dropdown">
+            <a href="#" className="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+              <UserOutlined className="me-2" />
+              <strong>Usuário</strong>
+            </a>
+            <ul className={`dropdown-menu ${darkMode ? 'dropdown-menu-dark' : ''}`} style={{
+              position: 'absolute',
+              bottom: '100%',
+              left: '0',
+              right: '0',
+              marginBottom: '0.5rem'
+            }}>
+              <li>
+                <Link className="dropdown-item" to="/profile">
+                  Perfil
+                </Link>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={toggleDarkMode}>
+                  <BulbOutlined className="me-2" />
+                  {darkMode ? 'Light mode' : 'Dark mode'}
+                </button>
+              </li>
+              <li><hr className="dropdown-divider" /></li>
+              <li>
+                <Link className="dropdown-item text-danger" to="/logout">
+                  <LogoutOutlined className="me-2" />
+                  Logout
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
         <style>
           {`
+            .sidebar {
+              display: flex;
+              flex-direction: column;
+            }
+            .sidebar-content {
+              flex: 1;
+              overflow-y: auto;
+            }
+            .sidebar-footer {
+              flex-shrink: 0;
+              padding: 1rem;
+              border-top: 1px solid ${darkMode ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'};
+            }
             .nav-link:hover {
               background-color: ${darkMode ? '#0d6efd' : '#e9ecef'};
               color: ${darkMode ? 'white' : 'black'};
@@ -166,11 +192,6 @@ function Sidebar() {
             .active-route {
               background-color: ${darkMode ? '#202f50' : '#d1e7ff'};
               color: ${darkMode ? 'white' : 'black'} !important;
-            }
-            .dropdown-menu {
-              position: absolute !important;
-              bottom: ${isMobile ? '80px' : '60px'} !important;
-              left: 20px !important;
             }
             @media (max-width: 767.98px) {
               .sidebar {
