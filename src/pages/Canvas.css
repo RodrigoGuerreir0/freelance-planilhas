@@ -1,57 +1,195 @@
-.canvas-container {
-  overflow-x: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.canvas-card {
-  min-height: 200px;
-  transition: transform 0.2s;
-}
-
-.canvas-card:hover {
-  transform: translateY(-5px);
-}
-
-.canvas-list {
-  list-style-type: none;
-  padding-left: 0;
-  margin-bottom: 0;
-}
-
-.canvas-list li {
-  padding: 0.25rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.canvas-icon {
-  font-size: 1.5rem;
-}
-
-/* Centralização e responsividade */
-@media (max-width: 767.98px) {
-  .canvas-card {
-    margin-bottom: 1rem;
-  }
-  
-  .canvas-title {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 575.98px) {
-  .canvas-container {
-    padding: 1rem;
-    width: 100% !important;
-    margin: 20px auto !important;
-    border-radius: 0;
-  }
-  
-  .canvas-list li {
-    font-size: 0.9rem;
-  }
+/* Reset e Base */
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
   background-color: #f5f7fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.canvas-container,
+.container-lg {}
+
+/* Container Principal */
+.canvas-wrapper {
+  padding: 50px 350px;
+  /* Margens laterais fixas + mais espaço no topo */
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.canvas-container {
+  width: 100%;
+  max-width: 100%;
+  /* padding: 400px; */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+  margin: 0 0 0 100px;
+  /* padding: 2.5rem; */
+  /* margin: 0 auto; */
+}
+
+/* Títulos */
+.canvas-title {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+  font-weight: 700;
+  padding-top: 1rem;
+}
+
+.canvas-subtitle {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+/* Cards */
+.canvas-card {
+  min-height: 40px;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.canvas-card .card-body {
+  padding: 1.5rem !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.canvas-item-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 0;
+}
+
+.canvas-icon {
+  font-size: 1.4rem;
+}
+
+/* Lista de Itens */
+.canvas-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.canvas-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #ecf0f1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.canvas-item-text {
+  font-size: 0.95rem;
+  color: #2c3e50;
+  flex: 1;
+}
+
+/* Botões */
+.canvas-remove-btn {
+  font-size: 1.2rem;
+  color: #e74c3c !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+}
+
+.canvas-input {
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem !important;
+  border: 1px solid #ddd !important;
+  border-radius: 6px !important;
+}
+
+.canvas-add-btn,
+.canvas-edit-btn {
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 6px !important;
+}
+
+.canvas-edit-btn {
+  margin-top: 0.75rem !important;
+  align-self: flex-start;
+}
+
+/* Efeitos Hover */
+.canvas-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 1800px) {
+  .canvas-wrapper {
+    padding: 50px 250px;
+  }
+}
+
+@media (max-width: 1600px) {
+  .canvas-wrapper {
+    padding: 50px 200px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .canvas-wrapper {
+    padding: 40px 150px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .canvas-wrapper {
+    padding: 40px 100px;
+  }
+}
+
+@media (max-width: 992px) {
+  .canvas-wrapper {
+    padding: 30px;
+  }
+
+  .canvas-container {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .canvas-wrapper {
+    padding: 20px;
+  }
+
+  .canvas-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .canvas-wrapper {
+    padding: 15px;
+  }
+
+  .canvas-container {
+    padding: 1rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }

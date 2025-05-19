@@ -23,47 +23,55 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
   };
 
   return (
-    <Card className="h-100 canvas-card border-0 shadow-sm" style={{ backgroundColor: '#f8f9fa' }}>
+    <Card className="canvas-card border-0">
       <Card.Body className="d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <Card.Title className="mb-0 text-dark fs-6 fs-md-5">{title}</Card.Title>
-          <span className="canvas-icon fs-5" style={{ color: `var(--bs-${color})` }}>{icon}</span>
+          <Card.Title className="canvas-item-title m-0">{title}</Card.Title>
+          <span className="canvas-icon" style={{ color: `var(--bs-${color})` }}>{icon}</span>
         </div>
         
-        <ul className="canvas-list flex-grow-1">
+        <ul className="canvas-list mb-3">
           {currentItems.map((item, index) => (
-            <li key={index} className="d-flex justify-content-between align-items-center">
-              <span className="text-dark fs-7 fs-md-6">{item}</span>
-              <Button 
-                variant="link" 
-                className="p-0 text-danger"
-                onClick={() => handleRemoveItem(index)}
-              >
-                ×
-              </Button>
+            <li key={index}>
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="canvas-item-text">{item}</span>
+                <Button 
+                  variant="link" 
+                  className="canvas-remove-btn"
+                  onClick={() => handleRemoveItem(index)}
+                >
+                  ×
+                </Button>
+              </div>
             </li>
           ))}
         </ul>
 
         {isEditing && (
-          <div className="mt-3 d-flex">
+          <div className="mt-auto d-flex align-items-center">
             <input
               type="text"
-              className="form-control form-control-sm me-2"
+              className="form-control canvas-input me-2"
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
               placeholder="Novo item"
+              onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
             />
-            <Button variant="primary" size="sm" onClick={handleAddItem}>
+            <Button 
+              variant="primary" 
+              className="canvas-add-btn"
+              onClick={handleAddItem}
+              disabled={!newItem.trim()}
+            >
               +
             </Button>
           </div>
         )}
 
         <Button 
-          variant="outline-primary" 
+          variant={isEditing ? 'outline-secondary' : 'outline-primary'} 
           size="sm" 
-          className="mt-2 align-self-start"
+          className="canvas-edit-btn"
           onClick={() => setIsEditing(!isEditing)}
         >
           {isEditing ? 'Fechar' : 'Editar'}
@@ -83,7 +91,6 @@ export function Canvas() {
     costs: ['Salários', 'Custos com projetos'],
     revenue: ['Projetos de consultoria financeira', 'Cursos online e produtos digitais'],
     channels: ['Site', 'Redes Sociais', 'Parcerias'],
-    segments: ['Startups', 'Empresas familiares', 'Profissionais liberais'],
     resources: ['Equipe especializada', 'Software de gestão', 'Conteúdo educativo']
   });
 
@@ -92,23 +99,18 @@ export function Canvas() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <Container className="canvas-container py-3 py-md-5 px-2 px-md-3" style={{ 
-        backgroundColor: 'white', 
-        maxWidth: '1200px',
-        margin: '0 auto',
-        width: '95%'
-      }}>
+    <div className="canvas-wrapper">
+      <Container fluid="lg" className="canvas-container">
         {/* Cabeçalho */}
-        <Row className="mb-3 mb-md-4 text-center">
+        <Row className="mb-4 text-center">
           <Col>
-            <h1 className="canvas-title text-dark fs-3 fs-md-2">Business Model Canvas</h1>
-            <p className="text-muted fs-6 fs-md-5">Visualize e edite seu modelo de negócios</p>
+            <h1 className="canvas-title">Business Model Canvas</h1>
+            <p className="canvas-subtitle">Visualize e edite seu modelo de negócios</p>
           </Col>
         </Row>
 
-        {/* Primeira linha - 4 colunas */}
-        <Row className="g-3 g-md-4 mb-3 mb-md-4">
+        {/* Primeira Linha */}
+        <Row className="g-3 mb-4">
           <Col xs={12} sm={6} lg={3}>
             <CanvasItem 
               title="Parcerias"
@@ -118,7 +120,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('partnerships', items)}
             />
           </Col>
-
           <Col xs={12} sm={6} lg={3}>
             <CanvasItem 
               title="Atividades Chave"
@@ -128,7 +129,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('activities', items)}
             />
           </Col>
-
           <Col xs={12} sm={6} lg={3}>
             <CanvasItem 
               title="Oferta de Valor"
@@ -138,7 +138,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('value', items)}
             />
           </Col>
-
           <Col xs={12} sm={6} lg={3}>
             <CanvasItem 
               title="Relacionamento"
@@ -150,8 +149,8 @@ export function Canvas() {
           </Col>
         </Row>
 
-        {/* Segunda linha - 3 colunas */}
-        <Row className="g-3 g-md-4 mb-3 mb-md-4">
+        {/* Segunda Linha */}
+        <Row className="g-3 mb-4">
           <Col xs={12} md={6} lg={4}>
             <CanvasItem 
               title="Segmento de Clientes"
@@ -161,7 +160,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('customers', items)}
             />
           </Col>
-
           <Col xs={12} md={6} lg={4}>
             <CanvasItem 
               title="Canais de Distribuição"
@@ -171,7 +169,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('channels', items)}
             />
           </Col>
-
           <Col xs={12} md={6} lg={4}>
             <CanvasItem 
               title="Recursos Chave"
@@ -183,8 +180,8 @@ export function Canvas() {
           </Col>
         </Row>
 
-        {/* Terceira linha - 2 colunas */}
-        <Row className="g-3 g-md-4">
+        {/* Terceira Linha */}
+        <Row className="g-3">
           <Col xs={12} lg={6}>
             <CanvasItem 
               title="Estrutura de Custos"
@@ -194,7 +191,6 @@ export function Canvas() {
               onUpdateItems={(items) => updateItems('costs', items)}
             />
           </Col>
-
           <Col xs={12} lg={6}>
             <CanvasItem 
               title="Fontes de Receitas"
