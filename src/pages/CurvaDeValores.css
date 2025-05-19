@@ -1,0 +1,71 @@
+/* Estilos para melhorar a responsividade */
+@media (max-width: 767.98px) {
+  .custom-tabs .nav-link {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .table-responsive {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+  
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table thead {
+    display: none;
+  }
+  
+  .table tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+  
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-top: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .table tbody td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+  
+  .table tbody td:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Ajustes para zoom 125% */
+@media screen and (min-resolution: 120dpi) {
+  body {
+    zoom: 0.8;
+  }
+}
+
+/* Melhorias para acessibilidade */
+.form-control:focus, .form-select:focus {
+  box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+/* Ajustes para os tabs em telas pequenas */
+.nav-pills .nav-link {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
