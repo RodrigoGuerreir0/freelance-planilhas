@@ -1,6 +1,4 @@
 import { Container, Form, Row, Col, Button, Card, Tab, Tabs, Table, Badge, Alert } from "react-bootstrap";
-import './CurvaDeValores.css';
-
 import React, { useState } from 'react';
 import {
   Bar,

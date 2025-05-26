@@ -139,26 +139,27 @@ const MetasEmpresa = () => {
   };
 
   return (
-    <Container fluid className="p-3" style={{ 
+    <Container fluid className="p-2 p-md-3" style={{ 
       backgroundColor: colors.background,
-      marginLeft: '280px', 
-      width: 'calc(100% - 280px)',
+      marginLeft: '0',
+      width: '100%',
       minHeight: '100vh',
-      overflow: 'auto'
+      overflow: 'auto',
+      transition: 'all 0.3s'
     }}>
       <Row className="mb-3 align-items-center">
-        <Col md={6}>
-          <h4 style={{ color: colors.primary, fontWeight: 600 }}>
+        <Col xs={12} md={6} className="mb-2 mb-md-0">
+          <h4 style={{ color: colors.primary, fontWeight: 600, fontSize: 'clamp(1rem, 2vw, 1.5rem)' }}>
             <Timeline className="me-2" />
             Planilha de Metas
           </h4>
         </Col>
-        <Col md={6} className="d-flex justify-content-end">
+        <Col xs={12} md={6} className="d-flex justify-content-md-end">
           <Button 
             variant="outline-primary" 
             onClick={adicionarAno}
             size="sm"
-            className="me-2"
+            className="w-100 w-md-auto me-2"
             style={{ borderWidth: '2px' }}
           >
             <Add fontSize="small" /> Ano
@@ -166,9 +167,9 @@ const MetasEmpresa = () => {
         </Col>
       </Row>
 
-      <div className="bg-white rounded-3 p-3 mb-3 shadow-sm">
+      <div className="bg-white rounded-3 p-2 p-md-3 mb-3 shadow-sm">
         <Row className="g-2 align-items-center">
-          <Col md={3}>
+          <Col xs={12} md={3} className="mb-2 mb-md-0">
             <Form.Control
               placeholder="Nome"
               size="sm"
@@ -177,7 +178,7 @@ const MetasEmpresa = () => {
               className="border-0 shadow-sm"
             />
           </Col>
-          <Col md={2}>
+          <Col xs={12} md={2} className="mb-2 mb-md-0">
             <Form.Control
               placeholder="Área"
               size="sm"
@@ -186,7 +187,7 @@ const MetasEmpresa = () => {
               className="border-0 shadow-sm"
             />
           </Col>
-          <Col md={2}>
+          <Col xs={12} md={2} className="mb-2 mb-md-0">
             <Form.Control
               placeholder="Formato"
               size="sm"
@@ -195,7 +196,7 @@ const MetasEmpresa = () => {
               className="border-0 shadow-sm"
             />
           </Col>
-          <Col md={2}>
+          <Col xs={12} md={2} className="mb-2 mb-md-0">
             <Button 
               variant="success" 
               onClick={adicionarMeta}
@@ -218,7 +219,7 @@ const MetasEmpresa = () => {
         borderRadius: '8px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
       }}>
-        <Table borderless className="mb-0" style={{ minWidth: '700px' }}>
+        <Table responsive borderless className="mb-0" style={{ minWidth: '700px' }}>
           <thead>
             <tr style={{ 
               backgroundColor: colors.header,
@@ -226,11 +227,11 @@ const MetasEmpresa = () => {
               top: 0,
               zIndex: 1
             }}>
-              <th style={{ width: '150px', minWidth: '150px' }}>Nome</th>
-              <th style={{ width: '120px', minWidth: '120px' }}>Área</th>
-              <th style={{ width: '80px', minWidth: '80px' }}>Formato</th>
+              <th style={{ minWidth: '120px' }}>Nome</th>
+              <th style={{ minWidth: '100px' }}>Área</th>
+              <th style={{ minWidth: '80px' }}>Formato</th>
               {anos.map((ano, index) => (
-                <th key={ano} colSpan={2} style={{ minWidth: '140px' }} className="text-center position-relative">
+                <th key={ano} colSpan={2} style={{ minWidth: '120px' }} className="text-center position-relative">
                   <div className="d-flex justify-content-center align-items-center">
                     <span>Ano {ano}</span>
                     {anos.length > 1 && (
@@ -248,7 +249,7 @@ const MetasEmpresa = () => {
                   </div>
                 </th>
               ))}
-              <th style={{ width: '100px', minWidth: '100px' }}>Ações</th>
+              <th style={{ minWidth: '90px' }}>Ações</th>
             </tr>
             <tr style={{ backgroundColor: colors.header }}>
               <th colSpan={3}></th>

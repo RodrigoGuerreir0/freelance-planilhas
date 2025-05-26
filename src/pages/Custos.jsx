@@ -12,7 +12,9 @@ import {
   Paper,
   IconButton,
   TableContainer,
-  styled
+  styled,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { Add, Delete, Edit, Save, Cancel } from '@mui/icons-material';
 
@@ -30,29 +32,31 @@ const colors = {
   black: '#212121'
 };
 
-const PageContainer = styled(Box)({
+const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
   width: '100%',
-  padding: '20px',
+  padding: theme.spacing(2),
   boxSizing: 'border-box',
   paddingLeft: '300px',
-  transition: 'margin-left 0.3s ease',
-  '@media (max-width: 900px)': {
-    marginLeft: '60px'
+  transition: 'all 0.3s ease',
+  [theme.breakpoints.down('lg')]: {
+    paddingLeft: '240px'
   },
-  '@media (max-width: 600px)': {
-    marginLeft: '20px',
-    padding: '10px'
+  [theme.breakpoints.down('md')]: {
+    paddingLeft: '180px'
+  },
+  [theme.breakpoints.down('sm')]: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   }
-});
+}));
 
 const ContentContainer = styled(Box)(({ theme }) => ({
-  width: 'calc(100% - 120px)',
+  width: '100%',
   maxWidth: '1400px',
   [theme.breakpoints.down('lg')]: {
-    maxWidth: '100%',
-    padding: '0 16px'
+    maxWidth: '100%'
   }
 }));
 
@@ -60,11 +64,11 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   backgroundColor: colors.light,
   borderRadius: '8px',
   boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-  margin: '20px 0',
-  marginLeft: '40px',
+  margin: theme.spacing(2, 0),
+  marginLeft: theme.spacing(4),
   [theme.breakpoints.down('sm')]: {
-    padding: '8px',
-    marginLeft: '0'
+    marginLeft: 0,
+    padding: theme.spacing(1)
   }
 }));
 
@@ -103,7 +107,7 @@ const initialRows = [
     cost3: 0,
     cost4: 0,
     cost5: 0,
-    extraCosts: {}, // Novo campo para custos extras
+    extraCosts: {},
     otherCosts: 0,
     totalCost: 500
   },
@@ -115,13 +119,17 @@ const initialRows = [
     cost3: 0,
     cost4: 0,
     cost5: 0,
-    extraCosts: {}, // Novo campo para custos extras
+    extraCosts: {},
     otherCosts: 0,
     totalCost: 300
   }
 ];
 
 const Custos = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
   const [rows, setRows] = useState(initialRows);
   const [newRow, setNewRow] = useState({
     product: '',
@@ -130,7 +138,7 @@ const Custos = () => {
     cost3: 0,
     cost4: 0,
     cost5: 0,
-    extraCosts: {}, // Novo campo para custos extras
+    extraCosts: {},
     otherCosts: 0
   });
   const [editingId, setEditingId] = useState(null);
@@ -152,7 +160,7 @@ const Custos = () => {
     
     const calculatedRow = calculateTotal({
       ...newRow,
-      id: Date.now() // Usando timestamp como ID único
+      id: Date.now()
     });
     setRows([...rows, calculatedRow]);
     setNewRow({
@@ -255,7 +263,6 @@ const Custos = () => {
     });
   };
 
-  // Função para obter todas as chaves de custos extras usadas em qualquer linha
   const getAllExtraCostKeys = () => {
     const allKeys = new Set();
     rows.forEach(row => {
@@ -271,11 +278,75 @@ const Custos = () => {
 
   const allExtraCostKeys = getAllExtraCostKeys();
 
+  // Versão simplificada para mobile
+  const MobileRow = ({ row, index }) => (
+    <Box key={row.id} mb={2} p={2} bgcolor={index % 2 === 0 ? colors.light : colors.secondary}>
+      <Typography variant="subtitle1" fontWeight="bold">{row.product}</Typography>
+      <Box display="flex" justifyContent="space-between" mt={1}>
+        <Typography>Custo 1:</Typography>
+        <Typography>{formatCurrency(row.cost1)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between">
+        <Typography>Custo 2:</Typography>
+        <Typography>{formatCurrency(row.cost2)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between">
+        <Typography>Custo 3:</Typography>
+        <Typography>{formatCurrency(row.cost3)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between">
+        <Typography>Custo 4:</Typography>
+        <Typography>{formatCurrency(row.cost4)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between">
+        <Typography>Custo 5:</Typography>
+        <Typography>{formatCurrency(row.cost5)}</Typography>
+      </Box>
+      
+      {allExtraCostKeys.map(extraCostKey => (
+        <Box key={extraCostKey} display="flex" justifyContent="space-between">
+          <Typography>Extra {extraCostKey.replace('extra', '')}:</Typography>
+          <Typography>{formatCurrency(row.extraCosts?.[extraCostKey] || 0)}</Typography>
+        </Box>
+      ))}
+      
+      <Box display="flex" justifyContent="space-between">
+        <Typography>Outros Custos:</Typography>
+        <Typography>{formatCurrency(row.otherCosts)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-between" mt={1}>
+        <Typography fontWeight="bold">Total:</Typography>
+        <Typography fontWeight="bold">{formatCurrency(row.totalCost)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="flex-end" mt={1}>
+        <IconButton
+          aria-label="edit"
+          onClick={() => handleEditRow(row)}
+          style={{ color: colors.primary }}
+        >
+          <Edit />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
+          onClick={() => handleDeleteRow(row.id)}
+          style={{ color: colors.error }}
+        >
+          <Delete />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+
   return (
     <PageContainer>
       <ContentContainer>
         <StyledTableContainer component={Paper}>
-          <Typography variant="h4" gutterBottom style={{ color: colors.primary, textAlign: 'left', padding: '10px 0 0 50px' }}>
+          <Typography variant="h4" gutterBottom style={{ 
+            color: colors.primary, 
+            textAlign: 'left', 
+            padding: theme.spacing(2),
+            fontSize: isSmallScreen ? '1.5rem' : '2rem'
+          }}>
             Tabela de Custos
           </Typography>
           
@@ -283,7 +354,7 @@ const Custos = () => {
             <Typography variant="h6" gutterBottom style={{ color: colors.text }}>
               Adicionar Novo Produto/Serviço
             </Typography>
-            <Box display="flex" flexWrap="wrap" gap={2}>
+            <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
               <TextField
                 label="Produto ou Serviço"
                 name="product"
@@ -291,84 +362,61 @@ const Custos = () => {
                 onChange={handleInputChange}
                 variant="outlined"
                 size="small"
-                fullWidth
+                fullWidth={isSmallScreen}
               />
-              <TextField
-                label="Custo 1 (R$)"
-                name="cost1"
-                type="number"
-                value={newRow.cost1}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-              />
-              <TextField
-                label="Custo 2 (R$)"
-                name="cost2"
-                type="number"
-                value={newRow.cost2}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-              />
-              <TextField
-                label="Custo 3 (R$)"
-                name="cost3"
-                type="number"
-                value={newRow.cost3}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-              />
-              <TextField
-                label="Custo 4 (R$)"
-                name="cost4"
-                type="number"
-                value={newRow.cost4}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-              />
-              <TextField
-                label="Custo 5 (R$)"
-                name="cost5"
-                type="number"
-                value={newRow.cost5}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-              />
-              
-              {/* Campos de custos extras */}
-              {allExtraCostKeys.map((extraCostKey) => (
-                <Box key={extraCostKey} display="flex" alignItems="center" gap={1}>
+              <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} gap={2} width={isSmallScreen ? '100%' : 'auto'}>
+                {[1, 2, 3, 4, 5].map(num => (
                   <TextField
-                    label={`Custo Extra ${extraCostKey.replace('extra', '')} (R$)`}
-                    name={`extraCost-${extraCostKey}`}
+                    key={`cost${num}`}
+                    label={`Custo ${num} (R$)`}
+                    name={`cost${num}`}
                     type="number"
-                    value={newRow.extraCosts?.[extraCostKey] || 0}
+                    value={newRow[`cost${num}`]}
                     onChange={handleInputChange}
                     variant="outlined"
                     size="small"
+                    sx={{ minWidth: isSmallScreen ? '100%' : '120px' }}
                   />
-                  <IconButton
-                    size="small"
-                    onClick={() => removeExtraCostField(extraCostKey)}
-                    style={{ color: colors.error }}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
+                ))}
+              </Box>
               
-              <Button
-                variant="outlined"
-                onClick={addExtraCostField}
-                startIcon={<Add />}
-                size="small"
-              >
-                Adicionar Custo Extra
-              </Button>
+              {/* Campos de custos extras */}
+              <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
+                {allExtraCostKeys.map((extraCostKey) => (
+                  <Box key={extraCostKey} display="flex" alignItems="center" gap={1}>
+                    <TextField
+                      label={`Extra ${extraCostKey.replace('extra', '')} (R$)`}
+                      name={`extraCost-${extraCostKey}`}
+                      type="number"
+                      value={newRow.extraCosts?.[extraCostKey] || 0}
+                      onChange={handleInputChange}
+                      variant="outlined"
+                      size="small"
+                      sx={{ minWidth: isSmallScreen ? '100%' : '150px' }}
+                    />
+                    <IconButton
+                      size="small"
+                      onClick={() => removeExtraCostField(extraCostKey)}
+                      style={{ color: colors.error }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Box>
+                ))}
+                
+                <Button
+                  variant="outlined"
+                  onClick={addExtraCostField}
+                  startIcon={<Add />}
+                  size="small"
+                  sx={{ 
+                    width: isSmallScreen ? '100%' : 'auto',
+                    mt: isSmallScreen ? 1 : 0
+                  }}
+                >
+                  Adicionar Custo Extra
+                </Button>
+              </Box>
               
               <TextField
                 label="Outros Custos (R$)"
@@ -378,6 +426,7 @@ const Custos = () => {
                 onChange={handleInputChange}
                 variant="outlined"
                 size="small"
+                sx={{ minWidth: isSmallScreen ? '100%' : '150px' }}
               />
             </Box>
             <Box mt={2} display="flex" justifyContent="flex-start">
@@ -385,180 +434,155 @@ const Custos = () => {
                 variant="contained"
                 startIcon={<Add />}
                 onClick={handleAddRow}
+                fullWidth={isSmallScreen}
               >
                 Adicionar
               </ActionButton>
             </Box>
           </Box>
 
-          <Box sx={{ overflowX: 'auto' }}>
-            <Table>
-              <StyledTableHead>
-                <TableRow>
-                  <TableCell>Produto/Serviço</TableCell>
-                  <TableCell align="right">Custo 1</TableCell>
-                  <TableCell align="right">Custo 2</TableCell>
-                  <TableCell align="right">Custo 3</TableCell>
-                  <TableCell align="right">Custo 4</TableCell>
-                  <TableCell align="right">Custo 5</TableCell>
-                  
-                  {/* Cabeçalhos para custos extras */}
-                  {allExtraCostKeys.map(extraCostKey => (
-                    <TableCell key={extraCostKey} align="right">
-                      Extra {extraCostKey.replace('extra', '')}
-                    </TableCell>
-                  ))}
-                  
-                  <TableCell align="right">Outros Custos</TableCell>
-                  <TableCell align="right">Custo Total</TableCell>
-                  <TableCell align="center">Ações</TableCell>
-                </TableRow>
-              </StyledTableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <StyledTableRow key={row.id} index={index}>
-                    {editingId === row.id ? (
-                      <>
-                        <TableCell>
-                          <TextField
-                            name="product"
-                            value={editRow.product}
-                            onChange={handleEditInputChange}
-                            size="small"
-                            fullWidth
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            name="cost1"
-                            type="number"
-                            value={editRow.cost1}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            name="cost2"
-                            type="number"
-                            value={editRow.cost2}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            name="cost3"
-                            type="number"
-                            value={editRow.cost3}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            name="cost4"
-                            type="number"
-                            value={editRow.cost4}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            name="cost5"
-                            type="number"
-                            value={editRow.cost5}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        
-                        {/* Campos de edição para custos extras */}
-                        {allExtraCostKeys.map(extraCostKey => (
-                          <TableCell key={extraCostKey} align="right">
+          {isSmallScreen ? (
+            <Box>
+              {rows.map((row, index) => (
+                <MobileRow key={row.id} row={row} index={index} />
+              ))}
+            </Box>
+          ) : (
+            <Box sx={{ overflowX: 'auto' }}>
+              <Table size={isMediumScreen ? 'small' : 'medium'}>
+                <StyledTableHead>
+                  <TableRow>
+                    <TableCell>Produto/Serviço</TableCell>
+                    <TableCell align="right">Custo 1</TableCell>
+                    <TableCell align="right">Custo 2</TableCell>
+                    <TableCell align="right">Custo 3</TableCell>
+                    <TableCell align="right">Custo 4</TableCell>
+                    <TableCell align="right">Custo 5</TableCell>
+                    
+                    {allExtraCostKeys.map(extraCostKey => (
+                      <TableCell key={extraCostKey} align="right">
+                        Extra {extraCostKey.replace('extra', '')}
+                      </TableCell>
+                    ))}
+                    
+                    <TableCell align="right">Outros Custos</TableCell>
+                    <TableCell align="right">Total</TableCell>
+                    <TableCell align="center">Ações</TableCell>
+                  </TableRow>
+                </StyledTableHead>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <StyledTableRow key={row.id} index={index}>
+                      {editingId === row.id ? (
+                        <>
+                          <TableCell>
                             <TextField
-                              name={`extraCost-${extraCostKey}`}
-                              type="number"
-                              value={editRow.extraCosts?.[extraCostKey] || 0}
+                              name="product"
+                              value={editRow.product}
                               onChange={handleEditInputChange}
                               size="small"
+                              fullWidth
                             />
                           </TableCell>
-                        ))}
-                        
-                        <TableCell align="right">
-                          <TextField
-                            name="otherCosts"
-                            type="number"
-                            value={editRow.otherCosts}
-                            onChange={handleEditInputChange}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell align="right" style={{ fontWeight: 'bold' }}>
-                          {formatCurrency(calculateTotal(editRow).totalCost)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            aria-label="save"
-                            onClick={handleSaveRow}
-                            style={{ color: colors.success }}
-                          >
-                            <Save />
-                          </IconButton>
-                          <IconButton
-                            aria-label="cancel"
-                            onClick={handleCancelEdit}
-                            style={{ color: colors.warning }}
-                          >
-                            <Cancel />
-                          </IconButton>
-                        </TableCell>
-                      </>
-                    ) : (
-                      <>
-                        <TableCell>{row.product}</TableCell>
-                        <TableCell align="right">{formatCurrency(row.cost1)}</TableCell>
-                        <TableCell align="right">{formatCurrency(row.cost2)}</TableCell>
-                        <TableCell align="right">{formatCurrency(row.cost3)}</TableCell>
-                        <TableCell align="right">{formatCurrency(row.cost4)}</TableCell>
-                        <TableCell align="right">{formatCurrency(row.cost5)}</TableCell>
-                        
-                        {/* Valores dos custos extras */}
-                        {allExtraCostKeys.map(extraCostKey => (
-                          <TableCell key={extraCostKey} align="right">
-                            {formatCurrency(row.extraCosts?.[extraCostKey] || 0)}
+                          {[1, 2, 3, 4, 5].map(num => (
+                            <TableCell key={`edit-cost${num}`} align="right">
+                              <TextField
+                                name={`cost${num}`}
+                                type="number"
+                                value={editRow[`cost${num}`]}
+                                onChange={handleEditInputChange}
+                                size="small"
+                                sx={{ width: '80px' }}
+                              />
+                            </TableCell>
+                          ))}
+                          
+                          {allExtraCostKeys.map(extraCostKey => (
+                            <TableCell key={`edit-${extraCostKey}`} align="right">
+                              <TextField
+                                name={`extraCost-${extraCostKey}`}
+                                type="number"
+                                value={editRow.extraCosts?.[extraCostKey] || 0}
+                                onChange={handleEditInputChange}
+                                size="small"
+                                sx={{ width: '80px' }}
+                              />
+                            </TableCell>
+                          ))}
+                          
+                          <TableCell align="right">
+                            <TextField
+                              name="otherCosts"
+                              type="number"
+                              value={editRow.otherCosts}
+                              onChange={handleEditInputChange}
+                              size="small"
+                              sx={{ width: '80px' }}
+                            />
                           </TableCell>
-                        ))}
-                        
-                        <TableCell align="right">{formatCurrency(row.otherCosts)}</TableCell>
-                        <TableCell align="right" style={{ fontWeight: 'bold' }}>
-                          {formatCurrency(row.totalCost)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            aria-label="edit"
-                            onClick={() => handleEditRow(row)}
-                            style={{ color: colors.primary }}
-                          >
-                            <Edit />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => handleDeleteRow(row.id)}
-                            style={{ color: colors.error }}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                      </>
-                    )}
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
+                          <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                            {formatCurrency(calculateTotal(editRow).totalCost)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              aria-label="save"
+                              onClick={handleSaveRow}
+                              style={{ color: colors.success }}
+                            >
+                              <Save />
+                            </IconButton>
+                            <IconButton
+                              aria-label="cancel"
+                              onClick={handleCancelEdit}
+                              style={{ color: colors.warning }}
+                            >
+                              <Cancel />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell>{row.product}</TableCell>
+                          <TableCell align="right">{formatCurrency(row.cost1)}</TableCell>
+                          <TableCell align="right">{formatCurrency(row.cost2)}</TableCell>
+                          <TableCell align="right">{formatCurrency(row.cost3)}</TableCell>
+                          <TableCell align="right">{formatCurrency(row.cost4)}</TableCell>
+                          <TableCell align="right">{formatCurrency(row.cost5)}</TableCell>
+                          
+                          {allExtraCostKeys.map(extraCostKey => (
+                            <TableCell key={`view-${extraCostKey}`} align="right">
+                              {formatCurrency(row.extraCosts?.[extraCostKey] || 0)}
+                            </TableCell>
+                          ))}
+                          
+                          <TableCell align="right">{formatCurrency(row.otherCosts)}</TableCell>
+                          <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                            {formatCurrency(row.totalCost)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              aria-label="edit"
+                              onClick={() => handleEditRow(row)}
+                              style={{ color: colors.primary }}
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => handleDeleteRow(row.id)}
+                              style={{ color: colors.error }}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      )}
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          )}
         </StyledTableContainer>
       </ContentContainer>
     </PageContainer>

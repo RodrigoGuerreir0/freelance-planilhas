@@ -12,7 +12,9 @@ import {
   Paper,
   IconButton,
   TableContainer,
-  styled
+  styled,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { Add, Delete, Edit, Save, Cancel } from '@mui/icons-material';
 
@@ -30,29 +32,31 @@ const colors = {
   black: '#212121'
 };
 
-const PageContainer = styled(Box)({
+const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
   width: '100%',
-  padding: '20px',
+  padding: theme.spacing(2),
   boxSizing: 'border-box',
   paddingLeft: '300px',
-  transition: 'margin-left 0.3s ease',
-  '@media (max-width: 900px)': {
-    marginLeft: '60px'
+  transition: 'all 0.3s ease',
+  [theme.breakpoints.down('lg')]: {
+    paddingLeft: '240px'
   },
-  '@media (max-width: 600px)': {
-    marginLeft: '20px',
-    padding: '10px'
+  [theme.breakpoints.down('md')]: {
+    paddingLeft: '180px'
+  },
+  [theme.breakpoints.down('sm')]: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   }
-});
+}));
 
 const ContentContainer = styled(Box)(({ theme }) => ({
-  width: 'calc(100% - 120px)',
+  width: '100%',
   maxWidth: '1400px',
   [theme.breakpoints.down('lg')]: {
-    maxWidth: '100%',
-    padding: '0 16px'
+    maxWidth: '100%'
   }
 }));
 
@@ -60,11 +64,11 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   backgroundColor: colors.light,
   borderRadius: '8px',
   boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-  margin: '20px 0',
-  marginLeft: '40px',
+  margin: theme.spacing(2, 0),
+  marginLeft: theme.spacing(4),
   [theme.breakpoints.down('sm')]: {
-    padding: '8px',
-    marginLeft: '0'
+    marginLeft: 0,
+    padding: theme.spacing(1)
   }
 }));
 
@@ -124,6 +128,10 @@ const initialRows = [
 ];
 
 const HomemHora = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
   const [rows, setRows] = useState(initialRows);
   const [newRow, setNewRow] = useState({
     product: '',
@@ -131,7 +139,7 @@ const HomemHora = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const [editRow, setEditRow] = useState({});
-  const [nextHourId, setNextHourId] = useState(7); // Começa em 7 porque já temos hour1 a hour6
+  const [nextHourId, setNextHourId] = useState(7);
 
   const calculateTotal = (row) => {
     const hoursSum = Object.values(row.hours || {}).reduce((sum, hour) => sum + (parseFloat(hour) || 0), 0);
@@ -146,7 +154,7 @@ const HomemHora = () => {
     
     const calculatedRow = calculateTotal({
       ...newRow,
-      id: Date.now() // ID único
+      id: Date.now()
     });
     setRows([...rows, calculatedRow]);
     setNewRow({
@@ -262,11 +270,52 @@ const HomemHora = () => {
 
   const allHourKeys = getAllHourKeys();
 
+  // Versão mobile simplificada
+  const MobileRow = ({ row, index }) => (
+    <Box key={row.id} mb={2} p={2} bgcolor={index % 2 === 0 ? colors.light : colors.secondary}>
+      <Typography variant="subtitle1" fontWeight="bold">{row.product}</Typography>
+      
+      {allHourKeys.map(hourKey => (
+        <Box key={hourKey} display="flex" justifyContent="space-between" mt={1}>
+          <Typography>Hora {hourKey.replace('hour', '')}:</Typography>
+          <Typography>{formatCurrency(row.hours?.[hourKey] || 0)}</Typography>
+        </Box>
+      ))}
+      
+      <Box display="flex" justifyContent="space-between" mt={1}>
+        <Typography fontWeight="bold">Total:</Typography>
+        <Typography fontWeight="bold">{formatCurrency(row.totalHourValue)}</Typography>
+      </Box>
+      
+      <Box display="flex" justifyContent="flex-end" mt={1}>
+        <IconButton
+          aria-label="edit"
+          onClick={() => handleEditRow(row)}
+          style={{ color: colors.primary }}
+        >
+          <Edit />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
+          onClick={() => handleDeleteRow(row.id)}
+          style={{ color: colors.error }}
+        >
+          <Delete />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+
   return (
     <PageContainer>
       <ContentContainer>
         <StyledTableContainer component={Paper}>
-          <Typography variant="h4" gutterBottom style={{ color: colors.primary, textAlign: 'left', padding: '10px 0 0 50px' }}>
+          <Typography variant="h4" gutterBottom style={{ 
+            color: colors.primary, 
+            textAlign: 'left', 
+            padding: theme.spacing(2),
+            fontSize: isSmallScreen ? '1.5rem' : '2rem'
+          }}>
             Precificação de Homem/Hora
           </Typography>
           
@@ -274,7 +323,8 @@ const HomemHora = () => {
             <Typography variant="h6" gutterBottom style={{ color: colors.text }}>
               Adicionar Novo Produto/Serviço
             </Typography>
-            <Box display="flex" flexWrap="wrap" gap={2}>
+            
+            <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
               <TextField
                 label="Produto ou Serviço"
                 name="product"
@@ -282,149 +332,167 @@ const HomemHora = () => {
                 onChange={handleInputChange}
                 variant="outlined"
                 size="small"
-                fullWidth
+                fullWidth={isSmallScreen}
               />
               
-              {allHourKeys.map((hourKey) => (
-                <Box key={hourKey} display="flex" alignItems="center" gap={1}>
-                  <TextField
-                    label={`Homem Hora ${hourKey.replace('hour', '')} (R$)`}
-                    name={`hour-${hourKey}`}
-                    type="number"
-                    value={newRow.hours?.[hourKey] || 0}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                    size="small"
-                  />
-                  {parseInt(hourKey.replace('hour', '')) > 6 && (
-                    <IconButton
+              <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
+                {allHourKeys.map((hourKey) => (
+                  <Box key={hourKey} display="flex" alignItems="center" gap={1}>
+                    <TextField
+                      label={`Hora ${hourKey.replace('hour', '')} (R$)`}
+                      name={`hour-${hourKey}`}
+                      type="number"
+                      value={newRow.hours?.[hourKey] || 0}
+                      onChange={handleInputChange}
+                      variant="outlined"
                       size="small"
-                      onClick={() => removeHourField(hourKey)}
-                      style={{ color: colors.error }}
-                    >
-                      <Delete fontSize="small" />
-                    </IconButton>
-                  )}
-                </Box>
-              ))}
-              
-              <Button
-                variant="outlined"
-                onClick={addHourField}
-                startIcon={<Add />}
-                size="small"
-              >
-                Adicionar Homem Hora
-              </Button>
+                      sx={{ minWidth: isSmallScreen ? '100%' : '150px' }}
+                    />
+                    {parseInt(hourKey.replace('hour', '')) > 6 && (
+                      <IconButton
+                        size="small"
+                        onClick={() => removeHourField(hourKey)}
+                        style={{ color: colors.error }}
+                      >
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    )}
+                  </Box>
+                ))}
+                
+                <Button
+                  variant="outlined"
+                  onClick={addHourField}
+                  startIcon={<Add />}
+                  size="small"
+                  sx={{ 
+                    width: isSmallScreen ? '100%' : 'auto',
+                    mt: isSmallScreen ? 1 : 0
+                  }}
+                >
+                  Adicionar Hora
+                </Button>
+              </Box>
             </Box>
+            
             <Box mt={2} display="flex" justifyContent="flex-start">
               <ActionButton
                 variant="contained"
                 startIcon={<Add />}
                 onClick={handleAddRow}
+                fullWidth={isSmallScreen}
               >
                 Adicionar Produto
               </ActionButton>
             </Box>
           </Box>
 
-          <Box sx={{ overflowX: 'auto' }}>
-            <Table>
-              <StyledTableHead>
-                <TableRow>
-                  <TableCell>Produto/Serviço</TableCell>
-                  {allHourKeys.map(hourKey => (
-                    <TableCell key={hourKey} align="right">
-                      Homem Hora {hourKey.replace('hour', '')}
-                    </TableCell>
-                  ))}
-                  <TableCell align="right">Valor Total</TableCell>
-                  <TableCell align="center">Ações</TableCell>
-                </TableRow>
-              </StyledTableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <StyledTableRow key={row.id} index={index}>
-                    {editingId === row.id ? (
-                      <>
-                        <TableCell>
-                          <TextField
-                            name="product"
-                            value={editRow.product}
-                            onChange={handleEditInputChange}
-                            size="small"
-                            fullWidth
-                          />
-                        </TableCell>
-                        
-                        {allHourKeys.map(hourKey => (
-                          <TableCell key={hourKey} align="right">
+          {isSmallScreen ? (
+            <Box>
+              {rows.map((row, index) => (
+                <MobileRow key={row.id} row={row} index={index} />
+              ))}
+            </Box>
+          ) : (
+            <Box sx={{ overflowX: 'auto' }}>
+              <Table size={isMediumScreen ? 'small' : 'medium'}>
+                <StyledTableHead>
+                  <TableRow>
+                    <TableCell>Produto/Serviço</TableCell>
+                    {allHourKeys.map(hourKey => (
+                      <TableCell key={hourKey} align="right">
+                        Hora {hourKey.replace('hour', '')}
+                      </TableCell>
+                    ))}
+                    <TableCell align="right">Total</TableCell>
+                    <TableCell align="center">Ações</TableCell>
+                  </TableRow>
+                </StyledTableHead>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <StyledTableRow key={row.id} index={index}>
+                      {editingId === row.id ? (
+                        <>
+                          <TableCell>
                             <TextField
-                              name={`hour-${hourKey}`}
-                              type="number"
-                              value={editRow.hours?.[hourKey] || 0}
+                              name="product"
+                              value={editRow.product}
                               onChange={handleEditInputChange}
                               size="small"
+                              fullWidth
                             />
                           </TableCell>
-                        ))}
-                        
-                        <TableCell align="right" style={{ fontWeight: 'bold' }}>
-                          {formatCurrency(calculateTotal(editRow).totalHourValue)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            aria-label="save"
-                            onClick={handleSaveRow}
-                            style={{ color: colors.success }}
-                          >
-                            <Save />
-                          </IconButton>
-                          <IconButton
-                            aria-label="cancel"
-                            onClick={handleCancelEdit}
-                            style={{ color: colors.warning }}
-                          >
-                            <Cancel />
-                          </IconButton>
-                        </TableCell>
-                      </>
-                    ) : (
-                      <>
-                        <TableCell>{row.product}</TableCell>
-                        
-                        {allHourKeys.map(hourKey => (
-                          <TableCell key={hourKey} align="right">
-                            {formatCurrency(row.hours?.[hourKey] || 0)}
+                          
+                          {allHourKeys.map(hourKey => (
+                            <TableCell key={`edit-${hourKey}`} align="right">
+                              <TextField
+                                name={`hour-${hourKey}`}
+                                type="number"
+                                value={editRow.hours?.[hourKey] || 0}
+                                onChange={handleEditInputChange}
+                                size="small"
+                                sx={{ width: '80px' }}
+                              />
+                            </TableCell>
+                          ))}
+                          
+                          <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                            {formatCurrency(calculateTotal(editRow).totalHourValue)}
                           </TableCell>
-                        ))}
-                        
-                        <TableCell align="right" style={{ fontWeight: 'bold' }}>
-                          {formatCurrency(row.totalHourValue)}
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton
-                            aria-label="edit"
-                            onClick={() => handleEditRow(row)}
-                            style={{ color: colors.primary }}
-                          >
-                            <Edit />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => handleDeleteRow(row.id)}
-                            style={{ color: colors.error }}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                      </>
-                    )}
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
+                          <TableCell align="center">
+                            <IconButton
+                              aria-label="save"
+                              onClick={handleSaveRow}
+                              style={{ color: colors.success }}
+                            >
+                              <Save />
+                            </IconButton>
+                            <IconButton
+                              aria-label="cancel"
+                              onClick={handleCancelEdit}
+                              style={{ color: colors.warning }}
+                            >
+                              <Cancel />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      ) : (
+                        <>
+                          <TableCell>{row.product}</TableCell>
+                          
+                          {allHourKeys.map(hourKey => (
+                            <TableCell key={`view-${hourKey}`} align="right">
+                              {formatCurrency(row.hours?.[hourKey] || 0)}
+                            </TableCell>
+                          ))}
+                          
+                          <TableCell align="right" style={{ fontWeight: 'bold' }}>
+                            {formatCurrency(row.totalHourValue)}
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              aria-label="edit"
+                              onClick={() => handleEditRow(row)}
+                              style={{ color: colors.primary }}
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => handleDeleteRow(row.id)}
+                              style={{ color: colors.error }}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                        </>
+                      )}
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          )}
         </StyledTableContainer>
       </ContentContainer>
     </PageContainer>

@@ -1,21 +1,6 @@
-/* Estilo base da sidebar */
+/* Transições suaves para a sidebar */
 .sidebar {
   transition: transform 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-/* Container do conteúdo rolável */
-.sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-}
-
-/* Rodapé fixo */
-.sidebar-footer {
-  flex-shrink: 0;
-  padding: 1rem;
 }
 
 /* Estilo para os links */
@@ -56,13 +41,4 @@
     background-color: #f8f9fa;
     color: black;
   }
-}
-
-/* Estilo do dropdown do usuário */
-.dropdown-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  margin-bottom: 0.5rem;
 }
