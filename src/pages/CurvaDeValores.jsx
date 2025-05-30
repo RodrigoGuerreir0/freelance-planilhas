@@ -366,7 +366,12 @@ export function CurvaDeValores() {
   };
 
   return (
-    <Container fluid className="py-4" style={{ backgroundColor: COLORS.background, minHeight: '100vh' }}>
+    <Container fluid className="py-4" style={{
+      backgroundColor: COLORS.background, minHeight: '100vh', minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+            margin: '50px 100px 0 400px'
+
+      
+      }}>
       <Container>
         {/* Header */}
         <Row className="mb-4 align-items-center">
@@ -630,7 +635,7 @@ export function CurvaDeValores() {
                   className="d-flex align-items-center"
                   style={{
                     borderLeft: `4px solid ${alerta.tipo === 'warning' ? COLORS.warning :
-                        alerta.tipo === 'success' ? COLORS.success : COLORS.info
+                      alerta.tipo === 'success' ? COLORS.success : COLORS.info
                       }`
                   }}
                 >

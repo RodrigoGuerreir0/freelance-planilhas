@@ -29,13 +29,13 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
           <Card.Title className="mb-0 text-dark">{title}</Card.Title>
           <span className="canvas-icon" style={{ color: `var(--bs-${color})` }}>{icon}</span>
         </div>
-        
+
         <ul className="canvas-list">
           {currentItems.map((item, index) => (
             <li key={index} className="d-flex justify-content-between align-items-center">
               <span className="text-dark">{item}</span>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 className="p-0 text-danger"
                 onClick={() => handleRemoveItem(index)}
               >
@@ -60,9 +60,9 @@ const CanvasItem = ({ title, icon, items, color, onUpdateItems }) => {
           </div>
         )}
 
-        <Button 
-          variant="outline-primary" 
-          size="sm" 
+        <Button
+          variant="outline-primary"
+          size="sm"
           className="mt-2"
           onClick={() => setIsEditing(!isEditing)}
         >
@@ -92,7 +92,11 @@ export function Canvas() {
   };
 
   return (
-    <Container className="canvas-container py-5" style={{ backgroundColor: 'white' }}>
+    <Container className="canvas-container py-5" style={{
+      backgroundColor: 'white',
+      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      margin: '50px 100px 0 400px'
+    }}>
       {/* Cabeçalho */}
       <Row className="mb-4 text-center">
         <Col>
@@ -103,7 +107,7 @@ export function Canvas() {
 
       <Row className="g-4 mb-4">
         <Col md={6} lg={3}>
-          <CanvasItem 
+          <CanvasItem
             title="Parcerias"
             icon="🤝"
             items={canvasData.partnerships}
@@ -113,7 +117,7 @@ export function Canvas() {
         </Col>
 
         <Col md={6} lg={3}>
-          <CanvasItem 
+          <CanvasItem
             title="Atividades Chave"
             icon="⚙️"
             items={canvasData.activities}
@@ -123,7 +127,7 @@ export function Canvas() {
         </Col>
 
         <Col md={6} lg={3}>
-          <CanvasItem 
+          <CanvasItem
             title="Oferta de Valor"
             icon="💎"
             items={canvasData.value}
@@ -133,7 +137,7 @@ export function Canvas() {
         </Col>
 
         <Col md={6} lg={3}>
-          <CanvasItem 
+          <CanvasItem
             title="Relacionamento"
             icon="💬"
             items={canvasData.relationships}
@@ -145,7 +149,7 @@ export function Canvas() {
 
       <Row className="g-4 mb-4">
         <Col md={6} lg={4}>
-          <CanvasItem 
+          <CanvasItem
             title="Segmento de Clientes"
             icon="👥"
             items={canvasData.customers}
@@ -155,7 +159,7 @@ export function Canvas() {
         </Col>
 
         <Col md={6} lg={4}>
-          <CanvasItem 
+          <CanvasItem
             title="Canais de Distribuição"
             icon="📦"
             items={canvasData.channels}
@@ -165,7 +169,7 @@ export function Canvas() {
         </Col>
 
         <Col md={6} lg={4}>
-          <CanvasItem 
+          <CanvasItem
             title="Recursos Chave"
             icon="🔑"
             items={canvasData.resources}
@@ -177,7 +181,7 @@ export function Canvas() {
 
       <Row className="g-4">
         <Col lg={6}>
-          <CanvasItem 
+          <CanvasItem
             title="Estrutura de Custos"
             icon="📉"
             items={canvasData.costs}
@@ -187,7 +191,7 @@ export function Canvas() {
         </Col>
 
         <Col lg={6}>
-          <CanvasItem 
+          <CanvasItem
             title="Fontes de Receitas"
             icon="💰"
             items={canvasData.revenue}

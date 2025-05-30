@@ -71,9 +71,8 @@ const CadastroDepartamentos = () => {
 
   return (
     <Container className="my-5" style={{
-      maxWidth: '1000px',
-      minWidth: '300px',
-      margin: '0 0 0 400px',
+      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      margin: '50px 100px 0 400px'
 
     }}>
       <Card className="border-0" style={{

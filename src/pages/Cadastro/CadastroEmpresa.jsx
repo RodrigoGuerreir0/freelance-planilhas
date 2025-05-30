@@ -33,7 +33,7 @@ const CadastroEmpresa = () => {
     mes_inicial_negocios: '',
     usuario_id: 1
   };
-  
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [empresa, setEmpresa] = useState(initialFormState);
   const [errors, setErrors] = useState({});
@@ -49,7 +49,7 @@ const CadastroEmpresa = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth >= 768 && menuOpen) setMenuOpen(false);
     };
-    
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [menuOpen]);
@@ -139,7 +139,7 @@ const CadastroEmpresa = () => {
     if (!empresa.nome.trim()) newErrors.nome = 'Campo obrigatório';
     if (!empresa.cnpj.trim()) newErrors.cnpj = 'Campo obrigatório';
     else if (empresa.cnpj.replace(/\D/g, '').length !== 14) newErrors.cnpj = 'CNPJ inválido';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -172,7 +172,7 @@ const CadastroEmpresa = () => {
 
       setSuccess(true);
       setCadastroRealizado(true);
-      
+
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
       console.error("Erro:", error);
@@ -196,9 +196,9 @@ const CadastroEmpresa = () => {
       if (!empresa.nome.trim()) newErrors.nome = 'Campo obrigatório';
       if (!empresa.cnpj.trim()) newErrors.cnpj = 'Campo obrigatório';
       else if (empresa.cnpj.replace(/\D/g, '').length !== 14) newErrors.cnpj = 'CNPJ inválido';
-      
+
       setErrors(newErrors);
-      
+
       if (Object.keys(newErrors).length === 0) {
         setActiveTab('contato');
       }
@@ -235,22 +235,22 @@ const CadastroEmpresa = () => {
   };
 
   return (
-    <Container className="mt-3 mt-md-4 px-3 px-md-4" style={{ 
-      maxWidth: '960px',
+    <Container className="mt-3 mt-md-4 px-3 px-md-4" style={{
       zoom: '100%',
       transform: 'scale(1)',
       transformOrigin: '0 0',
-      margin: '0 400px 0 400px',
+      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      margin: '50px 100px 0 400px'
     }}>
       <Row className="justify-content-center">
         <Col xs={12} lg={12}>
-          <Card className="border-0" style={{ 
+          <Card className="border-0" style={{
             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             borderRadius: '12px',
             overflow: 'hidden',
             backgroundColor: colors.light
           }}>
-            <Card.Header style={{ 
+            <Card.Header style={{
               backgroundColor: colors.light,
               borderBottom: `1px solid ${colors.border}`,
               padding: '1rem 1.25rem'
@@ -262,9 +262,9 @@ const CadastroEmpresa = () => {
                 </h5>
               </div>
             </Card.Header>
-            
-            <Card.Body style={{ 
-              backgroundColor: colors.light, 
+
+            <Card.Body style={{
+              backgroundColor: colors.light,
               padding: isMobile ? '1rem' : '1.5rem',
               zoom: '100%'
             }}>
@@ -281,17 +281,17 @@ const CadastroEmpresa = () => {
                   fontSize: isMobile ? '0.9rem' : '1rem'
                 }}>
                   <svg style={{ marginRight: '8px' }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white"/>
+                    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white" />
                   </svg>
                   Empresa cadastrada com sucesso!
                 </Alert>
               )}
 
               {!cadastroRealizado && (
-                <div className="mb-3 mb-md-4" style={{ 
-                  display: 'flex', 
-                  gap: isMobile ? '4px' : '8px', 
-                  borderBottom: `1px solid ${colors.border}`, 
+                <div className="mb-3 mb-md-4" style={{
+                  display: 'flex',
+                  gap: isMobile ? '4px' : '8px',
+                  borderBottom: `1px solid ${colors.border}`,
                   paddingBottom: '0.75rem',
                   overflowX: isMobile ? 'auto' : 'visible',
                   whiteSpace: 'nowrap',
@@ -300,7 +300,7 @@ const CadastroEmpresa = () => {
                   '&::-webkit-scrollbar': { display: 'none' }
                 }}>
                   {['dados-basicos', 'contato', 'detalhes'].map((tab) => (
-                    <Button 
+                    <Button
                       key={tab}
                       variant="link"
                       style={{
@@ -653,8 +653,8 @@ const CadastroEmpresa = () => {
                     </Col>
                     <Col xs={12} md={6}>
                       <Form.Group controlId="mesInicialNegocios">
-                        <Form.Label style={{ 
-                          color: colors.textLight, 
+                        <Form.Label style={{
+                          color: colors.textLight,
                           fontSize: isMobile ? '0.8rem' : '0.875rem',
                           marginBottom: '0.5rem',
                           display: 'block'
@@ -740,7 +740,7 @@ const CadastroEmpresa = () => {
 
                 <div className="d-flex justify-content-between mt-3 mt-md-4">
                   {!cadastroRealizado && activeTab !== 'dados-basicos' && (
-                    <Button 
+                    <Button
                       onClick={handleBack}
                       style={{
                         backgroundColor: colors.secondary,
@@ -754,11 +754,11 @@ const CadastroEmpresa = () => {
                       Voltar
                     </Button>
                   )}
-                  
+
                   <div className="ms-auto">
                     {!cadastroRealizado ? (
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         disabled={loading}
                         style={{
                           backgroundColor: colors.primary,
@@ -770,12 +770,12 @@ const CadastroEmpresa = () => {
                           fontSize: isMobile ? '0.9rem' : '1rem'
                         }}
                       >
-                        {activeTab === 'detalhes' 
-                          ? (loading ? 'Salvando...' : 'Salvar Cadastro') 
+                        {activeTab === 'detalhes'
+                          ? (loading ? 'Salvando...' : 'Salvar Cadastro')
                           : 'Avançar'}
                       </Button>
                     ) : (
-                      <Button 
+                      <Button
                         onClick={handleNovaEmpresa}
                         style={{
                           backgroundColor: colors.secondary,

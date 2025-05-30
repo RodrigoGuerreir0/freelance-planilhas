@@ -178,9 +178,8 @@ const CadastroSocios = () => {
 
   return (
     <Container className="mt-4 px-3" style={{
-      maxWidth: '1000px',
-      minWidth: '300px',
-      margin: '0 0 0 400px',
+      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      margin: '50px 100px 0 400px'
 
     }}>
       <Row className="justify-content-center">
