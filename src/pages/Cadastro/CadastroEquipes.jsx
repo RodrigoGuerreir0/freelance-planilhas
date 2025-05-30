@@ -243,22 +243,24 @@ const CadastroEquipes = () => {
                       backgroundColor: colors.light,
                       border: `1px solid ${colors.border}`,
                       borderRadius: '8px',
-                      padding: '1.5rem 1rem 0.75rem 1rem',
+                      padding: '1rem',
                       fontSize: '0.875rem',
                       color: colors.text
                     }}
                   />
-                  <label style={{
-                    position: 'absolute',
-                    top: '0.75rem',
-                    left: '1rem',
-                    fontSize: '0.75em',
-                    color: colors.textLight,
-                    pointerEvents: 'none',
-                    transition: 'all 0.2s ease'
-                  }}>
-                    Funções Principais
-                  </label>
+                  {!equipe.funcoes && (
+                    <label style={{
+                      position: 'absolute',
+                      top: '1rem',
+                      left: '1rem',
+                      fontSize: '0.875rem',
+                      color: colors.textLight,
+                      pointerEvents: 'none',
+                      transition: 'all 0.2s ease'
+                    }}>
+                      Funções Principais
+                    </label>
+                  )}
                 </div>
               </Col>
 
