@@ -10,6 +10,7 @@ import EventIcon from '@mui/icons-material/Event';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import MoneyIcon from '@mui/icons-material/Money';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const CadastroEmpresa = () => {
   const initialFormState = {
@@ -17,7 +18,9 @@ const CadastroEmpresa = () => {
     razao_social: '',
     endereco: '',
     complemento: '',
-    cidade_estado: '',
+    cidade: '',
+    estado: '',
+    cep: '',
     telefone: '',
     email: '',
     observacoes: '',
@@ -30,7 +33,8 @@ const CadastroEmpresa = () => {
     mes_inicial_negocios: '',
     usuario_id: 1
   };
-  const [menuOpen, setMenuOpen] = useState();
+  
+  const [menuOpen, setMenuOpen] = useState(false);
   const [empresa, setEmpresa] = useState(initialFormState);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
@@ -38,18 +42,17 @@ const CadastroEmpresa = () => {
   const [activeTab, setActiveTab] = useState('dados-basicos');
   const [cadastroRealizado, setCadastroRealizado] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [cepLoading, setCepLoading] = useState(false);
 
-  // Atualiza o estado se a tela for redimensionada
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      // Fecha o menu ao aumentar a tela para desktop
       if (window.innerWidth >= 768 && menuOpen) setMenuOpen(false);
     };
     
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [menuOpen]);
 
   const formatCNPJ = (value) => {
     if (!value) return '';
@@ -77,6 +80,12 @@ const CadastroEmpresa = () => {
         .replace(/(-\d{4})\d+?$/, '$1');
   };
 
+  const formatCEP = (value) => {
+    if (!value) return '';
+    const cleaned = value.replace(/\D/g, '').slice(0, 8);
+    return cleaned.replace(/^(\d{5})(\d)/, '$1-$2');
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEmpresa(prev => ({ ...prev, [name]: value }));
@@ -90,6 +99,39 @@ const CadastroEmpresa = () => {
   const handlePhoneChange = (e) => {
     const formattedValue = formatPhone(e.target.value);
     setEmpresa(prev => ({ ...prev, telefone: formattedValue }));
+  };
+
+  const handleCEPChange = (e) => {
+    const formattedValue = formatCEP(e.target.value);
+    setEmpresa(prev => ({ ...prev, cep: formattedValue }));
+  };
+
+  const buscarEnderecoPorCEP = async () => {
+    const cep = empresa.cep.replace(/\D/g, '');
+    if (cep.length !== 8) return;
+
+    setCepLoading(true);
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (!data.erro) {
+        setEmpresa(prev => ({
+          ...prev,
+          endereco: data.logradouro || '',
+          complemento: data.complemento || '',
+          cidade: data.localidade || '',
+          estado: data.uf || ''
+        }));
+      } else {
+        setErrors(prev => ({ ...prev, cep: 'CEP não encontrado' }));
+      }
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+      setErrors(prev => ({ ...prev, cep: 'Erro ao buscar CEP' }));
+    } finally {
+      setCepLoading(false);
+    }
   };
 
   const validate = () => {
@@ -112,7 +154,9 @@ const CadastroEmpresa = () => {
       const dadosParaEnviar = {
         ...empresa,
         cnpj: empresa.cnpj.replace(/\D/g, ''),
-        telefone: empresa.telefone.replace(/\D/g, '')
+        telefone: empresa.telefone.replace(/\D/g, ''),
+        cep: empresa.cep.replace(/\D/g, ''),
+        cidade_estado: `${empresa.cidade}/${empresa.estado}`
       };
 
       const response = await fetch("http://localhost/teste/CadastroEmpresa.php", {
@@ -126,7 +170,6 @@ const CadastroEmpresa = () => {
         throw new Error(errorData.message || "Erro no servidor");
       }
 
-      //const resultado = await response.json();
       setSuccess(true);
       setCadastroRealizado(true);
       
@@ -192,7 +235,13 @@ const CadastroEmpresa = () => {
   };
 
   return (
-    <Container className="mt-3 mt-md-4 px-3 px-md-4" style={{ maxWidth: '960px' }}>
+    <Container className="mt-3 mt-md-4 px-3 px-md-4" style={{ 
+      maxWidth: '960px',
+      zoom: '100%',
+      transform: 'scale(1)',
+      transformOrigin: '0 0',
+      margin: '0 400px 0 400px',
+    }}>
       <Row className="justify-content-center">
         <Col xs={12} lg={12}>
           <Card className="border-0" style={{ 
@@ -214,7 +263,11 @@ const CadastroEmpresa = () => {
               </div>
             </Card.Header>
             
-            <Card.Body style={{ backgroundColor: colors.light, padding: isMobile ? '1rem' : '1.5rem' }}>
+            <Card.Body style={{ 
+              backgroundColor: colors.light, 
+              padding: isMobile ? '1rem' : '1.5rem',
+              zoom: '100%'
+            }}>
               {success && (
                 <Alert variant="success" style={{
                   backgroundColor: colors.success,
@@ -383,6 +436,41 @@ const CadastroEmpresa = () => {
 
                 {activeTab === 'contato' && (
                   <Row>
+                    <Col xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="CEP"
+                        name="cep"
+                        value={empresa.cep}
+                        onChange={handleCEPChange}
+                        onBlur={buscarEnderecoPorCEP}
+                        error={!!errors.cep}
+                        helperText={errors.cep}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LocationOnIcon fontSize="small" style={{ color: colors.textLight }} />
+                            </InputAdornment>
+                          ),
+                          endAdornment: cepLoading ? (
+                            <InputAdornment position="end">
+                              <div className="spinner-border spinner-border-sm" role="status">
+                                <span className="visually-hidden">Carregando...</span>
+                              </div>
+                            </InputAdornment>
+                          ) : null,
+                          style: {
+                            backgroundColor: colors.light,
+                            borderRadius: '8px',
+                            border: `1px solid ${colors.border}`,
+                            padding: '8px 12px'
+                          }
+                        }}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado || cepLoading}
+                        size={isMobile ? 'small' : 'medium'}
+                      />
+                    </Col>
                     <Col xs={12} md={8}>
                       <TextField
                         fullWidth
@@ -420,12 +508,24 @@ const CadastroEmpresa = () => {
                         size={isMobile ? 'small' : 'medium'}
                       />
                     </Col>
-                    <Col xs={12} md={6}>
+                    <Col xs={12} md={4}>
                       <TextField
                         fullWidth
-                        label="Cidade/Estado"
-                        name="cidade_estado"
-                        value={empresa.cidade_estado}
+                        label="Cidade"
+                        name="cidade"
+                        value={empresa.cidade}
+                        onChange={handleChange}
+                        style={{ marginBottom: '1rem' }}
+                        disabled={cadastroRealizado}
+                        size={isMobile ? 'small' : 'medium'}
+                      />
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <TextField
+                        fullWidth
+                        label="Estado"
+                        name="estado"
+                        value={empresa.estado}
                         onChange={handleChange}
                         style={{ marginBottom: '1rem' }}
                         disabled={cadastroRealizado}
@@ -457,7 +557,7 @@ const CadastroEmpresa = () => {
                         size={isMobile ? 'small' : 'medium'}
                       />
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12} md={6}>
                       <TextField
                         fullWidth
                         label="Email"

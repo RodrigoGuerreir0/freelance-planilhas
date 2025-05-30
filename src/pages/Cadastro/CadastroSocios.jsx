@@ -16,16 +16,16 @@ import EditIcon from '@mui/icons-material/Edit';
 
 const formatDocument = (value) => {
   if (!value) return '';
-  
+
   const cleaned = value.replace(/\D/g, '');
-  
+
   if (cleaned.length <= 11) {
     return cleaned
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d{1,2})/, '$1-$2')
       .replace(/(-\d{2})\d+?$/, '$1');
-  } 
+  }
   else {
     return cleaned
       .replace(/^(\d{2})(\d)/, '$1.$2')
@@ -38,11 +38,11 @@ const formatDocument = (value) => {
 
 const formatPhone = (value) => {
   if (!value) return '';
-  
+
   const cleaned = value.replace(/\D/g, '');
-  
+
   const isCelular = cleaned.length > 2 && cleaned[2] === '9';
-  
+
   if (cleaned.length <= 2) {
     return `(${cleaned}`;
   } else if (cleaned.length <= 6) {
@@ -52,7 +52,6 @@ const formatPhone = (value) => {
   } else if (!isCelular && cleaned.length <= 10) {
     return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 6)}-${cleaned.slice(6)}`;
   } else {
-    // Caso tenha mais dígitos que o esperado, mantém o formato completo
     return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 3)} ${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
   }
 };
@@ -78,23 +77,23 @@ const CadastroSocios = () => {
   const [success, setSuccess] = useState(false);
 
   const colors = {
-    primary: '#4a6fa5',       
-    secondary: '#6c8fc7',      
-    light: '#ffffff',         
-    background: '#f8fafc',     
-    text: '#334155',           
-    textLight: '#64748b',     
-    success: '#10b981',       
-    error: '#ef4444',         
-    border: '#e2e8f0',        
-    hover: '#f1f5f9'           
+    primary: '#4a6fa5',
+    secondary: '#6c8fc7',
+    light: '#ffffff',
+    background: '#f8fafc',
+    text: '#334155',
+    textLight: '#64748b',
+    success: '#10b981',
+    error: '#ef4444',
+    border: '#e2e8f0',
+    hover: '#f1f5f9'
   };
 
   const handleDocumentChange = (id, e) => {
     const { value } = e.target;
     const formattedValue = formatDocument(value);
-    
-    setSocios(socios.map(socio => 
+
+    setSocios(socios.map(socio =>
       socio.id === id ? { ...socio, documento: formattedValue } : socio
     ));
   };
@@ -102,15 +101,15 @@ const CadastroSocios = () => {
   const handlePhoneChange = (id, e) => {
     const { value } = e.target;
     const formattedValue = formatPhone(value);
-    
-    setSocios(socios.map(socio => 
+
+    setSocios(socios.map(socio =>
       socio.id === id ? { ...socio, telefone: formattedValue } : socio
     ));
   };
 
   const handleChange = (id, e) => {
     const { name, value } = e.target;
-    setSocios(socios.map(socio => 
+    setSocios(socios.map(socio =>
       socio.id === id ? { ...socio, [name]: value } : socio
     ));
   };
@@ -120,6 +119,12 @@ const CadastroSocios = () => {
     if (!socio.nome) newErrors.nome = 'Nome é obrigatório';
     if (!socio.documento) newErrors.documento = 'CPF/CNPJ é obrigatório';
     if (!socio.percentual) newErrors.percentual = 'Percentual é obrigatório';
+
+    // Validação de email se existir
+    if (socio.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(socio.email)) {
+      newErrors.email = 'Email inválido';
+    }
+
     return newErrors;
   };
 
@@ -138,16 +143,20 @@ const CadastroSocios = () => {
       observacoes: ''
     }]);
     setEditingId(newId);
+    setErrors({});
+    setSuccess(false);
   };
 
   const handleEdit = (id) => {
     setEditingId(id);
+    setErrors({});
+    setSuccess(false);
   };
 
   const handleSave = (id) => {
     const socio = socios.find(s => s.id === id);
     const validationErrors = validate(socio);
-    
+
     if (Object.keys(validationErrors).length === 0) {
       setErrors({});
       setEditingId(null);
@@ -160,37 +169,50 @@ const CadastroSocios = () => {
 
   const handleRemove = (id) => {
     setSocios(socios.filter(socio => socio.id !== id));
+    if (editingId === id) {
+      setEditingId(null);
+    }
+    setErrors({});
+    setSuccess(false);
   };
 
   return (
-    <Container className="mt-4" style={{ maxWidth: '1200px' }}>
+    <Container className="mt-4 px-3" style={{
+      maxWidth: '1000px',
+      minWidth: '300px',
+      margin: '0 0 0 400px',
+
+    }}>
       <Row className="justify-content-center">
-        <Col lg={12}>
-          <Card className="border-0" style={{ 
+        <Col xs={12} lg={12}>
+          <Card className="border-0" style={{
             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
             borderRadius: '12px',
             overflow: 'hidden',
             backgroundColor: colors.light
           }}>
-            <Card.Header style={{ 
+            <Card.Header style={{
               backgroundColor: colors.light,
               borderBottom: `1px solid ${colors.border}`,
-              padding: '1.25rem 1.5rem'
+              padding: '1rem'
             }}>
-              <div className="d-flex align-items-center">
-                <PersonIcon style={{ 
-                  color: colors.primary, 
-                  marginRight: '12px',
-                  fontSize: '1.75rem'
-                }} />
-                <h4 style={{ 
-                  color: colors.text,
-                  margin: 0,
-                  fontWeight: 600
-                }}>
-                  Cadastro de Sócios
-                </h4>
-                <Badge style={{ 
+              <div className="d-flex align-items-center flex-wrap">
+                <div className="d-flex align-items-center me-3 mb-2 mb-sm-0">
+                  <PersonIcon style={{
+                    color: colors.primary,
+                    marginRight: '12px',
+                    fontSize: '1.75rem'
+                  }} />
+                  <h4 style={{
+                    color: colors.text,
+                    margin: 0,
+                    fontWeight: 600,
+                    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)'
+                  }}>
+                    Cadastro de Sócios
+                  </h4>
+                </div>
+                <Badge style={{
                   backgroundColor: colors.background,
                   color: colors.text,
                   fontSize: '0.75rem',
@@ -202,10 +224,10 @@ const CadastroSocios = () => {
                 </Badge>
               </div>
             </Card.Header>
-            
-            <Card.Body style={{ padding: '1.5rem' }}>
+
+            <Card.Body style={{ padding: '1rem' }}>
               {success && (
-                <Alert variant="success" onClose={() => setSuccess(false)} style={{
+                <Alert variant="success" onClose={() => setSuccess(false)} dismissible style={{
                   backgroundColor: colors.success,
                   color: colors.light,
                   border: 'none',
@@ -213,194 +235,245 @@ const CadastroSocios = () => {
                   padding: '0.75rem 1.25rem',
                   marginBottom: '1.5rem',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  fontSize: '0.875rem'
                 }}>
-                  <svg style={{ marginRight: '8px' }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white"/>
+                  <svg style={{ marginRight: '8px', flexShrink: 0 }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white" />
                   </svg>
                   Sócio salvo com sucesso!
                 </Alert>
               )}
 
-              <Table hover responsive className="mb-4" style={{ 
-                borderColor: colors.border,
-                marginBottom: '1.5rem'
-              }}>
-                <thead>
-                  <tr style={{ 
-                    backgroundColor: colors.background,
-                    color: colors.text
-                  }}>
-                    <th style={{ 
-                      padding: '0.75rem 1rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>Sócio</th>
-                    <th style={{ 
-                      padding: '0.75rem 1rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>CPF/CNPJ</th>
-                    <th style={{ 
-                      padding: '0.75rem 1rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>%</th>
-                    <th style={{ 
-                      padding: '0.75rem 1rem',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px'
-                    }}>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {socios.map(socio => (
-                    <tr key={socio.id} style={{ 
-                      borderBottom: `1px solid ${colors.border}`,
-                      transition: 'background-color 0.2s ease'
+              <div className="table-responsive">
+                <Table hover responsive className="mb-4" style={{
+                  borderColor: colors.border,
+                  marginBottom: '1.5rem',
+                  minWidth: '600px'
+                }}>
+                  <thead>
+                    <tr style={{
+                      backgroundColor: colors.background,
+                      color: colors.text
                     }}>
-                      <td style={{ padding: '1rem' }}>
-                        {editingId === socio.id ? (
-                          <TextField
-                            fullWidth
-                            name="nome"
-                            value={socio.nome}
-                            onChange={(e) => handleChange(socio.id, e)}
-                            size="small"
-                            margin="dense"
-                            error={!!errors.nome}
-                            helperText={errors.nome}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <PersonIcon fontSize="small" style={{ color: colors.textLight }} />
-                                </InputAdornment>
-                              ),
-                              style: {
-                                backgroundColor: colors.light,
-                                borderRadius: '8px',
-                                border: `1px solid ${colors.border}`,
-                                padding: '8px 12px'
-                              }
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: colors.textLight,
-                                fontSize: '0.875rem'
-                              },
-                              shrink: true
-                            }}
-                          />
-                        ) : (
-                          socio.nome || <span style={{ color: colors.textLight }}>Novo sócio</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem' }}>
-                        {editingId === socio.id ? (
-                          <TextField
-                            fullWidth
-                            name="documento"
-                            value={socio.documento}
-                            onChange={(e) => handleDocumentChange(socio.id, e)}
-                            size="small"
-                            margin="dense"
-                            error={!!errors.documento}
-                            helperText={errors.documento}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <BadgeIcon fontSize="small" style={{ color: colors.textLight }} />
-                                </InputAdornment>
-                              ),
-                              style: {
-                                backgroundColor: colors.light,
-                                borderRadius: '8px',
-                                border: `1px solid ${colors.border}`,
-                                padding: '8px 12px'
-                              }
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: colors.textLight,
-                                fontSize: '0.875rem'
-                              },
-                              shrink: true
-                            }}
-                          />
-                        ) : (
-                          socio.documento || <span style={{ color: colors.textLight }}>-</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem' }}>
-                        {editingId === socio.id ? (
-                          <TextField
-                            fullWidth
-                            name="percentual"
-                            value={socio.percentual}
-                            onChange={(e) => handleChange(socio.id, e)}
-                            size="small"
-                            margin="dense"
-                            error={!!errors.percentual}
-                            helperText={errors.percentual}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <PercentIcon fontSize="small" style={{ color: colors.textLight }} />
-                                </InputAdornment>
-                              ),
-                              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                              style: {
-                                backgroundColor: colors.light,
-                                borderRadius: '8px',
-                                border: `1px solid ${colors.border}`,
-                                padding: '8px 12px'
-                              }
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: colors.textLight,
-                                fontSize: '0.875rem'
-                              },
-                              shrink: true
-                            }}
-                          />
-                        ) : (
-                          socio.percentual ? `${socio.percentual}%` : <span style={{ color: colors.textLight }}>-</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem' }}>
-                        <div className="d-flex gap-2">
+                      <th style={{
+                        padding: '0.75rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        minWidth: '150px'
+                      }}>Sócio</th>
+                      <th style={{
+                        padding: '0.75rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        minWidth: '120px'
+                      }}>CPF/CNPJ</th>
+                      <th style={{
+                        padding: '0.75rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        minWidth: '80px'
+                      }}>%</th>
+                      <th style={{
+                        padding: '0.75rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        minWidth: '100px'
+                      }}>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {socios.map(socio => (
+                      <tr key={socio.id} style={{
+                        borderBottom: `1px solid ${colors.border}`,
+                        transition: 'background-color 0.2s ease'
+                      }}>
+                        <td style={{ padding: '0.75rem' }}>
                           {editingId === socio.id ? (
-                            <Button
-                              variant="success"
-                              size="sm"
-                              onClick={() => handleSave(socio.id)}
-                              style={{
-                                backgroundColor: colors.success,
-                                border: 'none',
-                                borderRadius: '6px',
-                                padding: '0.25rem 0.75rem',
-                                fontSize: '0.75rem',
-                                fontWeight: 500,
-                                display: 'flex',
-                                alignItems: 'center'
+                            <TextField
+                              fullWidth
+                              name="nome"
+                              value={socio.nome}
+                              onChange={(e) => handleChange(socio.id, e)}
+                              size="small"
+                              margin="dense"
+                              error={!!errors.nome}
+                              helperText={errors.nome}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <PersonIcon fontSize="small" style={{ color: colors.textLight }} />
+                                  </InputAdornment>
+                                ),
+                                style: {
+                                  backgroundColor: colors.light,
+                                  borderRadius: '8px',
+                                  border: `1px solid ${colors.border}`,
+                                  padding: '6px 12px',
+                                  fontSize: '0.875rem'
+                                }
                               }}
-                            >
-                              Salvar
-                            </Button>
+                              InputLabelProps={{
+                                style: {
+                                  color: colors.textLight,
+                                  fontSize: '0.875rem'
+                                },
+                                shrink: true
+                              }}
+                            />
                           ) : (
+                            <div style={{
+                              padding: '8px 0',
+                              color: socio.nome ? colors.text : colors.textLight,
+                              fontSize: '0.875rem'
+                            }}>
+                              {socio.nome || 'Novo sócio'}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          {editingId === socio.id ? (
+                            <TextField
+                              fullWidth
+                              name="documento"
+                              value={socio.documento}
+                              onChange={(e) => handleDocumentChange(socio.id, e)}
+                              size="small"
+                              margin="dense"
+                              error={!!errors.documento}
+                              helperText={errors.documento}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <BadgeIcon fontSize="small" style={{ color: colors.textLight }} />
+                                  </InputAdornment>
+                                ),
+                                style: {
+                                  backgroundColor: colors.light,
+                                  borderRadius: '8px',
+                                  border: `1px solid ${colors.border}`,
+                                  padding: '6px 12px',
+                                  fontSize: '0.875rem'
+                                }
+                              }}
+                              InputLabelProps={{
+                                style: {
+                                  color: colors.textLight,
+                                  fontSize: '0.875rem'
+                                },
+                                shrink: true
+                              }}
+                            />
+                          ) : (
+                            <div style={{
+                              padding: '8px 0',
+                              color: socio.documento ? colors.text : colors.textLight,
+                              fontSize: '0.875rem'
+                            }}>
+                              {socio.documento || '-'}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          {editingId === socio.id ? (
+                            <TextField
+                              fullWidth
+                              name="percentual"
+                              value={socio.percentual}
+                              onChange={(e) => handleChange(socio.id, e)}
+                              size="small"
+                              margin="dense"
+                              error={!!errors.percentual}
+                              helperText={errors.percentual}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <PercentIcon fontSize="small" style={{ color: colors.textLight }} />
+                                  </InputAdornment>
+                                ),
+                                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                                style: {
+                                  backgroundColor: colors.light,
+                                  borderRadius: '8px',
+                                  border: `1px solid ${colors.border}`,
+                                  padding: '6px 12px',
+                                  fontSize: '0.875rem'
+                                }
+                              }}
+                              InputLabelProps={{
+                                style: {
+                                  color: colors.textLight,
+                                  fontSize: '0.875rem'
+                                },
+                                shrink: true
+                              }}
+                            />
+                          ) : (
+                            <div style={{
+                              padding: '8px 0',
+                              color: socio.percentual ? colors.text : colors.textLight,
+                              fontSize: '0.875rem'
+                            }}>
+                              {socio.percentual ? `${socio.percentual}%` : '-'}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <div className="d-flex gap-2 flex-wrap">
+                            {editingId === socio.id ? (
+                              <Button
+                                variant="success"
+                                size="sm"
+                                onClick={() => handleSave(socio.id)}
+                                style={{
+                                  backgroundColor: colors.success,
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  padding: '0.25rem 0.75rem',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 500,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  minWidth: '80px',
+                                  justifyContent: 'center'
+                                }}
+                              >
+                                Salvar
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={() => handleEdit(socio.id)}
+                                style={{
+                                  borderRadius: '6px',
+                                  padding: '0.25rem 0.5rem',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 500,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  borderColor: colors.border,
+                                  color: colors.primary,
+                                  backgroundColor: colors.background,
+                                  minWidth: '32px',
+                                  height: '32px'
+                                }}
+                              >
+                                <EditIcon fontSize="small" />
+                              </Button>
+                            )}
                             <Button
-                              variant="outline-primary"
+                              variant="outline-danger"
                               size="sm"
-                              onClick={() => handleEdit(socio.id)}
+                              onClick={() => handleRemove(socio.id)}
                               style={{
                                 borderRadius: '6px',
                                 padding: '0.25rem 0.5rem',
@@ -408,55 +481,39 @@ const CadastroSocios = () => {
                                 fontWeight: 500,
                                 display: 'flex',
                                 alignItems: 'center',
-                                borderColor: colors.border,
-                                color: colors.primary,
-                                backgroundColor: colors.background
+                                borderColor: '#fee2e2',
+                                color: '#dc2626',
+                                backgroundColor: '#fef2f2',
+                                minWidth: '32px',
+                                height: '32px'
+                              }}
+                              onMouseOver={(e) => {
+                                e.target.style.backgroundColor = '#fee2e2';
+                                e.target.style.color = '#b91c1c';
+                              }}
+                              onMouseOut={(e) => {
+                                e.target.style.backgroundColor = '#fef2f2';
+                                e.target.style.color = '#dc2626';
                               }}
                             >
-                              <EditIcon fontSize="small" />
+                              <DeleteIcon fontSize="small" />
                             </Button>
-                          )}
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            onClick={() => handleRemove(socio.id)}
-                            style={{
-                              borderRadius: '6px',
-                              padding: '0.25rem 0.5rem',
-                              fontSize: '0.75rem',
-                              fontWeight: 500,
-                              display: 'flex',
-                              alignItems: 'center',
-                              borderColor: '#fee2e2',
-                              color: '#dc2626',
-                              backgroundColor: '#fef2f2'
-                            }}
-                            onMouseOver={(e) => {
-                              e.target.style.backgroundColor = '#fee2e2';
-                              e.target.style.color = '#b91c1c';
-                            }}
-                            onMouseOut={(e) => {
-                              e.target.style.backgroundColor = '#fef2f2';
-                              e.target.style.color = '#dc2626';
-                            }}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
 
               {editingId && socios.find(s => s.id === editingId) && (
-                <Card className="mb-4" style={{ 
+                <Card className="mb-4" style={{
                   border: `1px solid ${colors.border}`,
                   borderRadius: '8px',
                   overflow: 'hidden'
                 }}>
-                  <Card.Body style={{ padding: '1.5rem' }}>
-                    <h6 className="mb-3" style={{ 
+                  <Card.Body style={{ padding: '1rem' }}>
+                    <h6 className="mb-3" style={{
                       color: colors.text,
                       fontSize: '0.875rem',
                       fontWeight: 600
@@ -464,7 +521,7 @@ const CadastroSocios = () => {
                       Detalhes do Sócio
                     </h6>
                     <Row>
-                      <Col md={6} className="mb-3">
+                      <Col xs={12} md={6} className="mb-3">
                         <TextField
                           fullWidth
                           label="Data de Nascimento"
@@ -485,13 +542,13 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
-                          style={{ width: '100%' }}
                         />
                       </Col>
-                      <Col md={6} className="mb-3">
+                      <Col xs={12} md={6} className="mb-3">
                         <TextField
                           fullWidth
                           label="Telefone"
@@ -500,6 +557,8 @@ const CadastroSocios = () => {
                           onChange={(e) => handlePhoneChange(editingId, e)}
                           size="small"
                           margin="dense"
+                          error={!!errors.telefone}
+                          helperText={errors.telefone}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -510,7 +569,8 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
                           InputLabelProps={{
@@ -522,7 +582,7 @@ const CadastroSocios = () => {
                           }}
                         />
                       </Col>
-                      <Col md={6} className="mb-3">
+                      <Col xs={12} md={6} className="mb-3">
                         <TextField
                           fullWidth
                           label="Email"
@@ -532,6 +592,8 @@ const CadastroSocios = () => {
                           onChange={(e) => handleChange(editingId, e)}
                           size="small"
                           margin="dense"
+                          error={!!errors.email}
+                          helperText={errors.email}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -542,7 +604,8 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
                           InputLabelProps={{
@@ -554,7 +617,7 @@ const CadastroSocios = () => {
                           }}
                         />
                       </Col>
-                      <Col md={6} className="mb-3">
+                      <Col xs={12} md={6} className="mb-3">
                         <TextField
                           fullWidth
                           label="Formação"
@@ -573,7 +636,8 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
                           InputLabelProps={{
@@ -585,7 +649,7 @@ const CadastroSocios = () => {
                           }}
                         />
                       </Col>
-                      <Col md={6} className="mb-3">
+                      <Col xs={12} md={6} className="mb-3">
                         <TextField
                           fullWidth
                           label="Responsabilidade"
@@ -604,7 +668,8 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
                           InputLabelProps={{
@@ -616,7 +681,7 @@ const CadastroSocios = () => {
                           }}
                         />
                       </Col>
-                      <Col md={12} className="mb-3">
+                      <Col xs={12} className="mb-3">
                         <TextField
                           fullWidth
                           label="Observações"
@@ -637,7 +702,8 @@ const CadastroSocios = () => {
                               backgroundColor: colors.light,
                               borderRadius: '8px',
                               border: `1px solid ${colors.border}`,
-                              padding: '8px 12px'
+                              padding: '6px 12px',
+                              fontSize: '0.875rem'
                             }
                           }}
                           InputLabelProps={{
@@ -655,19 +721,21 @@ const CadastroSocios = () => {
               )}
 
               <div className="d-flex justify-content-end">
-                <Button 
+                <Button
                   variant="primary"
                   onClick={handleAddSocio}
                   style={{
                     backgroundColor: colors.primary,
                     border: 'none',
                     borderRadius: '8px',
-                    padding: '0.625rem 1.25rem',
+                    padding: '0.5rem 1rem',
                     fontWeight: 500,
                     fontSize: '0.875rem',
                     display: 'flex',
                     alignItems: 'center',
-                    boxShadow: '0 2px 8px rgba(74, 111, 165, 0.2)'
+                    boxShadow: '0 2px 8px rgba(74, 111, 165, 0.2)',
+                    minWidth: '160px',
+                    justifyContent: 'center'
                   }}
                   onMouseOver={(e) => e.target.style.backgroundColor = colors.secondary}
                   onMouseOut={(e) => e.target.style.backgroundColor = colors.primary}
