@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Table, Form, Button, Row, Col } from 'react-bootstrap';
-import { 
-  Add, 
+import {
+  Add,
   Delete,
   Edit,
   Save,
@@ -26,7 +26,7 @@ const MetasEmpresa = () => {
 
   const [anos, setAnos] = useState([1, 2, 3, 4, 5, 6]);
   const [metas, setMetas] = useState([
-    { 
+    {
       id: 1,
       nome: 'Lei Energia',
       area: 'Comercial',
@@ -40,7 +40,7 @@ const MetasEmpresa = () => {
         { planejado: '400,000', realizado: '' }
       ]
     },
-    { 
+    {
       id: 2,
       nome: 'Síndalores',
       area: 'Aeroporto',
@@ -67,7 +67,7 @@ const MetasEmpresa = () => {
   const adicionarAno = () => {
     const novoAno = anos.length > 0 ? Math.max(...anos) + 1 : 1;
     setAnos([...anos, novoAno]);
-    
+
     setMetas(metas.map(meta => ({
       ...meta,
       valores: [...meta.valores, { planejado: '', realizado: '' }]
@@ -81,7 +81,7 @@ const MetasEmpresa = () => {
 
   const removerAno = (anoIndex) => {
     if (anos.length <= 1) return;
-    
+
     const novosAnos = [...anos];
     novosAnos.splice(anoIndex, 1);
     setAnos(novosAnos);
@@ -94,7 +94,7 @@ const MetasEmpresa = () => {
 
   const adicionarMeta = () => {
     if (!novaMeta.nome || !novaMeta.area || !novaMeta.formato) return;
-    
+
     const novoId = metas.length > 0 ? Math.max(...metas.map(m => m.id)) + 1 : 1;
     setMetas([...metas, { ...novaMeta, id: novoId }]);
     setNovaMeta({
@@ -122,7 +122,7 @@ const MetasEmpresa = () => {
   };
 
   const atualizarMeta = (id, campo, valor) => {
-    setMetas(metas.map(m => 
+    setMetas(metas.map(m =>
       m.id === id ? { ...m, [campo]: valor } : m
     ));
   };
@@ -139,13 +139,15 @@ const MetasEmpresa = () => {
   };
 
   return (
-    <Container fluid className="p-2 p-md-3" style={{ 
+    <Container fluid className="p-2 p-md-3" style={{
       backgroundColor: colors.background,
       marginLeft: '0',
       width: '100%',
       minHeight: '100vh',
       overflow: 'auto',
-      transition: 'all 0.3s'
+      transition: 'all 0.3s',
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
+
     }}>
       <Row className="mb-3 align-items-center">
         <Col xs={12} md={6} className="mb-2 mb-md-0">
@@ -155,8 +157,8 @@ const MetasEmpresa = () => {
           </h4>
         </Col>
         <Col xs={12} md={6} className="d-flex justify-content-md-end">
-          <Button 
-            variant="outline-primary" 
+          <Button
+            variant="outline-primary"
             onClick={adicionarAno}
             size="sm"
             className="w-100 w-md-auto me-2"
@@ -174,7 +176,7 @@ const MetasEmpresa = () => {
               placeholder="Nome"
               size="sm"
               value={novaMeta.nome}
-              onChange={(e) => setNovaMeta({...novaMeta, nome: e.target.value})}
+              onChange={(e) => setNovaMeta({ ...novaMeta, nome: e.target.value })}
               className="border-0 shadow-sm"
             />
           </Col>
@@ -183,7 +185,7 @@ const MetasEmpresa = () => {
               placeholder="Área"
               size="sm"
               value={novaMeta.area}
-              onChange={(e) => setNovaMeta({...novaMeta, area: e.target.value})}
+              onChange={(e) => setNovaMeta({ ...novaMeta, area: e.target.value })}
               className="border-0 shadow-sm"
             />
           </Col>
@@ -192,13 +194,13 @@ const MetasEmpresa = () => {
               placeholder="Formato"
               size="sm"
               value={novaMeta.formato}
-              onChange={(e) => setNovaMeta({...novaMeta, formato: e.target.value})}
+              onChange={(e) => setNovaMeta({ ...novaMeta, formato: e.target.value })}
               className="border-0 shadow-sm"
             />
           </Col>
           <Col xs={12} md={2} className="mb-2 mb-md-0">
-            <Button 
-              variant="success" 
+            <Button
+              variant="success"
               onClick={adicionarMeta}
               disabled={!novaMeta.nome || !novaMeta.area || !novaMeta.formato}
               size="sm"
@@ -211,7 +213,7 @@ const MetasEmpresa = () => {
         </Row>
       </div>
 
-      <div style={{ 
+      <div style={{
         overflowX: 'auto',
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 180px)',
@@ -221,7 +223,7 @@ const MetasEmpresa = () => {
       }}>
         <Table responsive borderless className="mb-0" style={{ minWidth: '700px' }}>
           <thead>
-            <tr style={{ 
+            <tr style={{
               backgroundColor: colors.header,
               position: 'sticky',
               top: 0,
@@ -235,9 +237,9 @@ const MetasEmpresa = () => {
                   <div className="d-flex justify-content-center align-items-center">
                     <span>Ano {ano}</span>
                     {anos.length > 1 && (
-                      <Button 
-                        variant="link" 
-                        size="sm" 
+                      <Button
+                        variant="link"
+                        size="sm"
                         className="p-0 ms-1 text-danger"
                         onClick={() => removerAno(index)}
                         style={{ lineHeight: 1 }}
@@ -301,7 +303,7 @@ const MetasEmpresa = () => {
                     <div className="py-1">{meta.formato}</div>
                   )}
                 </td>
-                
+
                 {meta.valores.map((valor, index) => (
                   <React.Fragment key={index}>
                     <td className="align-middle">
@@ -318,7 +320,7 @@ const MetasEmpresa = () => {
                         value={valor.realizado}
                         onChange={(e) => atualizarValor(meta.id, index, 'realizado', e.target.value)}
                         className="text-end border-0 shadow-sm"
-                        style={{ 
+                        style={{
                           backgroundColor: valor.realizado ? '#f0f7f0' : 'inherit',
                           fontWeight: valor.realizado ? 500 : 'inherit'
                         }}
@@ -326,21 +328,21 @@ const MetasEmpresa = () => {
                     </td>
                   </React.Fragment>
                 ))}
-                
+
                 <td className="align-middle text-center">
                   {editando === meta.id ? (
                     <div className="d-flex justify-content-center">
-                      <Button 
-                        variant="success" 
-                        size="sm" 
+                      <Button
+                        variant="success"
+                        size="sm"
                         className="me-1"
                         onClick={() => salvarEdicao(meta.id)}
                         style={{ backgroundColor: colors.success, border: 'none' }}
                       >
                         <Save fontSize="small" />
                       </Button>
-                      <Button 
-                        variant="danger" 
+                      <Button
+                        variant="danger"
                         size="sm"
                         onClick={cancelarEdicao}
                         style={{ backgroundColor: colors.error, border: 'none' }}
@@ -350,17 +352,17 @@ const MetasEmpresa = () => {
                     </div>
                   ) : (
                     <div className="d-flex justify-content-center">
-                      <Button 
-                        variant="primary" 
-                        size="sm" 
+                      <Button
+                        variant="primary"
+                        size="sm"
                         className="me-1"
                         onClick={() => iniciarEdicao(meta.id)}
                         style={{ backgroundColor: colors.primary, border: 'none' }}
                       >
                         <Edit fontSize="small" />
                       </Button>
-                      <Button 
-                        variant="danger" 
+                      <Button
+                        variant="danger"
                         size="sm"
                         onClick={() => removerMeta(meta.id)}
                         style={{ backgroundColor: colors.error, border: 'none' }}

@@ -83,7 +83,7 @@ const PricingStrategyPage = () => {
     // Numa aplicação real, isso seria mais complexo baseado nas respostas
     const qualityAnswers = answers[2].answer; // "O cliente valoriza a qualidade..."
     const premiumAnswers = answers[4].answer; // "Sua linha de produtos/serviços é considerada Premium"
-    
+
     if (premiumAnswers === "Concordo Totalmente" || premiumAnswers === "Concordo Parcialmente") {
       if (qualityAnswers === "Concordo Totalmente") {
         return "Estratégia Premium";
@@ -102,20 +102,26 @@ const PricingStrategyPage = () => {
   const recommendedStrategy = getRecommendedStrategy();
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          borderRadius: 2,
-          backgroundColor: COLORS.card
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          component="h1" 
+    <Container
+      maxWidth="md"
+      className="mt-4"
+      style={{
+        minWidth: '1000px', width: 'auto', margin: '0 auto',
+        position: 'relative', left: '8%',
+      }}
+    >      <Paper
+      elevation={3}
+      sx={{
+        p: 4,
+        borderRadius: 2,
+        backgroundColor: COLORS.card
+      }}
+    >
+        <Typography
+          variant="h4"
+          component="h1"
           gutterBottom
-          sx={{ 
+          sx={{
             color: COLORS.primary,
             fontWeight: 'bold',
             mb: 3
@@ -153,12 +159,12 @@ const PricingStrategyPage = () => {
                         value={item.answer}
                         onChange={(e) => handleAnswerChange(index, e.target.value)}
                         sx={{
-                          backgroundColor: 
-                            item.answer === "Concordo Totalmente" ? COLORS.success : 
-                            item.answer === "Concordo Parcialmente" ? COLORS.info : 
-                            item.answer === "Não concordo e nem discordo" ? COLORS.light :
-                            item.answer === "Discordo Parcialmente" ? COLORS.warning :
-                            COLORS.danger,
+                          backgroundColor:
+                            item.answer === "Concordo Totalmente" ? COLORS.success :
+                              item.answer === "Concordo Parcialmente" ? COLORS.info :
+                                item.answer === "Não concordo e nem discordo" ? COLORS.light :
+                                  item.answer === "Discordo Parcialmente" ? COLORS.warning :
+                                    COLORS.danger,
                           color: COLORS.dark
                         }}
                       >

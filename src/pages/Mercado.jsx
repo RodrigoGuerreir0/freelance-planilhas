@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Divider, 
+import {
+  Box,
+  Typography,
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Divider,
   Button,
   TextField,
   IconButton,
@@ -41,7 +41,7 @@ const ProblemOpportunityPage = () => {
   const [competitorApproach, setCompetitorApproach] = useState('Resposta');
   const [newEntrants, setNewEntrants] = useState('Stantups');
   const [solutionGaps, setSolutionGaps] = useState('Gaps');
-  
+
   const [resources, setResources] = useState([
     { id: 1, name: 'Recurso 1', available: true },
     { id: 2, name: 'Recurso 2', available: false },
@@ -72,9 +72,9 @@ const ProblemOpportunityPage = () => {
   };
 
   const toggleResourceAvailability = (id) => {
-    setResources(resources.map(resource => 
-      resource.id === id 
-        ? { ...resource, available: !resource.available } 
+    setResources(resources.map(resource =>
+      resource.id === id
+        ? { ...resource, available: !resource.available }
         : resource
     ));
   };
@@ -82,7 +82,7 @@ const ProblemOpportunityPage = () => {
   const calculateTargetMarket = () => {
     const cleanMarketSize = parseInt(marketSize.replace(/\./g, ''));
     const cleanPercentage = parseInt(targetPercentage.replace('%', ''));
-    
+
     if (!isNaN(cleanMarketSize)) {
       const calculated = (cleanMarketSize * (cleanPercentage / 100)).toLocaleString();
       setTargetMarketSize(calculated);
@@ -90,20 +90,26 @@ const ProblemOpportunityPage = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          borderRadius: 2,
-          backgroundColor: COLORS.card
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          component="h1" 
+    <Container
+      maxWidth="md"
+      className="mt-4"
+      style={{
+        minWidth: '1000px', width: 'auto', margin: '0 auto',
+        position: 'relative', left: '8%',
+      }}
+    >        <Paper
+      elevation={3}
+      sx={{
+        p: 4,
+        borderRadius: 2,
+        backgroundColor: COLORS.card
+      }}
+    >
+        <Typography
+          variant="h4"
+          component="h1"
           gutterBottom
-          sx={{ 
+          sx={{
             color: COLORS.primary,
             fontWeight: 'bold',
             mb: 3
@@ -116,7 +122,7 @@ const ProblemOpportunityPage = () => {
           <Typography variant="h5" component="h2" sx={{ mb: 2, color: COLORS.secondary }}>
             Sobre os clientes
           </Typography>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
               Quem e quanto sofre com esse problema ou seria beneficiado pela solução
@@ -125,7 +131,7 @@ const ProblemOpportunityPage = () => {
               Segmento de clientes
             </Typography>
           </Box>
-          
+
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
             <Box sx={{ flex: 1, minWidth: 200 }}>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
@@ -139,7 +145,7 @@ const ProblemOpportunityPage = () => {
                 variant="outlined"
               />
             </Box>
-            
+
             <Box sx={{ flex: 1, minWidth: 200 }}>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
                 O quanto desse mercado você pretende atingir?
@@ -152,7 +158,7 @@ const ProblemOpportunityPage = () => {
                 variant="outlined"
               />
             </Box>
-            
+
             <Box sx={{ flex: 1, minWidth: 200 }}>
               <Typography variant="subtitle1" sx={{ mb: 1 }}>
                 Tamanho do mercado atingido
@@ -178,7 +184,7 @@ const ProblemOpportunityPage = () => {
           <Typography variant="h5" component="h2" sx={{ mb: 2, color: COLORS.secondary }}>
             Sobre os concorrentes e substitutos
           </Typography>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
               Quem são as empresas que exploram essa oportunidade?
@@ -191,7 +197,7 @@ const ProblemOpportunityPage = () => {
               sx={{ mb: 2 }}
             />
           </Box>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
               Como elas exploram essa oportunidade? E quais são os seus pontos fracos?
@@ -213,7 +219,7 @@ const ProblemOpportunityPage = () => {
           <Typography variant="h5" component="h2" sx={{ mb: 2, color: COLORS.secondary }}>
             Sobre os novos entrantes
           </Typography>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
               Quem e como exploram essa oportunidade hoje?
@@ -226,7 +232,7 @@ const ProblemOpportunityPage = () => {
               sx={{ mb: 2 }}
             />
           </Box>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
               Quais os Gaps dessas soluções?
@@ -275,7 +281,7 @@ const ProblemOpportunityPage = () => {
                       />
                     </TableCell>
                     <TableCell>
-                      <IconButton 
+                      <IconButton
                         onClick={() => handleDeleteResource(resource.id)}
                         sx={{ color: COLORS.danger }}
                       >
@@ -288,7 +294,7 @@ const ProblemOpportunityPage = () => {
                   <TableCell>
                     <TextField
                       value={newResource.name}
-                      onChange={(e) => setNewResource({...newResource, name: e.target.value})}
+                      onChange={(e) => setNewResource({ ...newResource, name: e.target.value })}
                       size="small"
                       fullWidth
                       placeholder="Novo recurso"
@@ -298,13 +304,13 @@ const ProblemOpportunityPage = () => {
                     <Chip
                       icon={newResource.available ? <Check /> : <Close />}
                       label={newResource.available ? 'Disponível' : 'Faltante'}
-                      onClick={() => setNewResource({...newResource, available: !newResource.available})}
+                      onClick={() => setNewResource({ ...newResource, available: !newResource.available })}
                       color={newResource.available ? 'success' : 'error'}
                       variant="outlined"
                     />
                   </TableCell>
                   <TableCell>
-                    <IconButton 
+                    <IconButton
                       onClick={handleAddResource}
                       sx={{ color: COLORS.primary }}
                     >

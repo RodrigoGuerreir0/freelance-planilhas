@@ -20,20 +20,26 @@ const ProductDefinitionForm = () => {
   const theme = useTheme();
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          borderRadius: 2,
-          backgroundColor: COLORS.card
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          component="h1" 
+    <Container
+      maxWidth="md"
+      className="mt-4"
+      style={{
+        minWidth: '1000px', width: 'auto', margin: '0 auto',
+        position: 'relative', left: '8%',
+      }}
+    >        <Paper
+      elevation={3}
+      sx={{
+        p: 4,
+        borderRadius: 2,
+        backgroundColor: COLORS.card
+      }}
+    >
+        <Typography
+          variant="h4"
+          component="h1"
           gutterBottom
-          sx={{ 
+          sx={{
             color: COLORS.primary,
             fontWeight: 'bold',
             mb: 3
@@ -46,9 +52,9 @@ const ProductDefinitionForm = () => {
           <Typography variant="body1" sx={{ mb: 2 }}>
             Veja o que já foi definido por você sobre o produto ou serviço.
           </Typography>
-          <Box 
-            sx={{ 
-              p: 2, 
+          <Box
+            sx={{
+              p: 2,
               backgroundColor: COLORS.light,
               borderRadius: 1,
               borderLeft: `4px solid ${COLORS.info}`

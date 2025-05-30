@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Table, Form, Button } from 'react-bootstrap';
-import { 
+import {
   AddCircleOutline,
   RemoveCircleOutline,
   CheckCircleOutline,
@@ -12,15 +12,15 @@ import {
 
 const MetasPlanosAcao = () => {
   const colors = {
-    primary: '#64B5F6',       
-    secondary: '#FAFAFA',      
-    accent: '#90CAF9',         
-    light: '#FFFFFF',         
-    background: '#F5F5F5',     
-    text: '#424242',          
-    success: '#A5D6A7',        
-    warning: '#FFCC80',        
-    error: '#EF9A9A',          
+    primary: '#64B5F6',
+    secondary: '#FAFAFA',
+    accent: '#90CAF9',
+    light: '#FFFFFF',
+    background: '#F5F5F5',
+    text: '#424242',
+    success: '#A5D6A7',
+    warning: '#FFCC80',
+    error: '#EF9A9A',
     white: '#FFFFFF',
     black: '#212121'
   };
@@ -34,64 +34,64 @@ const MetasPlanosAcao = () => {
   ];
 
   const [metas, setMetas] = useState([
-    { 
+    {
       id: 1,
-      meta: 'Meta 1', 
-      planoAcao: 'Ação 1', 
-      responsavel: 'Rafael', 
-      inicio: '2022-01-10', 
-      fim: '2022-01-20', 
-      status: 'Concluído no Prazo' 
+      meta: 'Meta 1',
+      planoAcao: 'Ação 1',
+      responsavel: 'Rafael',
+      inicio: '2022-01-10',
+      fim: '2022-01-20',
+      status: 'Concluído no Prazo'
     },
-    { 
+    {
       id: 2,
-      meta: 'Meta 2', 
-      planoAcao: 'Ação 2', 
-      responsavel: 'Rafael', 
-      inicio: '2022-02-20', 
-      fim: '', 
-      status: 'Não Concluído' 
+      meta: 'Meta 2',
+      planoAcao: 'Ação 2',
+      responsavel: 'Rafael',
+      inicio: '2022-02-20',
+      fim: '',
+      status: 'Não Concluído'
     },
-    { 
+    {
       id: 3,
-      meta: 'Meta 3', 
-      planoAcao: 'Ação 3', 
-      responsavel: 'Rafael', 
-      inicio: '2022-03-30', 
-      fim: '', 
-      status: 'Em Andamento' 
+      meta: 'Meta 3',
+      planoAcao: 'Ação 3',
+      responsavel: 'Rafael',
+      inicio: '2022-03-30',
+      fim: '',
+      status: 'Em Andamento'
     }
   ]);
 
   const getStatusStyle = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Concluído no Prazo':
-        return { 
-          backgroundColor: '#E8F5E9', 
+        return {
+          backgroundColor: '#E8F5E9',
           color: '#2E7D32',
           border: '1px solid #C8E6C9'
         };
       case 'Em Andamento':
-        return { 
-          backgroundColor: '#FFF3E0', 
+        return {
+          backgroundColor: '#FFF3E0',
           color: '#EF6C00',
           border: '1px solid #FFE0B2'
         };
       case 'Não Concluído':
-        return { 
-          backgroundColor: '#FFEBEE', 
+        return {
+          backgroundColor: '#FFEBEE',
           color: '#C62828',
           border: '1px solid #FFCDD2'
         };
       case 'Concluído com Atraso':
-        return { 
-          backgroundColor: '#FCE4EC', 
+        return {
+          backgroundColor: '#FCE4EC',
           color: '#AD1457',
           border: '1px solid #F8BBD0'
         };
       case 'Não Iniciado':
-        return { 
-          backgroundColor: '#E3F2FD', 
+        return {
+          backgroundColor: '#E3F2FD',
           color: '#1565C0',
           border: '1px solid #BBDEFB'
         };
@@ -100,7 +100,7 @@ const MetasPlanosAcao = () => {
     }
   };
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Concluído no Prazo':
         return <CheckCircleOutline style={{ color: '#2E7D32', fontSize: '1.2rem' }} />;
       case 'Em Andamento':
@@ -144,15 +144,14 @@ const MetasPlanosAcao = () => {
   };
 
   return (
-    <Container className="mt-4" style={{ 
-      maxWidth: '1400px', 
+    <Container className="mt-4" style={{
       backgroundColor: colors.background,
       padding: '20px',
       borderRadius: '8px',
       marginLeft: '370px',
-
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
     }}>
-      <h2 style={{ 
+      <h2 style={{
         color: colors.primary,
         marginBottom: '20px',
         display: 'flex',
@@ -163,11 +162,11 @@ const MetasPlanosAcao = () => {
       </h2>
 
       <div style={{ overflowX: 'auto' }}>
-        <Table bordered hover responsive style={{ 
+        <Table bordered hover responsive style={{
           backgroundColor: colors.light,
           borderColor: colors.secondary,
           marginBottom: '20px',
-          minWidth: '1200px' 
+          minWidth: '1200px'
         }}>
           <thead>
             <tr>
@@ -188,8 +187,8 @@ const MetasPlanosAcao = () => {
                     type="text"
                     value={item.meta}
                     onChange={(e) => atualizarMeta(item.id, 'meta', e.target.value)}
-                    style={{ 
-                      border: 'none', 
+                    style={{
+                      border: 'none',
                       backgroundColor: 'transparent',
                       boxShadow: 'none',
                       width: '100%'
@@ -201,8 +200,8 @@ const MetasPlanosAcao = () => {
                     type="text"
                     value={item.planoAcao}
                     onChange={(e) => atualizarMeta(item.id, 'planoAcao', e.target.value)}
-                    style={{ 
-                      border: 'none', 
+                    style={{
+                      border: 'none',
                       backgroundColor: 'transparent',
                       boxShadow: 'none',
                       width: '100%'
@@ -214,8 +213,8 @@ const MetasPlanosAcao = () => {
                     type="text"
                     value={item.responsavel}
                     onChange={(e) => atualizarMeta(item.id, 'responsavel', e.target.value)}
-                    style={{ 
-                      border: 'none', 
+                    style={{
+                      border: 'none',
                       backgroundColor: 'transparent',
                       boxShadow: 'none',
                       width: '100%'
@@ -227,8 +226,8 @@ const MetasPlanosAcao = () => {
                     type="date"
                     value={item.inicio}
                     onChange={(e) => atualizarMeta(item.id, 'inicio', e.target.value)}
-                    style={{ 
-                      border: 'none', 
+                    style={{
+                      border: 'none',
                       backgroundColor: 'transparent',
                       boxShadow: 'none',
                       width: '100%'
@@ -240,8 +239,8 @@ const MetasPlanosAcao = () => {
                     type="date"
                     value={item.fim}
                     onChange={(e) => atualizarMeta(item.id, 'fim', e.target.value)}
-                    style={{ 
-                      border: 'none', 
+                    style={{
+                      border: 'none',
                       backgroundColor: 'transparent',
                       boxShadow: 'none',
                       width: '100%'
@@ -254,7 +253,7 @@ const MetasPlanosAcao = () => {
                     <Form.Select
                       value={item.status}
                       onChange={(e) => atualizarMeta(item.id, 'status', e.target.value)}
-                      style={{ 
+                      style={{
                         ...getStatusStyle(item.status),
                         border: 'none',
                         padding: '5px',
@@ -271,7 +270,7 @@ const MetasPlanosAcao = () => {
                     </Form.Select>
                   </div>
                 </td>
-                <td style={{ 
+                <td style={{
                   textAlign: 'center',
                   backgroundColor: colors.light,
                   borderColor: colors.secondary
@@ -279,7 +278,7 @@ const MetasPlanosAcao = () => {
                   <Button
                     variant="outlined"
                     onClick={() => removerMeta(item.id)}
-                    style={{ 
+                    style={{
                       padding: '5px',
                       borderColor: colors.secondary,
                       color: colors.error,
@@ -296,10 +295,10 @@ const MetasPlanosAcao = () => {
       </div>
 
       <div className="text-center">
-        <Button 
+        <Button
           variant="outlined"
           onClick={adicionarMeta}
-          style={{ 
+          style={{
             borderColor: colors.primary,
             color: colors.primary,
             display: 'inline-flex',

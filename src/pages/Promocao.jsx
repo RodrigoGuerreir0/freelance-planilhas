@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Container, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Divider, 
+import {
+  Box,
+  Typography,
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Divider,
   Button,
   TextField,
   IconButton,
@@ -93,20 +93,26 @@ const PromotionStrategyPage = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          p: 4, 
-          borderRadius: 2,
-          backgroundColor: COLORS.card
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          component="h1" 
+    <Container
+      maxWidth="md"
+      className="mt-4"
+      style={{
+        minWidth: '1000px', width: 'auto', margin: '0 auto',
+        position: 'relative', left: '8%',
+      }}
+    >        <Paper
+      elevation={3}
+      sx={{
+        p: 4,
+        borderRadius: 2,
+        backgroundColor: COLORS.card
+      }}
+    >
+        <Typography
+          variant="h4"
+          component="h1"
           gutterBottom
-          sx={{ 
+          sx={{
             color: COLORS.primary,
             fontWeight: 'bold',
             mb: 3
@@ -119,7 +125,7 @@ const PromotionStrategyPage = () => {
           <Typography variant="h6" component="h2" sx={{ mb: 2, color: COLORS.secondary }}>
             Veja o que já foi definido por você para a Promoção
           </Typography>
-          <Typography variant="subtitle1" sx={{ 
+          <Typography variant="subtitle1" sx={{
             mb: 2,
             p: 2,
             backgroundColor: COLORS.light,
@@ -159,7 +165,7 @@ const PromotionStrategyPage = () => {
                   <TableCell>{expense.startDate}</TableCell>
                   <TableCell>{expense.endDate}</TableCell>
                   <TableCell>
-                    <IconButton 
+                    <IconButton
                       onClick={() => handleDeleteExpense(expense.id)}
                       sx={{ color: COLORS.danger }}
                     >
@@ -233,7 +239,7 @@ const PromotionStrategyPage = () => {
                   />
                 </TableCell>
                 <TableCell>
-                  <IconButton 
+                  <IconButton
                     onClick={handleAddExpense}
                     sx={{ color: COLORS.primary }}
                   >

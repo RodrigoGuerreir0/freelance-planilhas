@@ -125,7 +125,7 @@ const Precificacao = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   const [rows, setRows] = useState(initialRows.map(calculateValues));
   const [newRow, setNewRow] = useState({
     product: '',
@@ -169,7 +169,7 @@ const Precificacao = () => {
 
   const handleAddRow = () => {
     if (!newRow.product) return;
-    
+
     const calculatedRow = calculateValues({
       ...newRow,
       id: Date.now()
@@ -240,14 +240,19 @@ const Precificacao = () => {
   };
 
   return (
-    <ResponsivePageContainer>
+    <ResponsivePageContainer className="mt-4" style={{
+      backgroundColor: colors.background,
+      padding: '20px',
+      borderRadius: '8px',
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
+    }}>
       <ResponsiveContentContainer>
         <StyledTableContainer component={Paper}>
           <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
             <Typography variant="h4" style={{ color: colors.primary }}>
               Tabela de Precificação
             </Typography>
-            
+
             <Box display="flex" gap={1}>
               {!isMobile && (
                 <ActionButton
@@ -258,7 +263,7 @@ const Precificacao = () => {
                   Adicionar
                 </ActionButton>
               )}
-              
+
               {isMobile && (
                 <Tooltip title="Adicionar">
                   <IconButton
@@ -269,7 +274,7 @@ const Precificacao = () => {
                   </IconButton>
                 </Tooltip>
               )}
-              
+
               <Tooltip title="Filtrar Colunas">
                 <IconButton
                   color="primary"

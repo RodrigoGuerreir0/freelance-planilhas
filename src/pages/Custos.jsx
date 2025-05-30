@@ -338,7 +338,11 @@ const Custos = () => {
   );
 
   return (
-    <PageContainer>
+    <PageContainer  className="mt-4" style={{
+        padding: '20px',
+        borderRadius: '8px',
+        minWidth: '300px', width: 'auto', margin: '50px 100px 0 350px'
+      }}>
       <ContentContainer>
         <StyledTableContainer component={Paper}>
           <Typography variant="h4" gutterBottom style={{ 

@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { Container, Card, Table, Form, Button } from 'react-bootstrap';
-import { 
+import {
   AddCircleOutline,
   RemoveCircleOutline
 } from '@mui/icons-material';
 
 const AnaliseSWOT = () => {
   const colors = {
-    primary: '#64B5F6',       
-    secondary: '#FAFAFA',     
-    accent: '#90CAF9',        
-    light: '#FFFFFF',         
-    background: '#F5F5F5',    
-    text: '#424242',          
-    success: '#A5D6A7',       
-    warning: '#FFCC80',       
-    error: '#EF9A9A',         
-    white: '#FFFFFF',         
-    black: '#212121',         
-    forca: '#C8E6C9',         
-    fraqueza: '#FFCDD2',      
-    oportunidade: '#BBDEFB',  
-    ameaca: '#FFE0B2',        
+    primary: '#64B5F6',
+    secondary: '#FAFAFA',
+    accent: '#90CAF9',
+    light: '#FFFFFF',
+    background: '#F5F5F5',
+    text: '#424242',
+    success: '#A5D6A7',
+    warning: '#FFCC80',
+    error: '#EF9A9A',
+    white: '#FFFFFF',
+    black: '#212121',
+    forca: '#C8E6C9',
+    fraqueza: '#FFCDD2',
+    oportunidade: '#BBDEFB',
+    ameaca: '#FFE0B2',
   };
 
   const opcoesClassificacao = ['Força', 'Fraqueza'];
@@ -45,7 +45,7 @@ const AnaliseSWOT = () => {
   ]);
 
   const calcularPontuacao = (importancia) => {
-    switch(importancia) {
+    switch (importancia) {
       case 'Totalmente sem importância':
         return 0;
       case 'Pouco importante':
@@ -62,28 +62,28 @@ const AnaliseSWOT = () => {
   };
 
   const getClassificacaoStyle = (classificacao) => {
-    switch(classificacao) {
+    switch (classificacao) {
       case 'Força':
-        return { 
-          backgroundColor: colors.forca, 
-          color: '#2E7D32', 
+        return {
+          backgroundColor: colors.forca,
+          color: '#2E7D32',
           border: `1px solid ${colors.forca}`
         };
       case 'Fraqueza':
-        return { 
-          backgroundColor: colors.fraqueza, 
-          color: '#C62828', 
+        return {
+          backgroundColor: colors.fraqueza,
+          color: '#C62828',
           border: `1px solid ${colors.fraqueza}`
         };
       case 'Oportunidade':
-        return { 
-          backgroundColor: colors.oportunidade, 
-          color: '#1565C0', 
+        return {
+          backgroundColor: colors.oportunidade,
+          color: '#1565C0',
           border: `1px solid ${colors.oportunidade}`
         };
       case 'Ameaça':
-        return { 
-          backgroundColor: colors.ameaca, 
+        return {
+          backgroundColor: colors.ameaca,
           color: '#E65100',
           border: `1px solid ${colors.ameaca}`
         };
@@ -93,34 +93,34 @@ const AnaliseSWOT = () => {
   };
 
   const getImportanciaStyle = (importancia) => {
-    switch(importancia) {
+    switch (importancia) {
       case 'Totalmente sem importância':
-        return { 
-          backgroundColor: '#FFEBEE', 
+        return {
+          backgroundColor: '#FFEBEE',
           color: colors.text,
           border: '1px solid #EF9A9A'
         };
       case 'Pouco importante':
-        return { 
-          backgroundColor: '#FFF8E1', 
+        return {
+          backgroundColor: '#FFF8E1',
           color: colors.text,
           border: '1px solid #FFE082'
         };
       case 'Importante':
-        return { 
-          backgroundColor: colors.light, 
-          color: colors.text, 
-          border: `1px solid ${colors.secondary}` 
+        return {
+          backgroundColor: colors.light,
+          color: colors.text,
+          border: `1px solid ${colors.secondary}`
         };
       case 'Muito importante':
-        return { 
-          backgroundColor: '#E3F2FD', 
+        return {
+          backgroundColor: '#E3F2FD',
           color: colors.text,
           border: '1px solid #90CAF9'
         };
       case 'Totalmente importante':
-        return { 
-          backgroundColor: '#E1F5FE', 
+        return {
+          backgroundColor: '#E1F5FE',
           color: colors.text,
           border: '1px solid #4FC3F7'
         };
@@ -132,10 +132,10 @@ const AnaliseSWOT = () => {
   const getPontuacaoStyle = (pontuacao) => {
     const num = parseFloat(pontuacao);
     if (isNaN(num)) return { color: colors.text };
-    
-    if (num >= 8) return { color: '#388E3C', fontWeight: 'bold' }; 
-    if (num >= 5) return { color: '#F57C00', fontWeight: 'bold' }; 
-    return { color: '#D32F2F', fontWeight: 'bold' };               
+
+    if (num >= 8) return { color: '#388E3C', fontWeight: 'bold' };
+    if (num >= 5) return { color: '#F57C00', fontWeight: 'bold' };
+    return { color: '#D32F2F', fontWeight: 'bold' };
   };
 
   const adicionarItem = (lista, setLista, tipo) => {
@@ -168,13 +168,13 @@ const AnaliseSWOT = () => {
   };
 
   return (
-    <Container className="mt-4" style={{ 
-      maxWidth: '1200px',
+    <Container className="mt-4" style={{
       backgroundColor: colors.background,
       padding: '20px',
-      borderRadius: '8px'
+      borderRadius: '8px',
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
     }}>
-      <h2 style={{ 
+      <h2 style={{
         color: colors.primary,
         marginBottom: '20px',
         display: 'flex',
@@ -184,13 +184,13 @@ const AnaliseSWOT = () => {
         Análise SWOT
       </h2>
 
-      <Card className="mb-4" style={{ 
+      <Card className="mb-4" style={{
         border: 'none',
         borderRadius: '12px',
         boxShadow: '0 1px 6px rgba(0,0,0,0.05)',
         backgroundColor: colors.light
       }}>
-        <Card.Header style={{ 
+        <Card.Header style={{
           backgroundColor: colors.light,
           borderBottom: `1px solid ${colors.secondary}`,
           padding: '15px',
@@ -199,10 +199,10 @@ const AnaliseSWOT = () => {
           alignItems: 'center'
         }}>
           <h4 style={{ margin: 0, color: colors.primary }}>Forças e Fraquezas</h4>
-          <Button 
+          <Button
             variant="outlined"
             onClick={() => adicionarItem(forcasFraquezas, setForcasFraquezas, 'forcas')}
-            style={{ 
+            style={{
               borderColor: colors.forca,
               color: colors.forca,
               display: 'flex',
@@ -233,8 +233,8 @@ const AnaliseSWOT = () => {
                       type="text"
                       value={item.descricao}
                       onChange={(e) => atualizarItem(forcasFraquezas, setForcasFraquezas, item.id, 'descricao', e.target.value)}
-                      style={{ 
-                        border: 'none', 
+                      style={{
+                        border: 'none',
                         backgroundColor: 'transparent',
                         boxShadow: 'none'
                       }}
@@ -244,7 +244,7 @@ const AnaliseSWOT = () => {
                     <Form.Select
                       value={item.classificacao}
                       onChange={(e) => atualizarItem(forcasFraquezas, setForcasFraquezas, item.id, 'classificacao', e.target.value)}
-                      style={{ 
+                      style={{
                         ...getClassificacaoStyle(item.classificacao),
                         border: 'none',
                         padding: '5px',
@@ -262,7 +262,7 @@ const AnaliseSWOT = () => {
                     <Form.Select
                       value={item.importancia}
                       onChange={(e) => atualizarItem(forcasFraquezas, setForcasFraquezas, item.id, 'importancia', e.target.value)}
-                      style={{ 
+                      style={{
                         ...getImportanciaStyle(item.importancia),
                         border: 'none',
                         padding: '5px',
@@ -276,7 +276,7 @@ const AnaliseSWOT = () => {
                       ))}
                     </Form.Select>
                   </td>
-                  <td style={{ 
+                  <td style={{
                     ...getPontuacaoStyle(item.pontuacao),
                     backgroundColor: colors.light,
                     textAlign: 'center',
@@ -284,7 +284,7 @@ const AnaliseSWOT = () => {
                   }}>
                     {item.pontuacao.toFixed(1)}
                   </td>
-                  <td style={{ 
+                  <td style={{
                     textAlign: 'center',
                     backgroundColor: colors.light,
                     borderColor: colors.secondary
@@ -292,7 +292,7 @@ const AnaliseSWOT = () => {
                     <Button
                       variant="outlined"
                       onClick={() => removerItem(forcasFraquezas, setForcasFraquezas, item.id)}
-                      style={{ 
+                      style={{
                         padding: '5px',
                         borderColor: colors.secondary,
                         color: colors.error,
@@ -310,13 +310,13 @@ const AnaliseSWOT = () => {
       </Card>
 
       {/* Oportunidades e Ameaças */}
-      <Card style={{ 
+      <Card style={{
         border: 'none',
         borderRadius: '12px',
         boxShadow: '0 1px 6px rgba(0,0,0,0.05)',
         backgroundColor: colors.light
       }}>
-        <Card.Header style={{ 
+        <Card.Header style={{
           backgroundColor: colors.light,
           borderBottom: `1px solid ${colors.secondary}`,
           padding: '15px',
@@ -325,10 +325,10 @@ const AnaliseSWOT = () => {
           alignItems: 'center'
         }}>
           <h4 style={{ margin: 0, color: colors.primary }}>Oportunidades e Ameaças</h4>
-          <Button 
+          <Button
             variant="outlined"
             onClick={() => adicionarItem(oportunidadesAmeacas, setOportunidadesAmeacas, 'oportunidades')}
-            style={{ 
+            style={{
               borderColor: colors.oportunidade,
               color: colors.oportunidade,
               display: 'flex',
@@ -359,8 +359,8 @@ const AnaliseSWOT = () => {
                       type="text"
                       value={item.descricao}
                       onChange={(e) => atualizarItem(oportunidadesAmeacas, setOportunidadesAmeacas, item.id, 'descricao', e.target.value)}
-                      style={{ 
-                        border: 'none', 
+                      style={{
+                        border: 'none',
                         backgroundColor: 'transparent',
                         boxShadow: 'none'
                       }}
@@ -370,7 +370,7 @@ const AnaliseSWOT = () => {
                     <Form.Select
                       value={item.classificacao}
                       onChange={(e) => atualizarItem(oportunidadesAmeacas, setOportunidadesAmeacas, item.id, 'classificacao', e.target.value)}
-                      style={{ 
+                      style={{
                         ...getClassificacaoStyle(item.classificacao),
                         border: 'none',
                         padding: '5px',
@@ -385,7 +385,7 @@ const AnaliseSWOT = () => {
                     <Form.Select
                       value={item.importancia}
                       onChange={(e) => atualizarItem(oportunidadesAmeacas, setOportunidadesAmeacas, item.id, 'importancia', e.target.value)}
-                      style={{ 
+                      style={{
                         ...getImportanciaStyle(item.importancia),
                         border: 'none',
                         padding: '5px',
@@ -399,7 +399,7 @@ const AnaliseSWOT = () => {
                       ))}
                     </Form.Select>
                   </td>
-                  <td style={{ 
+                  <td style={{
                     ...getPontuacaoStyle(item.pontuacao),
                     backgroundColor: colors.light,
                     textAlign: 'center',
@@ -407,7 +407,7 @@ const AnaliseSWOT = () => {
                   }}>
                     {item.pontuacao.toFixed(1)}
                   </td>
-                  <td style={{ 
+                  <td style={{
                     textAlign: 'center',
                     backgroundColor: colors.light,
                     borderColor: colors.secondary
@@ -415,7 +415,7 @@ const AnaliseSWOT = () => {
                     <Button
                       variant="outlined"
                       onClick={() => removerItem(oportunidadesAmeacas, setOportunidadesAmeacas, item.id)}
-                      style={{ 
+                      style={{
                         padding: '5px',
                         borderColor: colors.secondary,
                         color: colors.error,

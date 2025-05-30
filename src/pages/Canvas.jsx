@@ -94,7 +94,7 @@ export function Canvas() {
   return (
     <Container className="canvas-container py-5" style={{
       backgroundColor: 'white',
-      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      minWidth: '300px', width: 'auto',
       margin: '50px 100px 0 400px'
     }}>
       {/* Cabeçalho */}

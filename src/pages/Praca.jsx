@@ -17,8 +17,14 @@ const COLORS = {
 
 const DistributionStrategyPage = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper 
+<Container
+      maxWidth="md"
+      className="mt-4"
+      style={{
+        minWidth: '1000px', width: 'auto', margin: '0 auto',
+        position: 'relative', left: '8%',
+      }}
+    >        <Paper 
         elevation={3} 
         sx={{ 
           p: 4, 

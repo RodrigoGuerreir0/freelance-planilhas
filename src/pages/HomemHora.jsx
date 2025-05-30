@@ -131,7 +131,7 @@ const HomemHora = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  
+
   const [rows, setRows] = useState(initialRows);
   const [newRow, setNewRow] = useState({
     product: '',
@@ -151,7 +151,7 @@ const HomemHora = () => {
 
   const handleAddRow = () => {
     if (!newRow.product) return;
-    
+
     const calculatedRow = calculateTotal({
       ...newRow,
       id: Date.now()
@@ -169,7 +169,7 @@ const HomemHora = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name.startsWith('hour-')) {
       const hourKey = name.split('-')[1];
       setNewRow({
@@ -189,7 +189,7 @@ const HomemHora = () => {
 
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name.startsWith('hour-')) {
       const hourKey = name.split('-')[1];
       setEditRow({
@@ -232,7 +232,7 @@ const HomemHora = () => {
   const addHourField = () => {
     const newHourKey = `hour${nextHourId}`;
     setNextHourId(nextHourId + 1);
-    
+
     setNewRow({
       ...newRow,
       hours: {
@@ -274,19 +274,19 @@ const HomemHora = () => {
   const MobileRow = ({ row, index }) => (
     <Box key={row.id} mb={2} p={2} bgcolor={index % 2 === 0 ? colors.light : colors.secondary}>
       <Typography variant="subtitle1" fontWeight="bold">{row.product}</Typography>
-      
+
       {allHourKeys.map(hourKey => (
         <Box key={hourKey} display="flex" justifyContent="space-between" mt={1}>
           <Typography>Hora {hourKey.replace('hour', '')}:</Typography>
           <Typography>{formatCurrency(row.hours?.[hourKey] || 0)}</Typography>
         </Box>
       ))}
-      
+
       <Box display="flex" justifyContent="space-between" mt={1}>
         <Typography fontWeight="bold">Total:</Typography>
         <Typography fontWeight="bold">{formatCurrency(row.totalHourValue)}</Typography>
       </Box>
-      
+
       <Box display="flex" justifyContent="flex-end" mt={1}>
         <IconButton
           aria-label="edit"
@@ -307,23 +307,27 @@ const HomemHora = () => {
   );
 
   return (
-    <PageContainer>
+    <PageContainer className="mt-4" style={{
+      padding: '20px',
+      borderRadius: '8px',
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 350px'
+    }}>
       <ContentContainer>
         <StyledTableContainer component={Paper}>
-          <Typography variant="h4" gutterBottom style={{ 
-            color: colors.primary, 
-            textAlign: 'left', 
+          <Typography variant="h4" gutterBottom style={{
+            color: colors.primary,
+            textAlign: 'left',
             padding: theme.spacing(2),
             fontSize: isSmallScreen ? '1.5rem' : '2rem'
           }}>
             Precificação de Homem/Hora
           </Typography>
-          
+
           <Box mb={4} p={2} style={{ backgroundColor: colors.background, borderRadius: '4px' }}>
             <Typography variant="h6" gutterBottom style={{ color: colors.text }}>
               Adicionar Novo Produto/Serviço
             </Typography>
-            
+
             <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
               <TextField
                 label="Produto ou Serviço"
@@ -334,7 +338,7 @@ const HomemHora = () => {
                 size="small"
                 fullWidth={isSmallScreen}
               />
-              
+
               <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} flexWrap="wrap" gap={2}>
                 {allHourKeys.map((hourKey) => (
                   <Box key={hourKey} display="flex" alignItems="center" gap={1}>
@@ -359,13 +363,13 @@ const HomemHora = () => {
                     )}
                   </Box>
                 ))}
-                
+
                 <Button
                   variant="outlined"
                   onClick={addHourField}
                   startIcon={<Add />}
                   size="small"
-                  sx={{ 
+                  sx={{
                     width: isSmallScreen ? '100%' : 'auto',
                     mt: isSmallScreen ? 1 : 0
                   }}
@@ -374,7 +378,7 @@ const HomemHora = () => {
                 </Button>
               </Box>
             </Box>
-            
+
             <Box mt={2} display="flex" justifyContent="flex-start">
               <ActionButton
                 variant="contained"
@@ -422,7 +426,7 @@ const HomemHora = () => {
                               fullWidth
                             />
                           </TableCell>
-                          
+
                           {allHourKeys.map(hourKey => (
                             <TableCell key={`edit-${hourKey}`} align="right">
                               <TextField
@@ -435,7 +439,7 @@ const HomemHora = () => {
                               />
                             </TableCell>
                           ))}
-                          
+
                           <TableCell align="right" style={{ fontWeight: 'bold' }}>
                             {formatCurrency(calculateTotal(editRow).totalHourValue)}
                           </TableCell>
@@ -459,13 +463,13 @@ const HomemHora = () => {
                       ) : (
                         <>
                           <TableCell>{row.product}</TableCell>
-                          
+
                           {allHourKeys.map(hourKey => (
                             <TableCell key={`view-${hourKey}`} align="right">
                               {formatCurrency(row.hours?.[hourKey] || 0)}
                             </TableCell>
                           ))}
-                          
+
                           <TableCell align="right" style={{ fontWeight: 'bold' }}>
                             {formatCurrency(row.totalHourValue)}
                           </TableCell>

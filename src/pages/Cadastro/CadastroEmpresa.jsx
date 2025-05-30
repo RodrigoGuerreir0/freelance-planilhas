@@ -239,8 +239,7 @@ const CadastroEmpresa = () => {
       zoom: '100%',
       transform: 'scale(1)',
       transformOrigin: '0 0',
-      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
-      margin: '50px 100px 0 400px'
+      minWidth: '300px', margin: '50px 100px 0 400px', width: 'auto',
     }}>
       <Row className="justify-content-center">
         <Col xs={12} lg={12}>

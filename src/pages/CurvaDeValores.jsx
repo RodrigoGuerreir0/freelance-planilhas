@@ -367,8 +367,7 @@ export function CurvaDeValores() {
 
   return (
     <Container fluid className="py-4" style={{
-      backgroundColor: COLORS.background, minHeight: '100vh', minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
-            margin: '50px 100px 0 400px'
+      backgroundColor: COLORS.background, minHeight: '100vh', minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
 
       
       }}>

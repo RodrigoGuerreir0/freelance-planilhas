@@ -71,7 +71,7 @@ const CadastroDepartamentos = () => {
 
   return (
     <Container className="my-5" style={{
-      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      minWidth: '300px', width: 'auto',
       margin: '50px 100px 0 400px'
 
     }}>

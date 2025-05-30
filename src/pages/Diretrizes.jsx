@@ -14,16 +14,16 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const CadastroDiretrizesEmpresa = () => {
-  
+
   const colors = {
-    primary: '#1976d2', 
-    secondary: '#f5f5f5', 
-    accent: '#64b5f6', 
-    light: '#ffffff', 
-    background: '#fafafa', 
+    primary: '#1976d2',
+    secondary: '#f5f5f5',
+    accent: '#64b5f6',
+    light: '#ffffff',
+    background: '#fafafa',
     text: '#424242',
-    success: '#4caf50', 
-    error: '#f44336'  
+    success: '#4caf50',
+    error: '#f44336'
   };
 
   const [editMode, setEditMode] = useState(true);
@@ -72,7 +72,7 @@ const CadastroDiretrizesEmpresa = () => {
       alert('Preencha os campos obrigatórios');
       return;
     }
-    
+
     console.log('Dados salvos:', empresa);
     setEditMode(false);
     setSuccess(true);
@@ -82,7 +82,7 @@ const CadastroDiretrizesEmpresa = () => {
     <ListGroup variant="flush">
       {items.map((item, index) => (
         item && (
-          <ListGroup.Item key={index} style={{ 
+          <ListGroup.Item key={index} style={{
             borderLeft: 'none',
             borderRight: 'none',
             display: 'flex',
@@ -97,8 +97,8 @@ const CadastroDiretrizesEmpresa = () => {
         )
       ))}
       {items.length === 0 || items.every(item => !item) && (
-        <ListGroup.Item style={{ 
-          color: '#9e9e9e', 
+        <ListGroup.Item style={{
+          color: '#9e9e9e',
           fontStyle: 'italic',
           backgroundColor: colors.light
         }}>
@@ -111,14 +111,14 @@ const CadastroDiretrizesEmpresa = () => {
   const renderEditItems = (arrayName, label, icon) => (
     <div>
       {empresa[arrayName].map((item, index) => (
-        <div key={index} style={{ 
+        <div key={index} style={{
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
           marginBottom: '12px'
         }}>
           {React.cloneElement(icon, { style: { color: colors.primary } })}
-          
+
           <TextField
             fullWidth
             label={`${label} ${index + 1}`}
@@ -133,7 +133,7 @@ const CadastroDiretrizesEmpresa = () => {
               }
             }}
           />
-          
+
           {empresa[arrayName].length > 1 && (
             <Button
               variant="outline-danger"
@@ -150,7 +150,7 @@ const CadastroDiretrizesEmpresa = () => {
           )}
         </div>
       ))}
-      
+
       <Button
         variant="outlined"
         size="sm"
@@ -171,14 +171,17 @@ const CadastroDiretrizesEmpresa = () => {
   );
 
   return (
-    <Container className="mt-4" style={{ maxWidth: '800px' }}>
-      <Card className="border-0" style={{ 
+    <Container className="mt-4" style={{
+      minWidth: '300px', width: 'auto',
+      margin: '50px 100px 0 400px'
+    }}>
+      <Card className="border-0" style={{
         boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
         borderRadius: '12px',
         overflow: 'hidden',
         backgroundColor: colors.light
       }}>
-        <Card.Header style={{ 
+        <Card.Header style={{
           backgroundColor: colors.light,
           borderBottom: `1px solid ${colors.secondary}`,
           padding: '1rem 1.5rem',
@@ -188,7 +191,7 @@ const CadastroDiretrizesEmpresa = () => {
         }}>
           <div className="d-flex align-items-center">
             <BusinessIcon style={{ color: colors.primary, marginRight: '12px' }} fontSize="medium" />
-            <h4 style={{ 
+            <h4 style={{
               color: colors.primary,
               margin: 0,
               fontWeight: 500,
@@ -197,9 +200,9 @@ const CadastroDiretrizesEmpresa = () => {
               {editMode ? 'Cadastro de Diretrizes' : 'Dados sobre a empresa'}
             </h4>
           </div>
-          
+
           {!editMode && (
-            <Button 
+            <Button
               variant="outlined"
               size="sm"
               onClick={() => setEditMode(true)}
@@ -215,8 +218,8 @@ const CadastroDiretrizesEmpresa = () => {
             </Button>
           )}
         </Card.Header>
-        
-        <Card.Body style={{ 
+
+        <Card.Body style={{
           backgroundColor: colors.background,
           padding: '1.5rem'
         }}>
@@ -237,7 +240,7 @@ const CadastroDiretrizesEmpresa = () => {
           )}
 
           <Form onSubmit={handleSubmit}>
-            <div style={{ 
+            <div style={{
               backgroundColor: colors.light,
               borderRadius: '8px',
               padding: '1.25rem',
@@ -245,7 +248,7 @@ const CadastroDiretrizesEmpresa = () => {
               boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
               border: `1px solid ${colors.secondary}`
             }}>
-              <h5 style={{ 
+              <h5 style={{
                 color: colors.primary,
                 marginBottom: '1rem',
                 display: 'flex',
@@ -255,7 +258,7 @@ const CadastroDiretrizesEmpresa = () => {
                 <BusinessIcon fontSize="small" />
                 Informações Básicas
               </h5>
-              
+
               <Row>
                 <Col md={6}>
                   <TextField
@@ -275,7 +278,7 @@ const CadastroDiretrizesEmpresa = () => {
                     }}
                   />
                 </Col>
-                
+
                 <Col md={3}>
                   <TextField
                     fullWidth
@@ -298,11 +301,11 @@ const CadastroDiretrizesEmpresa = () => {
                     }}
                   />
                 </Col>
-                
+
                 <Col md={3}>
                   {editMode ? (
                     <Form.Group controlId="mesInicial">
-                      <Form.Label style={{ 
+                      <Form.Label style={{
                         color: '#9e9e9e',
                         fontSize: '0.875rem',
                         marginBottom: '0.25rem'
@@ -328,12 +331,12 @@ const CadastroDiretrizesEmpresa = () => {
                     </Form.Group>
                   ) : (
                     <div style={{ marginBottom: '1rem' }}>
-                      <p style={{ 
+                      <p style={{
                         color: '#9e9e9e',
                         fontSize: '0.875rem',
                         marginBottom: '0.25rem'
                       }}>Mês Inicial</p>
-                      <p style={{ 
+                      <p style={{
                         color: colors.text,
                         fontSize: '1rem',
                         fontWeight: 500,
@@ -347,7 +350,7 @@ const CadastroDiretrizesEmpresa = () => {
                     </div>
                   )}
                 </Col>
-                
+
                 <Col md={12}>
                   <TextField
                     fullWidth
@@ -369,8 +372,8 @@ const CadastroDiretrizesEmpresa = () => {
                 </Col>
               </Row>
             </div>
-            
-            <div style={{ 
+
+            <div style={{
               backgroundColor: colors.light,
               borderRadius: '8px',
               padding: '1.25rem',
@@ -378,7 +381,7 @@ const CadastroDiretrizesEmpresa = () => {
               boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
               border: `1px solid ${colors.secondary}`
             }}>
-              <h5 style={{ 
+              <h5 style={{
                 color: colors.primary,
                 marginBottom: '1rem',
                 display: 'flex',
@@ -388,15 +391,15 @@ const CadastroDiretrizesEmpresa = () => {
                 <StarsIcon fontSize="small" style={{ color: colors.primary }} />
                 Missões
               </h5>
-              
+
               {editMode ? (
                 renderEditItems('missoes', 'Missão', <StarsIcon fontSize="small" />)
               ) : (
                 renderViewItems(empresa.missoes, <StarsIcon fontSize="small" />)
               )}
             </div>
-            
-            <div style={{ 
+
+            <div style={{
               backgroundColor: colors.light,
               borderRadius: '8px',
               padding: '1.25rem',
@@ -404,7 +407,7 @@ const CadastroDiretrizesEmpresa = () => {
               boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
               border: `1px solid ${colors.secondary}`
             }}>
-              <h5 style={{ 
+              <h5 style={{
                 color: colors.primary,
                 marginBottom: '1rem',
                 display: 'flex',
@@ -414,21 +417,21 @@ const CadastroDiretrizesEmpresa = () => {
                 <VisibilityIcon fontSize="small" style={{ color: colors.primary }} />
                 Visões
               </h5>
-              
+
               {editMode ? (
                 renderEditItems('visoes', 'Visão', <VisibilityIcon fontSize="small" />)
               ) : (
                 renderViewItems(empresa.visoes, <VisibilityIcon fontSize="small" />)
               )}
             </div>
-            <div style={{ 
+            <div style={{
               backgroundColor: colors.light,
               borderRadius: '8px',
               padding: '1.25rem',
               boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
               border: `1px solid ${colors.secondary}`
             }}>
-              <h5 style={{ 
+              <h5 style={{
                 color: colors.primary,
                 marginBottom: '1rem',
                 display: 'flex',
@@ -438,17 +441,17 @@ const CadastroDiretrizesEmpresa = () => {
                 <EmojiObjectsIcon fontSize="small" style={{ color: colors.primary }} />
                 Valores
               </h5>
-              
+
               {editMode ? (
                 renderEditItems('valores', 'Valor', <ComputerIcon fontSize="small" />)
               ) : (
                 renderViewItems(empresa.valores, <ComputerIcon fontSize="small" />)
               )}
             </div>
-            
+
             {editMode && (
               <div className="d-flex justify-content-end mt-4">
-                <Button 
+                <Button
                   variant="outlined"
                   onClick={() => setEditMode(false)}
                   style={{
@@ -464,8 +467,8 @@ const CadastroDiretrizesEmpresa = () => {
                 >
                   Cancelar
                 </Button>
-                
-                <Button 
+
+                <Button
                   type="submit"
                   variant="contained"
                   style={{

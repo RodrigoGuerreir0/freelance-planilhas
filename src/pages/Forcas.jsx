@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Card, Button, Table, Form, Collapse, Modal } from 'react-bootstrap';
-import { 
+import {
   Business,
   People,
   LocalShipping,
@@ -24,15 +24,15 @@ import {
 
 const AnaliseConcorrencia = () => {
   const colors = {
-    primary: '#1976d2',       
-    secondary: '#f5f5f5',     
-    accent: '#64b5f6',        
+    primary: '#1976d2',
+    secondary: '#f5f5f5',
+    accent: '#64b5f6',
     light: '#ffffff',
-    background: '#fafafa',    
-    text: '#424242',          
-    success: '#81C784',       
-    warning: '#FFB74D',       
-    error: '#E57373',         
+    background: '#fafafa',
+    text: '#424242',
+    success: '#81C784',
+    warning: '#FFB74D',
+    error: '#E57373',
     white: '#ffffff',
     black: '#212121'
   };
@@ -148,19 +148,19 @@ const AnaliseConcorrencia = () => {
 
   const calcularPontuacao = (resposta, importancia) => {
     let min, max;
-    
+
     if (importancia === 'Muito importante') {
       min = 8;
       max = 10;
     } else if (importancia === 'Importante') {
       min = 6;
       max = 7;
-    } else { 
+    } else {
       min = 0;
       max = 5;
     }
 
-    switch(resposta) {
+    switch (resposta) {
       case 'Concordo Totalmente':
         return max;
       case 'Concordo Parcialmente':
@@ -188,20 +188,20 @@ const AnaliseConcorrencia = () => {
   const adicionarPergunta = (tabelaId) => {
     setTabelas(tabelas.map(tabela => {
       if (tabela.id === tabelaId) {
-        const novaPerguntaId = tabela.perguntas.length > 0 
-          ? Math.max(...tabela.perguntas.map(p => p.id)) + 1 
+        const novaPerguntaId = tabela.perguntas.length > 0
+          ? Math.max(...tabela.perguntas.map(p => p.id)) + 1
           : 1;
-        
+
         return {
           ...tabela,
           perguntas: [
             ...tabela.perguntas,
-            { 
-              id: novaPerguntaId, 
-              texto: '', 
-              resposta: 'Não concordo e nem discordo', 
-              importancia: 'Importante', 
-              pontuacao: 6.5 
+            {
+              id: novaPerguntaId,
+              texto: '',
+              resposta: 'Não concordo e nem discordo',
+              importancia: 'Importante',
+              pontuacao: 6.5
             }
           ]
         };
@@ -219,19 +219,19 @@ const AnaliseConcorrencia = () => {
 
   const adicionarNovaAnalise = () => {
     if (!novoTitulo.trim()) return;
-    
+
     const novoId = tabelas.length > 0 ? Math.max(...tabelas.map(t => t.id)) + 1 : 1;
     const novaTabela = {
       id: novoId,
       titulo: novoTitulo,
       icone: React.cloneElement(iconeSelecionado.componente, { style: { fontSize: '1.5rem', color: colors.primary } }),
       perguntas: [
-        { 
-          id: 1, 
-          texto: '', 
-          resposta: 'Não concordo e nem discordo', 
-          importancia: 'Importante', 
-          pontuacao: 6.5 
+        {
+          id: 1,
+          texto: '',
+          resposta: 'Não concordo e nem discordo',
+          importancia: 'Importante',
+          pontuacao: 6.5
         }
       ],
       aberto: true
@@ -260,14 +260,14 @@ const AnaliseConcorrencia = () => {
           perguntas: tabela.perguntas.map(pergunta => {
             if (pergunta.id === perguntaId) {
               const novaPergunta = { ...pergunta, [campo]: valor };
-              
+
               if (campo === 'resposta' || campo === 'importancia') {
                 novaPergunta.pontuacao = calcularPontuacao(
                   campo === 'resposta' ? valor : pergunta.resposta,
                   campo === 'importancia' ? valor : pergunta.importancia
                 );
               }
-              
+
               return novaPergunta;
             }
             return pergunta;
@@ -279,7 +279,7 @@ const AnaliseConcorrencia = () => {
   };
 
   const getRespostaStyle = (resposta) => {
-    switch(resposta) {
+    switch (resposta) {
       case 'Concordo Totalmente':
         return { backgroundColor: '#E8F5E9', color: colors.text, border: '1px solid #C8E6C9' };
       case 'Concordo Parcialmente':
@@ -296,7 +296,7 @@ const AnaliseConcorrencia = () => {
   };
 
   const getImportanciaStyle = (importancia) => {
-    switch(importancia) {
+    switch (importancia) {
       case 'Muito importante':
         return { backgroundColor: '#E3F2FD', color: colors.text, border: '1px solid #BBDEFB' };
       case 'Importante':
@@ -311,20 +311,20 @@ const AnaliseConcorrencia = () => {
   const getPontuacaoStyle = (pontuacao) => {
     const num = parseFloat(pontuacao);
     if (isNaN(num)) return { color: colors.text };
-    
+
     if (num >= 8) return { color: '#2E7D32', fontWeight: 'bold' }; // Verde escuro
     if (num >= 5) return { color: '#EF6C00', fontWeight: 'bold' };  // Laranja
     return { color: '#C62828', fontWeight: 'bold' };                 // Vermelho
   };
 
   return (
-    <Container className="mt-4" style={{ 
-      maxWidth: '1200px',
+    <Container className="mt-4" style={{
       backgroundColor: colors.background,
       padding: '20px',
-      borderRadius: '8px'
+      borderRadius: '8px',
+      minWidth: '300px', width: 'auto', margin: '50px 100px 0 400px'
     }}>
-      <h3 style={{ 
+      <h3 style={{
         color: colors.primary,
         marginBottom: '1.5rem',
         display: 'flex',
@@ -336,15 +336,15 @@ const AnaliseConcorrencia = () => {
       </h3>
 
       {tabelas.map(tabela => (
-        <Card key={tabela.id} className="mb-4" style={{ 
+        <Card key={tabela.id} className="mb-4" style={{
           border: 'none',
           borderRadius: '12px',
           boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
           backgroundColor: colors.light
         }}>
-          <Card.Header 
+          <Card.Header
             onClick={() => toggleAbrirTabela(tabela.id)}
-            style={{ 
+            style={{
               backgroundColor: colors.light,
               color: colors.primary,
               borderBottom: `1px solid ${colors.secondary}`,
@@ -356,13 +356,13 @@ const AnaliseConcorrencia = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {tabela.aberto ? 
-                <KeyboardArrowUp style={{ color: colors.primary }} /> : 
+              {tabela.aberto ?
+                <KeyboardArrowUp style={{ color: colors.primary }} /> :
                 <KeyboardArrowDown style={{ color: colors.primary }} />}
               {tabela.icone}
               <h5 style={{ margin: 0, fontWeight: 500, color: colors.primary }}>{tabela.titulo}</h5>
             </div>
-            <Button 
+            <Button
               variant="outlined"
               size="sm"
               onClick={(e) => {
@@ -381,7 +381,7 @@ const AnaliseConcorrencia = () => {
               <Add fontSize="small" /> Adicionar Pergunta
             </Button>
           </Card.Header>
-          
+
           <Collapse in={tabela.aberto}>
             <div>
               <Card.Body style={{ padding: '1rem', backgroundColor: colors.background }}>
@@ -405,7 +405,7 @@ const AnaliseConcorrencia = () => {
                               value={pergunta.texto}
                               onChange={(e) => atualizarPergunta(tabela.id, pergunta.id, 'texto', e.target.value)}
                               placeholder="Digite a pergunta"
-                              style={{ 
+                              style={{
                                 backgroundColor: colors.light,
                                 border: 'none',
                                 boxShadow: 'none'
@@ -416,7 +416,7 @@ const AnaliseConcorrencia = () => {
                             <Form.Select
                               value={pergunta.resposta}
                               onChange={(e) => atualizarPergunta(tabela.id, pergunta.id, 'resposta', e.target.value)}
-                              style={{ 
+                              style={{
                                 ...getRespostaStyle(pergunta.resposta),
                                 border: 'none',
                                 boxShadow: 'none'
@@ -433,7 +433,7 @@ const AnaliseConcorrencia = () => {
                             <Form.Select
                               value={pergunta.importancia}
                               onChange={(e) => atualizarPergunta(tabela.id, pergunta.id, 'importancia', e.target.value)}
-                              style={{ 
+                              style={{
                                 ...getImportanciaStyle(pergunta.importancia),
                                 border: 'none',
                                 boxShadow: 'none'
@@ -446,14 +446,14 @@ const AnaliseConcorrencia = () => {
                               ))}
                             </Form.Select>
                           </td>
-                          <td style={{ 
+                          <td style={{
                             ...getPontuacaoStyle(pergunta.pontuacao),
                             backgroundColor: colors.light,
                             textAlign: 'center'
                           }}>
                             {pergunta.pontuacao.toFixed(1)}
                           </td>
-                          <td style={{ 
+                          <td style={{
                             textAlign: 'center',
                             backgroundColor: colors.light
                           }}>
@@ -461,7 +461,7 @@ const AnaliseConcorrencia = () => {
                               variant="outlined"
                               size="sm"
                               onClick={() => removerPergunta(tabela.id, pergunta.id)}
-                              style={{ 
+                              style={{
                                 padding: '0.25rem',
                                 borderColor: colors.secondary,
                                 color: colors.error,
@@ -484,10 +484,10 @@ const AnaliseConcorrencia = () => {
 
       {/* Botão para adicionar nova tabela */}
       <div className="text-center mb-4">
-        <Button 
+        <Button
           variant="contained"
           onClick={abrirModalNovaAnalise}
-          style={{ 
+          style={{
             backgroundColor: colors.primary,
             border: 'none',
             borderRadius: '6px',
@@ -503,7 +503,7 @@ const AnaliseConcorrencia = () => {
 
       {/* Modal para nova análise */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton style={{ 
+        <Modal.Header closeButton style={{
           backgroundColor: colors.light,
           color: colors.primary,
           borderBottom: `1px solid ${colors.secondary}`
@@ -521,11 +521,11 @@ const AnaliseConcorrencia = () => {
               style={{ backgroundColor: colors.light }}
             />
           </Form.Group>
-          
+
           <Form.Group className="mb-3">
             <Form.Label>Ícone</Form.Label>
-            <div style={{ 
-              display: 'grid', 
+            <div style={{
+              display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
               gap: '10px',
               marginTop: '10px'
@@ -553,22 +553,22 @@ const AnaliseConcorrencia = () => {
             </div>
           </Form.Group>
         </Modal.Body>
-        <Modal.Footer style={{ 
+        <Modal.Footer style={{
           backgroundColor: colors.background,
           borderTop: `1px solid ${colors.secondary}`
         }}>
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             onClick={() => setShowModal(false)}
-            style={{ 
-              borderColor: colors.secondary, 
+            style={{
+              borderColor: colors.secondary,
               color: colors.text,
               backgroundColor: colors.light
             }}
           >
             Cancelar
           </Button>
-          <Button 
+          <Button
             variant="contained"
             onClick={adicionarNovaAnalise}
             disabled={!novoTitulo.trim()}

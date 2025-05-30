@@ -178,7 +178,7 @@ const CadastroSocios = () => {
 
   return (
     <Container className="mt-4 px-3" style={{
-      minWidth: '300px', margin: '0 0 0 400px', width: 'auto',
+      minWidth: '300px', width: 'auto',
       margin: '50px 100px 0 400px'
 
     }}>
