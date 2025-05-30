@@ -24,7 +24,6 @@ const CadastroDepartamentos = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-
   const colors = {
     primary: '#4a6fa5',
     secondary: '#6c8fc7',
@@ -73,8 +72,26 @@ const CadastroDepartamentos = () => {
     <Container className="my-5" style={{
       minWidth: '300px', width: 'auto',
       margin: '50px 100px 0 400px'
-
     }}>
+      {/* Estilo para corrigir o FloatingLabel */}
+      <style>{`
+        .form-floating>label {
+          transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+          color: ${colors.textLight};
+        }
+        .form-floating>.form-control:focus~label,
+        .form-floating>.form-control:not(:placeholder-shown)~label,
+        .form-floating>.form-select~label {
+          transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+          opacity: 1;
+          color: ${colors.textLight};
+        }
+        .form-control:focus {
+          box-shadow: none;
+          border-color: ${colors.primary};
+        }
+      `}</style>
+
       <Card className="border-0" style={{
         boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
         borderRadius: '12px',
@@ -150,28 +167,39 @@ const CadastroDepartamentos = () => {
           )}
 
           <Form onSubmit={handleSubmit}>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Nome do Departamento"
-              style={{ marginBottom: '1.25rem' }}
-            >
+            <div className="mb-3" style={{ position: 'relative' }}>
               <Form.Control
                 type="text"
-                placeholder="Nome do Departamento"
+                placeholder=""
                 value={departamento}
                 onChange={(e) => setDepartamento(e.target.value)}
                 style={{
                   backgroundColor: colors.light,
                   border: `1px solid ${colors.border}`,
                   borderRadius: '8px',
-                  padding: '0.75rem 1rem',
+                  padding: '1rem',
                   fontSize: '0.875rem',
-                  color: colors.text
+                  color: colors.text,
+                  height: 'auto'
                 }}
               />
-            </FloatingLabel>
+              {!departamento && (
+                <span style={{
+                  position: 'absolute',
+                  left: '1rem',
+                  top: '1rem',
+                  color: colors.textLight,
+                  fontSize: '0.875rem',
+                  pointerEvents: 'none',
+                  transition: 'all 0.2s ease'
+                }}>
+                  Nome do Departamento
+                </span>
+              )}
+            </div>
 
             <div className="d-flex gap-2 mb-4">
+              {/* Mantenha os botões exatamente como estão */}
               <Button
                 variant="primary"
                 type="submit"
@@ -211,7 +239,7 @@ const CadastroDepartamentos = () => {
                 Limpar
               </Button>
             </div>
-          </Form>
+          </Form> 
 
           {departamentos.length > 0 ? (
             <div className="table-responsive">

@@ -231,11 +231,11 @@ const CadastroEquipes = () => {
               </Col>
 
               <Col md={12}>
-                <FloatingLabel controlId="funcoes" label="Funções Principais">
+                <div style={{ position: 'relative', marginBottom: '1rem' }}>
                   <Form.Control
                     name="funcoes"
                     as="textarea"
-                    placeholder="Funções Principais"
+                    placeholder=" "
                     value={equipe.funcoes}
                     onChange={handleChange}
                     style={{
@@ -243,12 +243,23 @@ const CadastroEquipes = () => {
                       backgroundColor: colors.light,
                       border: `1px solid ${colors.border}`,
                       borderRadius: '8px',
-                      padding: '0.75rem 1rem',
+                      padding: '1.5rem 1rem 0.75rem 1rem',
                       fontSize: '0.875rem',
                       color: colors.text
                     }}
                   />
-                </FloatingLabel>
+                  <label style={{
+                    position: 'absolute',
+                    top: '0.75rem',
+                    left: '1rem',
+                    fontSize: '0.75em',
+                    color: colors.textLight,
+                    pointerEvents: 'none',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    Funções Principais
+                  </label>
+                </div>
               </Col>
 
               <Col md={4}>
